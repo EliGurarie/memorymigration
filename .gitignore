@@ -5,3 +5,4 @@
 .Rproj
 code/*_cache
 code/*_files
+.DS_Store
