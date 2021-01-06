@@ -148,16 +148,6 @@ The following examples illustrate how an initially migrating population evolves,
 
 
 
-```{r}
-ForagingMemoryModel <- function(t, y, parms, resource, pop_lag){
-  tran.1D(C = y, D = parms["epsilon"], 
-          flux.up = 0, flux.down = 0, 
-          v = parms["alpha"] * diff(resource)/parms["dx"] +  
-            parms["beta0"] * diff(y)/parms["dx"] +
-            parms["beta1"] * diff(pop_lag)/parms["dx"], 
-          dx = parms["dx"])
-}
-```
 
 
 ```{r memoryOnly, fig.height = 5, fig.width = 10}
