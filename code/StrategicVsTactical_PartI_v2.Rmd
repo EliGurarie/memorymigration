@@ -1,6 +1,6 @@
 ---
 title: "Modeling memory and taxis to analyze migrations"
-author: "E. Gurarie, B. Fagan, others"
+author: "E. Gurarie, S. Potluri, B. Fagan, others"
 date: "`r Sys.Date()`"
 output:
   html_document:
