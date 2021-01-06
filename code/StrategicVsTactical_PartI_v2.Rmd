@@ -12,7 +12,7 @@ output:
     toc: yes
 theme: cerulean
 editor_options:
-  chunk_output_type: inline
+  chunk_output_type: console
 ---
 
 
@@ -27,11 +27,12 @@ We intend to study how a blending of a *tactical* (i.e. direct response to resou
 
 Out model is an advection diffusion with two advective terms corresponding to a direct response to the environment and to memory.  Importantly, the environment is *approximately periodic*, i.e. one in which the distribution of the resource at a given time is approximately equal to that resource distribution at a fixed previous time period, i.e. $h(t) \approx h(t - \tau)$. This models annual variations, and the period corresponds to one year.  The *tactical* process is straightforward taxis up a resource gradient, while the *collective memory* corresponds to a tendency of the organisms to repeat the behavior of the population in previous years.  Thus:
 
-$${\frac{\partial u(x,t)}{\partial t}} = -\varepsilon {\frac{\partial^2 u(x,t)}{\partial x^2}} + \alpha \frac{\partial h(x,t)}{\partial x} + \sum_{i = 1}^n \beta_i \frac{\partial u(x, t - i\tau)}{\partial x}$$
+$${\frac{\partial u(x,t)}{\partial t}} = -\varepsilon {\frac{\partial^2 u(x,t)}{\partial x^2}} + \alpha \frac{\partial h(x,t)}{\partial x} + \sum_{i = 0}^n \beta_i \frac{\partial u(x, t - i\tau)}{\partial x}$$
 
 
-where $u$ represents a population distributed in time and space, $\varepsilon$ is a rate of randomness (diffusion), $\alpha$ is the strength of advection in the direction of the resource $h(x,t)$ gradient), and $\beta_i$ is the strength of advection up the gradient of the *population* distribution in an $i$'th earlier seasonal cycle (year), up to $n \in N$.  The form of $\beta_i$ should be simple, e.g., if the collective memory reaches only one year back then $n = 1$ and $\beta$ is a single constant. Alternatively, a form of memory might discounts older "traditions" via $\beta_i = \beta \exp(-i/\gamma)$, where $\gamma$ represents a generational scale of memory. 
+where $u$ represents a population distributed in time and space, $\varepsilon$ is a rate of randomness (diffusion), $\alpha$ is the strength of advection in the direction of the resource $h(x,t)$ gradient), and $\beta_i$ is the strength of advection up the gradient of the *population* distribution in an $i$'th earlier seasonal cycle (year), up to $n \in N$.  
 
+Note that $\beta_0$ is similar to an index of "cohesion", essentially encouraging the population to stay close together.  Higher terms of $\beta_i$ should be simple, e.g., if the collective memory reaches only one year back then $n = 1$ and $\beta_i$ is a single constant. Alternatively, a form of memory might discounts older "traditions" via $\beta_i = \beta \exp(-i/\gamma)$, where $\gamma$ represents a generational scale of memory. 
 
 For reference and replicability, I include the incrementally constructed R code, which relies heavily on the `deSolve` (Soetaert et al. 2010) and `ReacTran` (Soetaert and Filip, 2020) packages, which efficiently implement transport ODE and PDE systems in R. 
 
@@ -152,29 +153,19 @@ ForagingMemoryModel <- function(t, y, parms, resource, pop_lag){
   tran.1D(C = y, D = parms["epsilon"], 
           flux.up = 0, flux.down = 0, 
           v = parms["alpha"] * diff(resource)/parms["dx"] +  
-            parms["gamma"] * diff(y)/parms["dx"] +
-            parms["beta"] * diff(pop_lag)/parms["dx"], 
+            parms["beta0"] * diff(y)/parms["dx"] +
+            parms["beta1"] * diff(pop_lag)/parms["dx"], 
           dx = parms["dx"])
 }
-
-
-ForagingMemoryModel <- function(t, y, parms, resource, pop_lag){
-  tran.1D(C = y, D = parms["epsilon"], 
-          flux.up = 0, flux.down = 0, 
-          v = parms["alpha"] * diff(resource)/parms["dx"] +  
-            parms["gamma"] * diff(y)/parms["dx"] +
-            parms["beta"] * diff(pop_lag)/parms["dx"], 
-          dx = parms["dx"])
-}
-
 ```
-
-
 
 
 ```{r memoryOnly, fig.height = 5, fig.width = 10}
 dx <- .5
-parameters <- c(epsilon = 5, alpha = 0, beta = 5e2, gamma = 20, lambda = 0, dx = dx)
+parameters <- c(epsilon = 5, alpha = 0, 
+                beta0 = 20, 
+                beta1 = 5e2, 
+                lambda = 0, dx = dx)
 
 eval <- FALSE
 if(eval){

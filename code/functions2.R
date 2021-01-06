@@ -7,8 +7,8 @@ ForagingMemoryModel <- function(t, y, parms, resource, pop_lag){
   tran.1D(C = y, D = parms["epsilon"], 
           flux.up = 0, flux.down = 0, 
           v = parms["alpha"] * diff(resource)/parms["dx"] +  
-            parms["gamma"] * diff(y)/parms["dx"] +
-            parms["beta"] * diff(pop_lag)/parms["dx"], 
+            parms["beta0"] * diff(y)/parms["dx"] +
+            parms["beta1"] * diff(pop_lag)/parms["dx"], 
           dx = parms["dx"])
 }
 
@@ -81,9 +81,9 @@ plotYearList <- function(yearlist, X.max = 100, tau = 360, log = FALSE,
     mypersp(time, x, allyears, ...) 
 }
 
-printParameters <- function(p) 
+printParameters <- function(p) {
   parse(text = paste0("list(",paste(names(p), p, sep = "==", collapse = ", "),")"))
-
+}
 
 #' getPulsedResource
 
