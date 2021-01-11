@@ -2,51 +2,51 @@ require(deSolve)
 require(ReacTran)
 require(magrittr)
 #' Foraging model
-
-ForagingMemoryModel <- function(t, y, parms, resource, pop_lag){
-  tran.1D(C = y, D = parms["epsilon"], 
+#' 
+ForagingMemoryModel <- function(t, pop, parms, pop_lag, resource, 
+                                dx = dx){
+  tran.1D(C = pop, D = parms["epsilon"], 
           flux.up = 0, flux.down = 0, 
-          v = parms["alpha"] * diff(resource)/parms["dx"] +  
-            parms["beta0"] * diff(y)/parms["dx"] +
-            parms["beta1"] * diff(pop_lag)/parms["dx"], 
-          dx = parms["dx"])
+          v = parms["alpha"] * diff(resource)/dx + 
+            parms["beta0"] * diff(pop)/dx + 
+            parms["beta1"] * diff(pop_lag)/dx, 
+          dx = dx)
 }
 
 #' Run One Year forward
 
-runNextYear <- function(pop.Year1, Time, Resource, Parameters){
-  
-  pop.Year2 <- pop.Year1*0
-  pop.Year2[1,] <- pop.Year1[nrow(pop.Year1),]
-  
-  t.max <- max(Time)
-  
-  fl <-  Parameters["lambda"]
+runNextYear <- function(World, Parameters){
+  pop1 <- World$pop
+  pop2 <- pop1*0
+  pop2[1,] <- pop1[nrow(pop1),]
+  t.max <- World$tau
+  Time <- World$time
+  Resource <- World$resource
   
   for(i in 2:t.max){
-    if(i < t.max-fl)
-      pop_lag <- c(0,pop.Year1[i+fl,],0) else
-        pop_lag <- c(0,pop.Year2[max(i - (t.max - fl)),],0)
-      
-      pop.Year2[i,] <- ode(y = pop.Year2[i-1,], 
-                           times = c(0,Time[i]-Time[i-1]), 
-                           parms = Parameters,
-                           func = ForagingMemoryModel, 
-                           resource = c(0,Resource[i,],0),
-                           pop_lag = pop_lag)[2,1:ncol(pop.Year2)+1]
+    if(i < t.max)
+      pop_lastyear <- c(0,pop1[i,],0) 
+      pop2[i,] <- ode(y = pop2[i-1,], 
+                     times = c(0,Time[i]-Time[i-1]), 
+                     parms = Parameters,
+                     func = ForagingMemoryModel, 
+                     resource = c(0,Resource[i,],0),
+                     pop_lag = pop_lastyear,
+                     dx = World$dx)[2,1:ncol(pop2)+1]
   }
   
-  pop.Year2
+  pop2
 }
 
 #' Run several years forward
 
-runManyYears <- function(pop.Year1, Time, Resource, Parameters, n.years){
-  pop.list <- list(Year1 = pop.Year1)
+runManyYears <- function(World, Parameters, n.years){
+  pop.list <- list(Year1 = World$pop)
   
   for(i in 1:n.years){
     cat(paste("running year ", i, "\n"))
-    pop.list[[i+1]] <- runNextYear(pop.list[[i]], Time, Resource = Resource, 
+    World$pop <- pop.list[[i]]
+    pop.list[[i+1]] <- runNextYear(World, 
                                    Parameters = parameters)
   }
   names(pop.list) <- paste0("Year",0:n.years)

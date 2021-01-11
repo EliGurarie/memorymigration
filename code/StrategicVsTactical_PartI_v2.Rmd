@@ -41,13 +41,13 @@ For reference and replicability, I include the incrementally constructed R code,
 require(deSolve)
 require(ReacTran)
 require(magrittr)
-source("functions.R")
 ```
 
 # Static run
 
 ```{r}
-ForagingMemoryModel <- function(t, pop, parms, pop_lag, resource, dx){
+ForagingMemoryModel <- function(t, pop, parms, pop_lag, resource, 
+                                dx = attributes(pop)$dx){
   tran.1D(C = pop, D = parms["epsilon"], 
                    flux.up = 0, flux.down = 0, 
                    v = parms["alpha"] * diff(resource)/dx + 
@@ -67,6 +67,7 @@ x.mids <- (x.edges[-1] + x.edges[-length(x.edges)])/2
 
 parameters <- c(epsilon = 0.1, alpha = 4, beta = 2)
 pop <- dnorm(x.mids, mean=20, sd = 2) %>% {./sum(.)/dx} 
+attributes(pop)$dx <- dx
 
 pop_lag <- c(0,dnorm(x.mids, mean=80, sd = 2) %>% {./sum(.)/dx},0)
 resource <- c(0,dnorm(x.mids, mean = 50, sd = 4) %>% {./sum(.)/dx},0)
@@ -75,7 +76,8 @@ pop.inf <- steady.1D(func = ForagingMemoryModel,
                    y = pop, parms = parameters, 
                    resource = resource, 
                    pop_lag = pop_lag, 
-                   nspec=1, dx = dx)$y %>% {./sum(.)/dx}
+                   nspec=1, 
+                   dx = attributes(pop)$dx)$y %>% {./sum(.)/attributes(pop)$dx}
 
 n <- length(x.mids)
 
@@ -115,51 +117,43 @@ source("functions2.R")
 In the following example, we let the population be "initialized" via a sinusoidal migration pattern, while the resource is fixed in the middle of the space (as above).  The memory is a one-year memory.  In this context, migration is not, in fact, optimal.  But the important piece is to see how the reponse mixes attraction to the resource with attraction to the previous year's behavior.  Note that the year here (for simplicity, speed and symmetry), is 100 days long. 
 
 ```{r setupEnvironment}
-getSinePop <- function(Time, X, X.max, peak.max, peak.min, sd){
-  pop <- outer(Time, X,
+getSinePop <- function(tau, X.min = 0, X.max = 100, dx, 
+                       peak.max, peak.min, sd){
+  Time <- 1:tau
+
+  X.edge <- seq(X.min, X.max, dx)
+  X.mid <- (X.edge[-1] + X.edge[-length(X.edge)])/2
+  pop <- outer(Time, X.mid,
                      function(t,x) 
                        dnorm(x, mean = X.max/2 + (peak.max-peak.min) / 2 * sin( 2*(t * pi)/max(Time)),sd = sd))
-  pop <- apply(pop, 1, function(x) x/sum(x)) %>% t
-  pop / mean(diff(X))
+  pop <- apply(pop, 1, function(x) x/sum(x)/dx) %>% t
+  list(pop = pop, X.mid = X.mid, time = Time, dx = dx, tau = tau)
 }
 
-dx <- 1
-X.max <- 100
-tau <- 100
+world <- getSinePop(tau = 100, X.min = 0, X.max = 100, dx=1, 
+                    peak.max = 80, peak.min = 20, sd = 10)
 
-X.edge <- seq(0,100, length=X.max/dx + 1)
-X.mid <- seq(1,X.max,dx) - 1/2
-Time <- 1:tau
-
-pop.Year1 <- getSinePop(Time, X.mid, X.max = X.max, peak.max = 80, peak.min = 20, sd = 10)
-
-fr1 <- dnorm(X.mid, mean = 80, sd = 10) %>% {./sum(.)/dx}
-fr2 <- dnorm(X.mid, mean = 20, sd = 10) %>% {./sum(.)/dx}
-
+fr1 <- dnorm(world$X.mid, mean = 80, sd = 10) %>% {./sum(.)/dx}
+fr2 <- dnorm(world$X.mid, mean = 20, sd = 10) %>% {./sum(.)/dx}
 fixed.Resource <- matrix((fr1 + fr2)/2, byrow = TRUE, 
-                         nrow = nrow(pop.Year1), 
-                         ncol = ncol(pop.Year1))
+                         nrow = nrow(world$pop), 
+                         ncol = ncol(world$pop))
 
+world$resource <- fixed.Resource
 ```
 
 The following examples illustrate how an initially migrating population evolves, even as it is attracted to a resource that is distributed in two different locations. In these examples, the first year (year 0) is a sinusoidal migration.  We run the simulations for 3 subsequent years.
 
 ## Only memory
 
-
-
-
-
 ```{r memoryOnly, fig.height = 5, fig.width = 10}
-dx <- .5
-parameters <- c(epsilon = 5, alpha = 0, 
-                beta0 = 20, 
-                beta1 = 5e2, 
-                lambda = 0, dx = dx)
+
+parameters <- c(epsilon = 5, alpha = 0, beta0 = 20, beta1 = 5e2, lambda = 0)
 
 eval <- FALSE
 if(eval){
-  MemSim <- runManyYears(pop.Year1, Time, Resource = fixed.Resource, Parameters = parameters, n.years = 3)
+  MemSim <- runManyYears(World, Parameters = parameters, 
+                         n.years = 3)
   save(MemSim, file = "../results/MemSim.rda")
 } else load("../results/MemSim.rda")
   
