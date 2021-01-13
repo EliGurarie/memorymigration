@@ -179,7 +179,7 @@ parameters <- c(epsilon = 5, alpha = 5e2, beta0 = 0, beta1 = 0)
 
 eval <- FALSE
 if(eval){
-  ResourceSim <- runManyYears(pop.Year1, Time, Resource = fixed.Resource, Parameters = parameters, n.years = 3)
+  ResourceSim <- runManyYears(World, Parameters = parameters, n.years = 3)
   save(ResourceSim, file = "../results/ResourceSim.rda")
 } else load("../results/ResourceSim.rda")
   
@@ -203,7 +203,7 @@ parameters <- c(epsilon = 5, alpha = 3e2, beta0=20, beta1 = 5e2)
 
 eval <- FALSE
 if(eval){
-  MemResourceSim <- runManyYears(pop.Year1, Time, Resource = fixed.Resource, Parameters = parameters, n.years = 3)
+  MemResourceSim <- runManyYears(World, Parameters = parameters, n.years = 3)
   save(MemResourceSim, file = "../results/MemResourceSim.rda")
 } else load("../results/MemResourceSim.rda")
   
