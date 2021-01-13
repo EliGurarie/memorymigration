@@ -2,7 +2,7 @@ require(deSolve)
 require(ReacTran)
 require(magrittr)
 #' Foraging model
-#' 
+
 ForagingMemoryModel <- function(t, pop, parms, pop_lag, resource, 
                                 dx = dx){
   tran.1D(C = pop, D = parms["epsilon"], 
@@ -65,6 +65,7 @@ plotYearList <- function(yearlist, X.max = 100, tau = 360, log = FALSE,
   
   n.years <- length(yearlist)
   allyears <- do.call(rbind, yearlist)
+  tau <- world$tau
   
   if(log) allyears <- log(allyears)
   

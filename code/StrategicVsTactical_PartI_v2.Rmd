@@ -34,7 +34,7 @@ where $u$ represents a population distributed in time and space, $\varepsilon$ i
 
 Note that $\beta_0$ is similar to an index of "cohesion", essentially encouraging the population to stay close together.  Higher terms of $\beta_i$ should be simple, e.g., if the collective memory reaches only one year back then $n = 1$ and $\beta_i$ is a single constant. Alternatively, a form of memory might discounts older "traditions" via $\beta_i = \beta \exp(-i/\gamma)$, where $\gamma$ represents a generational scale of memory. 
 
-For reference and replicability, I include the incrementally constructed R code, which relies heavily on the `deSolve` (Soetaert et al. 2010) and `ReacTran` (Soetaert and Filip, 2020) packages, which efficiently implement transport ODE and PDE systems in R. 
+For reference and replicability, I include the incrementally constructed R code, which relies heavily on the `deSolve` (Soetaert et al. 2010) and `ReacTran` (Soetaert and Filip, 2010) packages, which efficiently implement transport ODE and PDE systems in R. 
 
 
 ```{r, message=FALSE, warning=FALSE}
@@ -148,7 +148,7 @@ The following examples illustrate how an initially migrating population evolves,
 
 ```{r memoryOnly, fig.height = 5, fig.width = 10}
 
-parameters <- c(epsilon = 5, alpha = 0, beta0 = 20, beta1 = 5e2, lambda = 0)
+parameters <- c(epsilon = 5, alpha = 0, beta0 = 20, beta1 = 5e2)
 
 eval <- FALSE
 if(eval){
@@ -175,7 +175,7 @@ image(Time, X.mid, fixed.Resource, main = "resource", ylab = "x")
 ```
 
 ```{r resourceOnly, fig.height = 5, fig.width = 10}
-parameters <- c(epsilon = 5, alpha = 5e2, beta = 0, lambda = 0, dx = dx)
+parameters <- c(epsilon = 5, alpha = 5e2, beta0 = 0, beta1 = 0)
 
 eval <- FALSE
 if(eval){
@@ -199,7 +199,7 @@ Here, the population disregards its memory and only pursues a tactic stategy. Wi
 Finally, we combine both resource following and memory:
 
 ```{r resourceAndMemory, fig.height = 5, fig.width = 10}
-parameters <- c(epsilon = 5, alpha = 3e2, beta = 3e2, lambda = 0, dx = dx)
+parameters <- c(epsilon = 5, alpha = 3e2, beta0=20, beta1 = 5e2)
 
 eval <- FALSE
 if(eval){
@@ -242,7 +242,7 @@ All of these details boil down to the ability to generate various seasonal scena
 
 
 ```{r exampleResourcePlots, fig.width = 10, fig.height = 6}
-source("functions.R")
+source("functions2.R")
 Time <- 1:100; X <- 0:100
 
 R1 <- getPulsedResource(Time, X, c(t.peak = 25, t.sd = 9, x.peak = 80, x.sd = 9))
@@ -264,12 +264,12 @@ In these pulsed resources, we might assume that a *combination* of memory and ta
 ## Memory only
 
 ```{r PulseSim1, fig.width = 10}
-parameters <- c(epsilon = 5, alpha = 0, beta = 4e2, lambda = 0, dx = dx)
-Memory_PulsedResource_Sim <- runManyYears(pop.Year1, Time, 
-                                  Resource = R1, Parameters = parameters, n.years = 6)
+parameters <- c(epsilon = 5, alpha = 0, beta0 = 20, beta1 = 5e2)
+Memory_PulsedResource_Sim <- runManyYears(pop.Year1, Time, Resource = R1, Parameters = parameters, n.years = 6)
+
 par(mfrow = c(1,2), oma = c(0,0,3,0))
-plotYearList(Memory_PulsedResource_Sim, tau = tau)
-plotYearList(Memory_PulsedResource_Sim, tau = tau, persp = TRUE, scale = FALSE, expand = 100)
+plotYearList(MemSim, tau = tau)
+plotYearList(MemSim, tau = tau, persp = TRUE, scale = FALSE, expand = 100)
 title(printParameters(parameters), outer = TRUE)
 ```
 
