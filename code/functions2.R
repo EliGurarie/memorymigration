@@ -1,6 +1,7 @@
 require(deSolve)
 require(ReacTran)
 require(magrittr)
+require(purrr)
 #' Foraging model
 
 ForagingMemoryModel <- function(t, pop, parms, pop_lag, resource, 
@@ -18,23 +19,22 @@ ForagingMemoryModel <- function(t, pop, parms, pop_lag, resource,
 runNextYear <- function(World, Parameters){
   pop1 <- World$pop
   pop2 <- pop1*0
-  pop2[1,] <- pop1[nrow(pop1),]
-  t.max <- World$tau
+  #pop2[1,] <- pop1[nrow(pop1),]
+  
   Time <- World$time
   Resource <- World$resource
   
-  for(i in 2:t.max){
-    if(i < t.max)
-      pop_lastyear <- c(0,pop1[i,],0) 
-      pop2[i,] <- ode(y = pop2[i-1,], 
-                     times = c(0,Time[i]-Time[i-1]), 
+  for(t in Time){
+     pop_lastyear <- c(0,pop1[t,],0) 
+     if(t == 1) pop_now <- pop1[nrow(pop1),] else pop_now <- pop2[t-1,]
+     pop2[t,] <- ode(y = pop_now, 
+                     times = 0:1, 
                      parms = Parameters,
                      func = ForagingMemoryModel, 
-                     resource = c(0,Resource[i,],0),
+                     resource = c(0,Resource[t,],0),
                      pop_lag = pop_lastyear,
                      dx = World$dx)[2,1:ncol(pop2)+1]
   }
-  
   pop2
 }
 
@@ -50,7 +50,6 @@ runManyYears <- function(World, Parameters, n.years){
                                    Parameters = parameters)
   }
   names(pop.list) <- paste0("Year",0:n.years)
-  pop.list <- lapply(pop.list, function(l) l[-1,])
   pop.list
 }
 
