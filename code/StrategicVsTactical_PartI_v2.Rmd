@@ -249,22 +249,37 @@ source("functions2.R")
 world.R1 <- world %>% 
   list_modify(resource = getPulsedResource(1:world$tau, world$X.mid, c(t.peak = 25, t.sd = 9, x.peak = 80, x.sd = 9)))
 
-R2 <- getPulsedResource(Time, X, c(t.peak = 25, t.sd = 9, x.peak = 80, x.sd = 5))
-R3 <- getPulsedResource(Time, X, c(t.peak = 25, t.sd = 5, x.peak = 80, x.sd = 9))
-R4 <- getPulsedResource(Time, X, c(t.peak = 25, t.sd = 5, x.peak = 80, x.sd = 5))
+world.R2 <- world %>% 
+  list_modify(resource = getPulsedResource(1:world$tau, world$X.mid, c(t.peak = 25, t.sd = 9, x.peak = 80, x.sd = 5)))
+
+world.R3 <- world %>% 
+  list_modify(resource = getPulsedResource(1:world$tau, world$X.mid, c(t.peak = 25, t.sd = 5, x.peak = 80, x.sd = 9)))
+
+world.R4 <- world %>% 
+  list_modify(resource = getPulsedResource(1:world$tau, world$X.mid, c(t.peak = 25, t.sd = 5, x.peak = 80, x.sd = 5)))
 
 par(mfrow = c(2,2), mar = c(3,3,3,1), mgp = c(2,.25,0), las = 1, tck = 0.01)
 with(world.R1, {     
   image(1:tau,X.mid,resource, main = "Broad, long peak")
   contour(1:tau,X.mid,resource, add = TRUE)
   })
+with(world.R2, {     
+  image(1:tau,X.mid,resource, main = "Narrow, long peak")
+  contour(1:tau,X.mid,resource, add = TRUE)
+  })
+with(world.R3, {     
+  image(1:tau,X.mid,resource, main = "Broad, short peak")
+  contour(1:tau,X.mid,resource, add = TRUE)
+  })
+with(world.R4, {     
+  image(1:tau,X.mid,resource, main = "Narrow, short peak")
+  contour(1:tau,X.mid,resource, add = TRUE)
+  })
      
-image(Time,X,R2, main = "Narrow, long peak"); contour(Time,X,R2, add = TRUE)
-image(Time,X,R3, main = "Broad, short peak"); contour(Time,X,R3, add = TRUE)
-image(Time,X,R4, main = "Narrow, short peak"); contour(Time,X,R4, add = TRUE)
 ```
 
 # Running the model in a seasonal environment
+# Note: to view any of the resource models, change the world 
 
 In these pulsed resources, we might assume that a *combination* of memory and tactic responses would yield more optimal behavior, and might observe some shift in the migratory strategy. 
 
@@ -272,7 +287,7 @@ In these pulsed resources, we might assume that a *combination* of memory and ta
 
 ```{r PulseSim1, fig.width = 10}
 parameters <- c(epsilon = 5, alpha = 0, beta0 = 20, beta1 = 5e2)
-Memory_PulsedResource_Sim <- runManyYears(world.R1, Parameters = parameters, n.years = 6)
+Memory_PulsedResource_Sim <- runManyYears(world.R3, Parameters = parameters, n.years = 6)
 
 par(mfrow = c(1,2), oma = c(0,0,3,0))
 plotYearList(Memory_PulsedResource_Sim, tau = tau)
@@ -285,9 +300,9 @@ title(printParameters(parameters), outer = TRUE)
 This model does a surprisingly good job aggregating at the appropriate resource, but appears to only locally aggregate, not to migrate per se. 
 
 ```{r PulseSim2, fig.width = 10}
-parameters <- c(epsilon = 2, alpha = 4e2, beta = 0, lambda = 0, dx = dx)
-Tactic_PulsedResource_Sim <- runManyYears(pop.Year1, Time, 
-                                  Resource = R1, Parameters = parameters, n.years = 6)
+parameters <- c(epsilon = 2, alpha = 4e2, beta0 = 0, beta1 = 0)
+Tactic_PulsedResource_Sim <- runManyYears(world.R1, Parameters = parameters, n.years = 6)
+
 par(mfrow = c(1,2), oma = c(0,0,3,0))
 plotYearList(Tactic_PulsedResource_Sim, tau = tau)
 plotYearList(Tactic_PulsedResource_Sim, tau = tau, persp = TRUE, scale = FALSE, expand = 100)
@@ -299,14 +314,13 @@ title(printParameters(parameters), outer = TRUE)
 It is not clear that the hybrid model recovers a true migration, but it seems to retain somewhat more concentration along the migratory corridors. 
 
 ```{r PulseSim3, fig.width = 10}
-parameters <- c(epsilon = 5, alpha = 2e2, beta = 3e2, lambda = 0, dx = dx)
-Hybrid_PulsedResource_Sim <- runManyYears(pop.Year1, Time, 
-                                  Resource = R1, Parameters = parameters, n.years = 6)
+parameters <- c(epsilon = 5, alpha = 2e2, beta0 = 20, beta1 = 3e2)
+Hybrid_PulsedResource_Sim <- runManyYears(world.R1, Parameters = parameters, n.years = 6)
+
 par(mfrow = c(1,2), oma = c(0,0,3,0))
 plotYearList(Hybrid_PulsedResource_Sim, tau = tau)
 plotYearList(Hybrid_PulsedResource_Sim, tau = tau, persp = TRUE, scale = FALSE, expand = 100)
 title(printParameters(parameters), outer = TRUE)
-```
 
 
 ## Memory and tactics: Narrow resource
@@ -318,9 +332,9 @@ Here we compare a memory with and without memory exploiting the "narrow - long" 
 Notable concentrations at the resource peaks, but a lot of diffuse behavior in the interim seasons
 
 ```{r PulseSim4_tactic, fig.width = 10}
-parameters <- c(epsilon = 5, alpha = 2e2, beta = 0, lambda = 0, dx = dx)
-Hybrid_PulsedResource_Sim2 <- runManyYears(pop.Year1, Time, 
-                                  Resource = R4, Parameters = parameters, n.years = 6)
+parameters <- c(epsilon = 2, alpha = 2e2, beta0 = 0, beta1 = 0)
+Tactic_PulsedResource_Sim2 <- runManyYears(world.R1, Parameters = parameters, n.years = 6)
+
 par(mfrow = c(1,2), oma = c(0,0,3,0))
 plotYearList(Hybrid_PulsedResource_Sim2, tau = tau)
 plotYearList(Hybrid_PulsedResource_Sim2, tau = tau, persp = TRUE, scale = FALSE, expand = 100)
@@ -333,12 +347,12 @@ title(printParameters(parameters), outer = TRUE)
 Memory appears to reinforce the aggregations at the (narrow) resource peaks
 
 ```{r PulseSim4_memory, fig.width = 10}
-parameters <- c(epsilon = 5, alpha = 2e2, beta = 3e2, lambda = 0, dx = dx)
-Hybrid_PulsedResource_Sim2 <- runManyYears(pop.Year1, Time, 
-                                  Resource = R4, Parameters = parameters, n.years = 6)
+parameters <- c(epsilon = 5, alpha = 2e2, beta0 = 20, beta1 = 3e2)
+Hybrid_PulsedResource_Sim3 <- runManyYears(world.R4, Parameters = parameters, n.years = 6)
+
 par(mfrow = c(1,2), oma = c(0,0,3,0))
-plotYearList(Hybrid_PulsedResource_Sim2, tau = tau)
-plotYearList(Hybrid_PulsedResource_Sim2, tau = tau, persp = TRUE, scale = FALSE, expand = 100)
+plotYearList(Hybrid_PulsedResource_Sim3, tau = tau)
+plotYearList(Hybrid_PulsedResource_Sim3, tau = tau, persp = TRUE, scale = FALSE, expand = 100)
 title(printParameters(parameters), outer = TRUE)
 ```
 
