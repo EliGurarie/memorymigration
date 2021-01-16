@@ -1,0 +1,72 @@
+---
+title: "Indices Equations"
+output: html_notebook
+---
+
+Migratoriness Index
+To determine the migratoriness of a population, we calculate overlap of the population from two different years. We calculate the overlap using the equation:
+$$\int \! \psi_1(x) \psi_2(x) \, \mathrm{d}x$$
+where $\psi_1(x)$ represents the population in one year and $\psi_2(x)$ represents the population in another year. After calcuating this overlap of the two matrices that contain the population, we want to find the index that contains the minimum overlap value which the function below calculates.    
+
+```{r}
+ findMinOverlap <- function(P, world = world){
+    
+    getOverlap <- function(i1, i2, P){
+      sum(sqrt(P[i1,] * P[i2,])) * world$dx
+    }
+    
+    Overlap <- matrix(NA, world$tau, world$tau)
+    for(i in 1:(world$tau-1))
+      for(j in (i+1):world$tau)
+        Overlap[i,j] <- sum(sqrt(P[i,] * P[j,])) * world$dx
+    
+    minOverlap <-  min(Overlap, na.rm = TRUE)
+    list(times = which(Overlap == minOverlap, arr.ind = TRUE),
+         overlap = minOverlap)
+  }
+  
+
+```
+
+Foraging Success Score Index - Bhattacharyya Distance
+In this function, we determine the forgaing success score index by comparing the similarity of the population with the resource using the Bhattacharyya distance. First we calculate the Bhattacharyya Coefficient $BC(p,q) from a function found in the R package bio3d. This is done by taking the integral of the square root of the product of the two statistical distributions we wish to compare: 
+$$BC(p,q) = \int \! \sqrt{p(x)q(x)} \, \mathrm{d}x$$
+Then we take the negative natural log of the Bhattacharrya Coefficient to determine the Bhattacharyya distance: $$D_B(p,q) = -ln(BC(p,q))$$
+
+The Bhattacharyya coefficient determines the probability of the overlap between the two distributions. Thus $0 \ge BC(p,q) \ge 1$. A larger Bhattacharyya coefficient indicates a smaller Bhattacharyya distance to show that the two distributions are similar. A larger distance indicates that the population is farther away from the resource at the given year. 
+
+Bhattacharyya, A. On a measure of divergence between two statistical populations defined by their probability distributions. Bull. Calcutta Math. Soc. 35 (1943), 99–109.
+```{r}
+require(bio3d)
+  BhattacharryyaDistance <- function(i1, i2){
+    BhattacharyyaCoefficient <- bhattacharyya(cov(i1), cov(i2), q=99.9) #do we need a q value?
+    distance <- -log(BhattacharyyaCoefficient)
+    list(distance)
+  }
+
+
+```
+
+
+Social Cohesion
+To measure the social cohesion of a population, we calculate the standard deviation, $\sigma$  using the equation:
+$$\sigma = \sqrt{E[(X-\mu)^2]} = \sqrt{E[X^2]-(E[X])^2}$$
+where $\mu=E[X]$ represents the expected value (the average) of the population. The maximum standard deviation of the model is $\frac{1}{\sqrt{12}}$ so the social cohesion is defined with the equation: $$1-\frac{\sigma}{\sigma_{max}}$$
+
+where $\sigma_{max}=\frac{1}{\sqrt{12}}.$ The larger the value of social cohesion indicates that the migratory population remained close with one another. 
+```{r}
+ getSD <- function(f, world){
+    EX <- sum( world$X.mid * f) * world$dx
+    EX2 <- sum( world$X.mid^2 * f) * world$dx
+    sd  = sqrt(EX2 - EX^2)
+  }
+
+  computeCohesiveness <- function(P){
+    SDs <- apply(P, 1, getSD, world = world)
+    SD.max <- (1/sqrt(12))*max(world$X.mid)
+    SC <- 1 - SDs/SD.max
+    c(SC.mean = mean(SC), SC.sd = sd(SC))
+  }
+
+```
+

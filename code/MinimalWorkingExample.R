@@ -1,11 +1,13 @@
 source("functions2.R")
 
-world <- getSinePop(tau = 100, X.min = 0, X.max = 100, dx=2, 
+world <- getSinePop(tau = 100, X.min = 0, X.max = 100, dx=1, 
                     peak.max = 80, peak.min = 20, sd = 10)
 world$resource <- getPulsedResource(world$time, world$X.mid, c(t.peak = 25, t.sd = 9, x.peak = 80, x.sd = 9))
 
 
 parameters <- c(epsilon = 5, alpha = 300, beta0=100, beta1 = 300)
+world.R1 <- world %>% 
+  list_modify(resource = getPulsedResource(1:world$tau, world$X.mid, c(t.peak = 25, t.sd = 9, x.peak = 80, x.sd = 9)))
 M <- runManyYears(world.R1, Parameters = parameters, n.years = 6)
 
 plotYearList(M, tau = tau)
@@ -59,6 +61,12 @@ sqrt(mean((M2[[6]]-M2[[5]])^2))
   sapply(M2, computeCohesiveness)
   
   
-  
-  
+  #Foraging Success Score
+  require(bio3d)
+  BhattacharryyaDistance <- function(i1, i2){
+    BhattacharyyaCoefficient <- bhattacharyya(cov(i1), cov(i2), q=99.9) #do we need a q value?
+    distance <- -log(BhattacharyyaCoefficient)
+    list(distance)
+  }
+  BhattacharryyaDistance(M[[1]],world$resource)
   
