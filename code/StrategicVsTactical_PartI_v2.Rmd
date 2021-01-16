@@ -122,19 +122,19 @@ getSinePop <- function(tau, X.min = 0, X.max = 100, dx,
   Time <- 1:tau
 
   X.edge <- seq(X.min, X.max, dx)
-  X.mid <- (X.edge[-1] + X.edge[-length(X.edge)])/2
-  pop <- outer(Time, X.mid,
+  X <- (X.edge[-1] + X.edge[-length(X.edge)])/2
+  pop <- outer(Time, X,
                      function(t,x) 
                        dnorm(x, mean = X.max/2 + (peak.max-peak.min) / 2 * sin( 2*(t * pi)/max(Time)),sd = sd))
   pop <- apply(pop, 1, function(x) x/sum(x)/dx) %>% t
-  list(pop = pop, X.mid = X.mid, time = Time, dx = dx, tau = tau)
+  list(pop = pop, X = X, time = Time, dx = dx, tau = tau)
 }
 
 world <- getSinePop(tau = 100, X.min = 0, X.max = 100, dx=1, 
                     peak.max = 80, peak.min = 20, sd = 10)
 
-fr1 <- dnorm(world$X.mid, mean = 80, sd = 10) %>% {./sum(.)/world$dx}
-fr2 <- dnorm(world$X.mid, mean = 20, sd = 10) %>% {./sum(.)/world$dx}
+fr1 <- dnorm(world$X, mean = 80, sd = 10) %>% {./sum(.)/world$dx}
+fr2 <- dnorm(world$X, mean = 20, sd = 10) %>% {./sum(.)/world$dx}
 fixed.Resource <- matrix((fr1 + fr2)/2, byrow = TRUE, 
                          nrow = nrow(world$pop), 
                          ncol = ncol(world$pop))
@@ -172,7 +172,7 @@ In the following simulations, we add a resource distributed as follows in two co
 
 ```{r fixedResource, fig.height = 3, fig.width = 4}
 with(world, 
-  image(X.mid, 1:tau, resource, main = "resource", ylab = "x")
+  image(X, 1:tau, resource, main = "resource", ylab = "x")
 )
 ```
 
@@ -247,33 +247,33 @@ All of these details boil down to the ability to generate various seasonal scena
 source("functions2.R")
 
 world.R1 <- world %>% 
-  list_modify(resource = getPulsedResource(1:world$tau, world$X.mid, c(t.peak = 25, t.sd = 9, x.peak = 80, x.sd = 9)))
+  list_modify(resource = getPulsedResource(1:world$tau, world$X, c(t.peak = 25, t.sd = 9, x.peak = 80, x.sd = 9)))
 
 world.R2 <- world %>% 
-  list_modify(resource = getPulsedResource(1:world$tau, world$X.mid, c(t.peak = 25, t.sd = 9, x.peak = 80, x.sd = 5)))
+  list_modify(resource = getPulsedResource(1:world$tau, world$X, c(t.peak = 25, t.sd = 9, x.peak = 80, x.sd = 5)))
 
 world.R3 <- world %>% 
-  list_modify(resource = getPulsedResource(1:world$tau, world$X.mid, c(t.peak = 25, t.sd = 5, x.peak = 80, x.sd = 9)))
+  list_modify(resource = getPulsedResource(1:world$tau, world$X, c(t.peak = 25, t.sd = 5, x.peak = 80, x.sd = 9)))
 
 world.R4 <- world %>% 
-  list_modify(resource = getPulsedResource(1:world$tau, world$X.mid, c(t.peak = 25, t.sd = 5, x.peak = 80, x.sd = 5)))
+  list_modify(resource = getPulsedResource(1:world$tau, world$X, c(t.peak = 25, t.sd = 5, x.peak = 80, x.sd = 5)))
 
 par(mfrow = c(2,2), mar = c(3,3,3,1), mgp = c(2,.25,0), las = 1, tck = 0.01)
 with(world.R1, {     
-  image(1:tau,X.mid,resource, main = "Broad, long peak")
-  contour(1:tau,X.mid,resource, add = TRUE)
+  image(1:tau,X,resource, main = "Broad, long peak")
+  contour(1:tau,X,resource, add = TRUE)
   })
 with(world.R2, {     
-  image(1:tau,X.mid,resource, main = "Narrow, long peak")
-  contour(1:tau,X.mid,resource, add = TRUE)
+  image(1:tau,X,resource, main = "Narrow, long peak")
+  contour(1:tau,X,resource, add = TRUE)
   })
 with(world.R3, {     
-  image(1:tau,X.mid,resource, main = "Broad, short peak")
-  contour(1:tau,X.mid,resource, add = TRUE)
+  image(1:tau,X,resource, main = "Broad, short peak")
+  contour(1:tau,X,resource, add = TRUE)
   })
 with(world.R4, {     
-  image(1:tau,X.mid,resource, main = "Narrow, short peak")
-  contour(1:tau,X.mid,resource, add = TRUE)
+  image(1:tau,X,resource, main = "Narrow, short peak")
+  contour(1:tau,X,resource, add = TRUE)
   })
      
 ```
