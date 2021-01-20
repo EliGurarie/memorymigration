@@ -38,7 +38,6 @@ sqrt(mean((M2[[6]]-M2[[5]])^2))
     list(times = which(Overlap == minOverlap, arr.ind = TRUE),
          overlap = minOverlap)
   }
-  
   sapply(M, function(m) findMinOverlap(m)$overlap)
   sapply(M2, function(m) findMinOverlap(m)$overlap)
 
@@ -63,10 +62,9 @@ sqrt(mean((M2[[6]]-M2[[5]])^2))
   
   #Foraging Success Score
   require(bio3d)
-  BhattacharryyaDistance <- function(i1, i2){
-    BhattacharyyaCoefficient <- bhattacharyya(cov(i1), cov(i2), q=99.9) #do we need a q value?
-    distance <- -log(BhattacharyyaCoefficient)
-    list(distance)
+  BhattacharyyaCoefficient <- function(i1, i2){
+    BC <- bhattacharyya(cov(i1), cov(i2)) #do we need a q value?
+    list(BC)
   }
-  BhattacharryyaDistance(M[[1]],world$resource)
+  BhattacharyyaCoefficient(M[[2]],world$resource)
   

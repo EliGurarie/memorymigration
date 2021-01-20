@@ -52,11 +52,10 @@ The Bhattacharyya coefficient determines the probability of the overlap between 
 
 ```{r}
 require(bio3d)
-  BhattacharyyaDistance <- function(i1, i2){
-    BhattacharyyaCoefficient <- bhattacharyya(cov(i1), cov(i2), q=99.9) #do we need a q value?
-    distance <- -log(BhattacharyyaCoefficient)
-    list(distance)
-  }
+  BhattacharyyaDCoefficient <- function(i1, i2){
+    BC <- bhattacharyya(cov(i1), cov(i2)) #do we need a q value? 
+    list(BC)
+  } #does this function take the mean of the BC over the year? 
 ```
 
 We used the `bhattacharyya` function in the `bio3d` package (Grant et al. 2006).
