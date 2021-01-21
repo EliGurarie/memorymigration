@@ -19,7 +19,7 @@ To determine the migratoriness of a population, we calculate overlap of the popu
 $$O(t_1, t_2) = \int_D \sqrt{u(x, t_1) \, u(x, t_2)} \, dx; $$
 After calcuating this overlap of the two matrices that contain the population, we find the values of $t_1$ and $t_2$ that minimize $O$, corresponding to the periods of maximum distance.  Thus, the migratoriness index is:
 
-$$MI = min(O(t_1, t_2))$$
+$$MI = 1-min(O(t_1, t_2))$$
 
 ```{r}
  findMinOverlap <- function(P, world = world){
@@ -45,8 +45,8 @@ $$MI = min(O(t_1, t_2))$$
 
 
 To quantify the consumers’ ability to track the distribution of their resources over space and time, we use the continuous form of the Bhattacharya Coefficient (BC; Bhattacharyya 1943).  The BC quantifies similarity between two distributions; we take the mean of the BC over the equilibrium year. Thus: 
-$$BC = {1\over T} \int_T\int_D \sqrt{u(x,t) \, h(x,t)} \, dx\,dt$$
-Where the spatial integral is taken over the domain ($D$).  
+$$FE = {1\over T} \int_{0}^T \int_{0}^{X_{max}} \sqrt{u(x,t) \, h(x,t)} \, dx\,dt$$
+Where the spatial integral is taken over the domain.  
 
 The Bhattacharyya coefficient determines the probability of the overlap between the two distributions. Thus $0 \ge BC(p,q) \ge 1$. A larger Bhattacharyya coefficient indicates a smaller Bhattacharyya distance to show that the two distributions are similar. A larger distance indicates that the population is farther away from the resource at the given year. 
 
