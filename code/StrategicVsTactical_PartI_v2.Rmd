@@ -6,10 +6,6 @@ output:
   html_document:
     toc: yes
     toc_float: yes
-  pdf_document:
-    toc: yes
-  word_document:
-    toc: yes
 theme: cerulean
 editor_options:
   chunk_output_type: console
@@ -319,9 +315,10 @@ Hybrid_PulsedResource_Sim <- runManyYears(world.R1, Parameters = parameters, n.y
 
 par(mfrow = c(1,2), oma = c(0,0,3,0))
 plotYearList(Hybrid_PulsedResource_Sim, tau = tau)
-plotYearList(Hybrid_PulsedResource_Sim, tau = tau, persp = TRUE, scale = FALSE, expand = 100)
+plotYearList(Hybrid_PulsedResource_Sim, tau = tau, 
+             persp = TRUE, scale = FALSE, expand = 100)
 title(printParameters(parameters), outer = TRUE)
-
+```
 
 ## Memory and tactics: Narrow resource
 

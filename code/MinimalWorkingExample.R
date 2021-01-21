@@ -1,70 +1,48 @@
-source("functions2.R")
+  source("code/functions2.R")
 
-world <- getSinePop(tau = 100, X.min = 0, X.max = 100, dx=1, 
-                    peak.max = 80, peak.min = 20, sd = 10)
-world$resource <- getPulsedResource(world$time, world$X, c(t.peak = 25, t.sd = 9, x.peak = 80, x.sd = 9))
-
-
-parameters <- c(epsilon = 5, alpha = 300, beta0=100, beta1 = 300)
-world.R1 <- world %>% 
-  list_modify(resource = getPulsedResource(1:world$tau, world$X, c(t.peak = 25, t.sd = 9, x.peak = 80, x.sd = 9)))
-M <- runManyYears(world.R1, Parameters = parameters, n.years = 6)
-
-plotYearList(M, tau = tau)
-world.R1 <- world %>% list_modify(pop = M$Year6)
-
-M2 <- runManyYears(world.R1, Parameters = parameters, n.years = 6)
-plotYearList(M2, tau = tau)
-
-sqrt(mean((M[[2]]-M[[1]])^2))
-sqrt(mean((M2[[6]]-M2[[5]])^2))
-
-
-
+# Initialize world
+  
+  world <- getSinePop(tau = 100, X.min = 0, X.max = 100, dx=1, 
+                      peak.max = 80, peak.min = 20, sd = 10)
+  world$resource <- getPulsedResource(world$time, world$X, c(t.peak = 25, t.sd = 9, 
+                                                             x.peak = 80, x.sd = 9))
+  
+  
+  parameters <- c(epsilon = 5, alpha = 300, beta0=100, beta1 = 300)
+  world.R1 <- world %>% 
+    list_modify(resource = getPulsedResource(1:world$tau, world$X, 
+                                             c(t.peak = 25, t.sd = 9, 
+                                               x.peak = 80, x.sd = 9)))
+  
+# run simulation 12 years
+  
+  M <- runManyYears(world.R1, Parameters = parameters, n.years = 6)
+  plotYearList(M, tau = tau)
+  
+  world.R1 <- world %>% list_modify(pop = M$Year6)
+  M2 <- runManyYears(world.R1, Parameters = parameters, n.years = 6)
+  plotYearList(M2, tau = tau)
+  
+  source("code/functions_indices.R")
+  
+  computeCohesiveness(world$pop, world)["SC.mean"]
+  computeMigratoriness(world$pop, world)$overlap
+  with(world, computeEfficiency(pop, resource))
+  computeIndices(world$pop, world$resource, world)
+  
 # Migratoriness Index
 
-  findMinOverlap <- function(P, world = world){
-    
-    getOverlap <- function(i1, i2, P){
-      sum(sqrt(P[i1,] * P[i2,])) * world$dx
-    }
-    
-    Overlap <- matrix(NA, world$tau, world$tau)
-    for(i in 1:(world$tau-1))
-      for(j in (i+1):world$tau)
-        Overlap[i,j] <- sum(sqrt(P[i,] * P[j,])) * world$dx
-    
-    minOverlap <-  min(Overlap, na.rm = TRUE)
-    list(times = which(Overlap == minOverlap, arr.ind = TRUE),
-         overlap = minOverlap)
-  }
-  sapply(M, function(m) findMinOverlap(m)$overlap)
-  sapply(M2, function(m) findMinOverlap(m)$overlap)
 
-# Social cohesion index
+  indices1 <- sapply(M, computeIndices, resource = world$resource, world = world) %>% t
+  indices2 <- sapply(M2, computeIndices, resource = world$resource, world = world) %>% t
+  I <- rbind(indices1, indices2)
   
-  getSD <- function(f, world){
-    EX <- sum( world$X * f) * world$dx
-    EX2 <- sum( world$X^2 * f) * world$dx
-    sd  = sqrt(EX2 - EX^2)
-  }
+  matplot(I, type="o", pch = 19, lty = 1)
+  legend("topright", pch = 19, col = 1:3, legend = colnames(I))
 
-  computeCohesiveness <- function(P){
-    SDs <- apply(P, 1, getSD, world = world)
-    SD.max <- (1/sqrt(12))*max(world$X)
-    SC <- 1 - SDs/SD.max
-    c(SC.mean = mean(SC), SC.sd = sd(SC))
-  }
-
-  sapply(M, computeCohesiveness)
-  sapply(M2, computeCohesiveness)
-  
-  
-  #Foraging Success Score
-  require(bio3d)
-  BhattacharyyaCoefficient <- function(i1, i2){
-    BC <- bhattacharyya(cov(i1), cov(i2)) #do we need a q value?
-    list(BC)
-  }
-  BhattacharyyaCoefficient(M[[2]],world$resource)
+  I.v2 <- sapply(Hybrid_PulsedResource_Sim, computeIndices, 
+         world = world.R1,
+         resource = world.R1$resource) %>% t
+  matplot(I.v2, type="o", pch = 19, lty = 1)
+  legend("topright", pch = 19, col = 1:3, legend = colnames(I))
   
