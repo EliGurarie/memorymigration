@@ -34,9 +34,7 @@ For reference and replicability, I include the incrementally constructed R code,
 
 
 ```{r, message=FALSE, warning=FALSE}
-require(deSolve)
-require(ReacTran)
-require(magrittr)
+source("functions2.R")
 ```
 
 # Static run
@@ -105,12 +103,7 @@ This example is completely static and symmetric around the two drivers.  Note th
 
 # Dynamic initial population
 
-```{r}
-source("functions2.R")
-```
-
-
-In the following example, we let the population be "initialized" via a sinusoidal migration pattern, while the resource is fixed in the middle of the space (as above).  The memory is a one-year memory.  In this context, migration is not, in fact, optimal.  But the important piece is to see how the reponse mixes attraction to the resource with attraction to the previous year's behavior.  Note that the year here (for simplicity, speed and symmetry), is 100 days long. 
+In the following example, we let the population be "initialized" via a sinusoidal migration pattern, while the resource is fixed in the middle of the space (as above).  The memory is a one-year memory.  In this context, migration is not, in fact, optimal.  But the important piece is to see how the response mixes attraction to the resource with attraction to the previous year's behavior.  Note that the year here (for simplicity, speed and symmetry), is 100 days long. 
 
 ```{r setupEnvironment}
 getSinePop <- function(tau, X.min = 0, X.max = 100, dx, 
@@ -353,7 +346,35 @@ plotYearList(Hybrid_PulsedResource_Sim3, tau = tau, persp = TRUE, scale = FALSE,
 title(printParameters(parameters), outer = TRUE)
 ```
 
+## Example
+We apply the three indices to an example model. In this model, we let the population be "initialized" via a sinusoidal migration pattern, while the resource is seasonal in a broad, long peak. The model uses the parameters $\epsilon = 5, \alpha = 300, \beta0=100, \beta1 = 300$ so that the migratory population combines both memory and a tactical strategy. We run the model for 12 years and compute the three indices. Then we plot the three indices to the view the trend of the migratory population over time.  
 
+```{r}
+source("functions_indices.R")
+  world$resource <- getPulsedResource(world$time, world$X, c(t.peak = 25, t.sd = 9, 
+                                                             x.peak = 80, x.sd = 9))
+  
+  
+  parameters <- c(epsilon = 5, alpha = 300, beta0=100, beta1 = 300)
+  world.R1 <- world %>% 
+    list_modify(resource = getPulsedResource(1:world$tau, world$X, 
+                                             c(t.peak = 25, t.sd = 9, 
+                                               x.peak = 80, x.sd = 9)))
+  M <- runManyYears(world.R1, Parameters = parameters, n.years = 6)
+  
+  world.R1 <- world %>% list_modify(pop = M$Year6)
+  M2 <- runManyYears(world.R1, Parameters = parameters, n.years = 6)
+  
+  source("functions_indices.R")
+  indices1 <- sapply(M, computeIndices, resource = world$resource, world = world) %>% t
+  indices2 <- sapply(M2, computeIndices, resource = world$resource, world = world) %>% t
+  I <- rbind(indices1, indices2)
+  
+  matplot(I, type="o", pch = 19, lty = 1) #year 6 and year 7 are the same so it is plotted twice 
+  legend("topright", pch = 19, col = 1:3, legend = colnames(I))
+
+
+```
 
 
 # Some summaries

@@ -17,70 +17,73 @@ Simulations are run until a (quasi)-equilibrium state is achieved, where "state"
 To determine the migratoriness of a population, we calculate overlap of the population from two different times within the year, choosing those times to minimize the overlap, and reporting the overal.  The overlap is defined as:
 
 $$O(t_1, t_2) = \int_D \sqrt{u(x, t_1) \, u(x, t_2)} \, dx; $$
-After calcuating this overlap of the two matrices that contain the population, we find the values of $t_1$ and $t_2$ that minimize $O$, corresponding to the periods of maximum distance.  Thus, the migratoriness index is:
+After calcuating this overlap of the two matrices that contain the population, we find the values of $t_1$ and $t_2$ that minimize $O$, corresponding to the periods of maximum distance. We subtract this minimum value to calculate migratoriness of the population. Thus, the migratoriness index (MI) is:
 
 $$MI = 1-min(O(t_1, t_2))$$
 
 ```{r}
- findMinOverlap <- function(P, world = world){
-    
-    getOverlap <- function(i1, i2, P){
-      sum(sqrt(P[i1,] * P[i2,])) * world$dx
-    }
-    
-    Overlap <- matrix(NA, world$tau, world$tau)
-    for(i in 1:(world$tau-1))
-      for(j in (i+1):world$tau)
-        Overlap[i,j] <- sum(sqrt(P[i,] * P[j,])) * world$dx
-    
-    minOverlap <-  min(Overlap, na.rm = TRUE)
-    list(times = which(Overlap == minOverlap, arr.ind = TRUE),
-         overlap = minOverlap)
-  }
+ computeMigratoriness <- function(pop, world){
+
+  dx <- world$dx
+  tau <- world$tau
+  
+  Overlap <- matrix(NA, tau, tau)
+  for(i in 1:(tau-1))
+    for(j in (i+1):tau)
+      Overlap[i,j] <- sum(sqrt(pop[i,] * pop[j,])) * dx
+  
+  minOverlap <-  1-min(Overlap, na.rm = TRUE)
+  list(times = which(Overlap == minOverlap, arr.ind = TRUE),
+       overlap = minOverlap)
+}
   
 
 ```
 
-## Foraging Success 
+## Foraging Efficiency 
 
 
-To quantify the consumers’ ability to track the distribution of their resources over space and time, we use the continuous form of the Bhattacharya Coefficient (BC; Bhattacharyya 1943).  The BC quantifies similarity between two distributions; we take the mean of the BC over the equilibrium year. Thus: 
-$$FE = {1\over T} \int_{0}^T \int_{0}^{X_{max}} \sqrt{u(x,t) \, h(x,t)} \, dx\,dt$$
+To quantify the consumers’ ability to track the distribution of their resources over space and time, we use the continuous form of the Bhattacharyya Coefficient (Bhattacharyya 1943).  The Bhattacharyya Coefficient quantifies similarity between two distributions; we take the mean of the coefficient over the equilibrium year to determine foraging efficiency (FE). Thus, the foraging efficiency index is: 
+$$FE = {1\over \tau} \int_{0}^\tau \int_{0}^{X_{max}} \sqrt{u(x,t) \, h(x,t)} \, dx\,dt$$
 Where the spatial integral is taken over the domain.  
 
-The Bhattacharyya coefficient determines the probability of the overlap between the two distributions. Thus $0 \ge BC(p,q) \ge 1$. A larger Bhattacharyya coefficient indicates a smaller Bhattacharyya distance to show that the two distributions are similar. A larger distance indicates that the population is farther away from the resource at the given year. 
 
 ```{r}
-require(bio3d)
-  BhattacharyyaDCoefficient <- function(i1, i2){
-    BC <- bhattacharyya(cov(i1), cov(i2)) #do we need a q value? 
-    list(BC)
-  } #does this function take the mean of the BC over the year? 
+computeEfficiency <- function(pop, resource, world){
+  
+  dx <- world$dx
+  tau <- world$tau
+  
+  Similarity <- matrix(NA, tau, tau)
+  for(i in 1:(tau-1))
+    for(j in (i+1):tau)
+      Similarity[i,j] <- sum(sqrt(pop[i,] * resource[j,])) * dx
+  
+  FS <- mean(Similarity, na.rm=TRUE)/tau
+}
 ```
-
-We used the `bhattacharyya` function in the `bio3d` package (Grant et al. 2006).
 
 
 ## Social Cohesion
 
 To measure the social cohesion (SC) of a population, we simply calculate the mean standard deviation of the population across the equilibrium year:
 
-$$\overline{\sigma} = {1\over \tau} \int \sigma_u(t) \,dt$$
+$$\overline{\sigma} = {1\over \tau} \int \sigma_u(x,t) \,dt$$
 
 where $$\sigma_u^2(t) = \int_D \left(x - \mu_u(t)\right)^2 \, u(x,t)\, dx$$
 
-and $\mu_u$ is the mean of $u$ at time $t$.  If the population is uniformly distributed over the domain, the standard deviation of the model would be $\frac{X_{max}}{\sqrt{12}}$.  Where therefore define the social cohesion index as: $$SC = 1-\frac{\sqrt{12} \, }{X_{max}}\overline{\sigma}$$
+and $\mu_u$ is the mean of $u$ at time $t$.  If the population is uniformly distributed over the domain, the standard deviation of the model would be $\frac{X_{max}}{\sqrt{12}}$.  We therefore define the social cohesion (SC) index as: $$SC = 1-\frac{\sqrt{12} \, }{X_{max}}\overline{\sigma}$$
 
 where $\sigma_{max}=\frac{1}{\sqrt{12}}.$  In theory, SC can be lower than 1 if, for example, the population concentrates in two groups at the edges of the domain, but in practice the SC is positive.  The maximum value of 1 would correspond to the entire population . 
 ```{r}
- getSD <- function(f, world){
-    EX <- sum( world$X * f) * world$dx
-    EX2 <- sum( world$X^2 * f) * world$dx
+ getSD <- function(pop, world){
+    EX <- sum( world$X * pop) * world$dx
+    EX2 <- sum( world$X^2 * pop) * world$dx
     sd  = sqrt(EX2 - EX^2)
   }
 
-  computeCohesiveness <- function(P){
-    SDs <- apply(P, 1, getSD, world = world)
+  computeCohesiveness <- function(pop){
+    SDs <- apply(pop, 1, getSD, world = world)
     SD.max <- (1/sqrt(12))*max(world$X)
     SC <- 1 - SDs/SD.max
     c(SC.mean = mean(SC), SC.sd = sd(SC))
@@ -88,9 +91,19 @@ where $\sigma_{max}=\frac{1}{\sqrt{12}}.$  In theory, SC can be lower than 1 if,
 
 ```
 
+## Combining the Indices
+The following function calculates these three indices for a specific population and resource. 
+```{r}
+computeIndices <- function(pop, resource, world){
+  SC = computeCohesiveness(pop, world)["SC.mean"]
+  MI = computeMigratoriness(pop, world)$overlap
+  FE = computeEfficiency(pop, resource, world)
+  data.frame(SC, MI, FE)
+}
+```
 
-## References
+## References  
+Bhattacharyya, A. (1943). "On a measure of divergence between two statistical populations defined by their probability distributions". Bulletin of the Calcutta Mathematical Society. 35: 99–109. MR 0010358
 
-Bhattacharyya, A. On a measure of divergence between two statistical populations defined by their probability distributions. Bull. Calcutta Math. Soc. 35 (1943), 99–109.
+```
 
-Grant, B.J. et al. (2006) Bioinformatics 22, 2695--2696.

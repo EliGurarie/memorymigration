@@ -1,4 +1,5 @@
-  source("code/functions2.R")
+  source("functions2.R")
+  source("functions_indices.R")
 
 # Initialize world
   
@@ -18,6 +19,8 @@
   
   M <- runManyYears(world.R1, Parameters = parameters, n.years = 6)
   plotYearList(M, tau = tau)
+
+  
   
   world.R1 <- world %>% list_modify(pop = M$Year6)
   M2 <- runManyYears(world.R1, Parameters = parameters, n.years = 6)
@@ -27,8 +30,9 @@
   
   computeCohesiveness(world$pop, world)["SC.mean"]
   computeMigratoriness(world$pop, world)$overlap
-  with(world, computeEfficiency(pop, resource))
+  computeEfficiency(world$pop, world$resource, world)
   computeIndices(world$pop, world$resource, world)
+  computeIndices(M[[2]], world$resource, world)
   
 # Migratoriness Index
 
@@ -45,4 +49,6 @@
          resource = world.R1$resource) %>% t
   matplot(I.v2, type="o", pch = 19, lty = 1)
   legend("topright", pch = 19, col = 1:3, legend = colnames(I))
+  
+
   
