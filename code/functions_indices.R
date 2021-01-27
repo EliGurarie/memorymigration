@@ -12,16 +12,9 @@ computeCohesiveness <- function(pop){
 }
 
 computeEfficiency <- function(pop, resource, world){
-  
   dx <- world$dx
   tau <- world$tau
-  
-  Similarity <- matrix(NA, tau, tau)
-  for(i in 1:(tau-1))
-    for(j in (i+1):tau)
-      Similarity[i,j] <- sum(sqrt(pop[i,] * resource[j,])) * dx
-  
-  FE <- mean(Similarity, na.rm=TRUE)/tau
+  sum(sqrt(pop*resource))*dx/tau
 }
 
 computeMigratoriness <- function(pop, world){

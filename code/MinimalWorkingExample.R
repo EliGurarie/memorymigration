@@ -19,8 +19,9 @@
   
   M <- runManyYears(world.R1, Parameters = parameters, n.years = 6)
   plotYearList(M, tau = tau)
-
   
+  pop <- world$pop
+  resource <- world$resource
   
   world.R1 <- world %>% list_modify(pop = M$Year6)
   M2 <- runManyYears(world.R1, Parameters = parameters, n.years = 6)
