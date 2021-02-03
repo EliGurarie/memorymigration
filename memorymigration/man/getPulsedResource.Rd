@@ -22,11 +22,11 @@ A X x X matrix containing values of the resource distribution
 This function generates a a seasonal resource function with the following properties:
 1. The total amount of resource across space is constant throughout the year.
 2. At the beginning, middle, and end of the year the resource is uniformly distributed. 
-3. At some peak time $t_r < tau/2$, the resource concentrates at a location $x_r < \chi/2$
- with a spatial deviation $\sigma_x$ and a temporal deviation $sigma_t$ (where $tau$ 
- is the length of the year and $\chi$ is the extent of the spatial domain).
+3. At some peak time $t_r < tau/2$, the resource concentrates at a location $x_r < chi/2$
+ with a spatial deviation $sigma_x$ and a temporal deviation $sigma_t$ (where $tau$ 
+ is the length of the year and $chi$ is the extent of the spatial domain).
 4. The resource peaks exactly symmetrically at time $tau - t_r$ and location 
-$\chi - x_r$ with the same variance $\sigma_r$.
+$chi - x_r$ with the same variance $sigma_r$.
 }
 \details{
 To generate a resource with these properties, we distributing the resource in 
