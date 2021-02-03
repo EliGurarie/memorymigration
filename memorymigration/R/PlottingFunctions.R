@@ -7,8 +7,9 @@
 #' @param X.max maximum value of X-axis
 #' @param tau maximum value of time T
 #' @param log logical;
-#' @param persp logical;
+#' @param persp whether to plot an image / contour or perspective plot
 #' @seealso \link{runManyYears}; \link{printParameters}
+#' @example examples/plotting_examples.R
 
 plotYearList <- function(yearlist, X.max = 100, tau = 360, log = FALSE, 
                          persp = FALSE, ...){
@@ -25,10 +26,9 @@ plotYearList <- function(yearlist, X.max = 100, tau = 360, log = FALSE,
   if(!persp){
     image(time, x, allyears)
     contour(time, x, allyears, add = TRUE)  
-    
     mtext(side = 3, at = (1:n.years)*tau - tau/2, text = paste("Year", 1:n.years-1))
     abline(v = tau*1:(n.years-1), col = "grey") 
-  } else
+  } else 
     mypersp(time, x, allyears, ...) 
 }
 
