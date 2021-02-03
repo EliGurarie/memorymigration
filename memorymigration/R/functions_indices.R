@@ -11,7 +11,7 @@
 #' @seealso \link{computeEfficiency}, \link{computeMigratoriness}, \link{computeIndices}
 #' @example examples/indices_examples.R
 #' 
-computeCohesiveness <- function(pop){
+computeCohesiveness <- function(pop, world){
   
   getSD <- function(p, world){
     EX <- sum( world$X * p) * world$dx

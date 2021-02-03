@@ -4,7 +4,7 @@
 \alias{computeCohesiveness}
 \title{Compute social cohesiveness}
 \usage{
-computeCohesiveness(pop)
+computeCohesiveness(pop, world)
 }
 \arguments{
 \item{pop}{One cycle of population process}
