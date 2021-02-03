@@ -14,7 +14,7 @@ Simulations are run until a (quasi)-equilibrium state is achieved, where "state"
 
 ## Migratoriness 
 
-To determine the migratoriness of a population, we calculate overlap of the population from two different times within the year, choosing those times to minimize the overlap, and reporting the overal.  The overlap is defined as:
+To determine the migratoriness of a population, we calculate overlap of the population from two different times within the year, choosing those times to minimize the overlap, and reporting the overall overlap.  The overlap is defined as:
 
 $$O(t_1, t_2) = \int_D \sqrt{u(x, t_1) \, u(x, t_2)} \, dx; $$
 After calcuating this overlap of the two matrices that contain the population, we find the values of $t_1$ and $t_2$ that minimize $O$, corresponding to the periods of maximum distance. We subtract this minimum value to calculate migratoriness of the population. Thus, the migratoriness index (MI) is:

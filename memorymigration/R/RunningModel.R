@@ -1,4 +1,18 @@
-#' Run One Year forward
+#' Run Next Year
+#' 
+#' Based on a migratory population's set up (the World) and the values \code{alpha},
+#'\code{beta0} and \code{beta1}, this function determines the population 
+#'distribution for the following year. 
+#' 
+#' @param World List of 5 a population distribution across the time period in a T x X matrix,
+#'  a vector with midpoint X-values, the time points for the population as integers 1:tau,
+#'  the dx value and the tau value. Set up by the getSinePop function. 
+#' @param Parameters named vector of parameters. \code{epsilon} - diffusion coefficient; 
+#' \code{alpha} - resource 
+#' following coefficient; \code{beta0} - social cohesion coefficient; \code{beta1} - 
+#' memory coefficient
+#' @return a T x X matrix describing the population distribution for the next year
+#' @seealso \link{getSinePop}, \link{runManyYears}
 
 runNextYear <- function(World, Parameters){
   pop1 <- World$pop
@@ -22,7 +36,23 @@ runNextYear <- function(World, Parameters){
   pop2
 }
 
-#' Run several years forward
+#' Run Many Years 
+#' 
+#' Based on a migratory population's set up (the World) and the values \code{alpha},
+#'\code{beta0} and \code{beta1}, this function determines the population 
+#'distribution after several years. 
+#'
+#' @param World List of 5 a population distribution across the time period in a T x X matrix,
+#'  a vector with midpoint X-values, the time points for the population as integers 1:tau,
+#'  the dx value and the tau value. Set up by the getSinePop function. 
+#' @param Parameters named vector of parameters. These are \code{epsilon} - diffusion coefficient; 
+#' \code{alpha} - resource 
+#' following coefficient; \code{beta0} - social cohesion coefficient; \code{beta1} - 
+#' memory coefficient
+#' @param n.years number of years the population migrates 
+#' @return a list of n.years containing T x X matrices describing the population 
+#' distribution for each year after initial population
+#' @seealso \link{getSinePop}, \link{runManyYears}
 
 runManyYears <- function(World, Parameters, n.years){
   pop.list <- list(Year1 = World$pop)
@@ -36,3 +66,4 @@ runManyYears <- function(World, Parameters, n.years){
   names(pop.list) <- paste0("Year",0:n.years)
   pop.list
 }
+

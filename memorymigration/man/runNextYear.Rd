@@ -2,10 +2,28 @@
 % Please edit documentation in R/RunningModel.R
 \name{runNextYear}
 \alias{runNextYear}
-\title{Run One Year forward}
+\title{Run Next Year}
 \usage{
 runNextYear(World, Parameters)
 }
+\arguments{
+\item{World}{List of 5 a population distribution across the time period in a T x X matrix,
+a vector with midpoint X-values, the time points for the population as integers 1:tau,
+the dx value and the tau value. Set up by the getSinePop function.}
+
+\item{Parameters}{named vector of parameters. \code{epsilon} - diffusion coefficient; 
+\code{alpha} - resource 
+following coefficient; \code{beta0} - social cohesion coefficient; \code{beta1} - 
+memory coefficient}
+}
+\value{
+a T x X matrix describing the population distribution for the next year
+}
 \description{
-Run One Year forward
+Based on a migratory population's set up (the World) and the values \code{alpha},
+\code{beta0} and \code{beta1}, this function determines the population 
+distribution for the following year.
+}
+\seealso{
+\link{getSinePop}, \link{runManyYears}
 }

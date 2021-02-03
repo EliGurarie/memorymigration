@@ -5,7 +5,8 @@
 #' @param t vector of times
 #' @param pop a T x X matrix describing the population distribution 
 #' across the time period.
-#' @param parms named vector of parameters. THese are \code{alpha} - resource 
+#' @param parms named vector of parameters. These are \code{epsilon} - diffusion coefficient; 
+#' \code{alpha} - resource 
 #' following coefficient; \code{beta0} - social cohesion coefficient; \code{beta1} - 
 #' memory coefficient
 #' @param pop_lag the T x X population distribution over time in the previous cycle (year)

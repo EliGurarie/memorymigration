@@ -2,10 +2,31 @@
 % Please edit documentation in R/RunningModel.R
 \name{runManyYears}
 \alias{runManyYears}
-\title{Run several years forward}
+\title{Run Many Years}
 \usage{
 runManyYears(World, Parameters, n.years)
 }
+\arguments{
+\item{World}{List of 5 a population distribution across the time period in a T x X matrix,
+a vector with midpoint X-values, the time points for the population as integers 1:tau,
+the dx value and the tau value. Set up by the getSinePop function.}
+
+\item{Parameters}{named vector of parameters. These are \code{epsilon} - diffusion coefficient; 
+\code{alpha} - resource 
+following coefficient; \code{beta0} - social cohesion coefficient; \code{beta1} - 
+memory coefficient}
+
+\item{n.years}{number of years the population migrates}
+}
+\value{
+a list of n.years containing T x X matrices describing the population 
+distribution for each year after initial population
+}
 \description{
-Run several years forward
+Based on a migratory population's set up (the World) and the values \code{alpha},
+\code{beta0} and \code{beta1}, this function determines the population 
+distribution after several years.
+}
+\seealso{
+\link{getSinePop}, \link{runManyYears}
 }

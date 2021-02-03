@@ -12,7 +12,8 @@ ForagingMemoryModel(t, pop, parms, pop_lag, resource, dx = dx)
 \item{pop}{a T x X matrix describing the population distribution 
 across the time period.}
 
-\item{parms}{named vector of parameters. THese are \code{alpha} - resource 
+\item{parms}{named vector of parameters. These are \code{epsilon} - diffusion coefficient; 
+\code{alpha} - resource 
 following coefficient; \code{beta0} - social cohesion coefficient; \code{beta1} - 
 memory coefficient}
 

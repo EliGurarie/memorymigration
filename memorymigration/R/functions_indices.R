@@ -35,13 +35,29 @@ computeCohesiveness <- function(pop){
 #' @param resource The resource in an given cycle to compare to pop
 #' @param world world object
 #' @return a single foraging efficiecy (FE) index
-#' @example examples/indices_examples.
+#' @seealso \link{computeCohesiveness}, \link{computeMigratoriness}, \link{computeIndices}
+#' @example examples/indices_examples.R
 
 computeEfficiency <- function(pop, resource, world){
   dx <- world$dx
   tau <- world$tau
   sum(sqrt(pop*resource))*dx/tau
 }
+
+#' Compute Migratoriness
+#' 
+#' Returns an migratoriness index of a population by comparing the overlap 
+#' overlap of the population from two different times within the year, 
+#' choosing those times to minimize the overlap, and reporting the 
+#' overall overlap.
+#' 
+#' @param pop One cycle of population process
+#' @param world world object
+#' @return a list with the time of the minimal overlap and the Migratoriness 
+#' (MI) index 
+#' @seealso \link{computeEfficiency}, \link{computeCohesiveness}, \link{computeIndices}
+#' @example examples/indices_examples.R
+
 
 computeMigratoriness <- function(pop, world){
 
@@ -57,6 +73,21 @@ computeMigratoriness <- function(pop, world){
   list(times = which(Overlap == minOverlap, arr.ind = TRUE),
        overlap = minOverlap)
 }
+
+#' Compute Indicies
+#' 
+#' Returns the three migratoriness indeces calculated by the cumputeCohesiveness,
+#' commputeEfficiency, and computeMigratoriness functions for a population and 
+#' distribution and a resource distribution. 
+#' 
+#'
+#' @param pop One cycle of population process
+#' @param resource The resource in an given cycle to compare to pop
+#' @param world world object
+#' @return a data frame containing the Social Cohesiveness (SC) index,
+#' the Migratoriness (MI) index, and the Foraging Efficiency (FE) index
+#' @seealso \link{computeEfficiency}, \link{computeMigratoriness}, \link{computeCohesiveness}
+#' @example examples/indices_examples.R
 
 computeIndices <- function(pop, resource, world){
   SC = computeCohesiveness(pop, world)["SC.mean"]

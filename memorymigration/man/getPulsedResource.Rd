@@ -2,10 +2,34 @@
 % Please edit documentation in R/getPulsedResource.R
 \name{getPulsedResource}
 \alias{getPulsedResource}
-\title{getPulsedResource}
+\title{Get Pulsed Resource}
 \usage{
 getPulsedResource(t, x, par)
 }
+\arguments{
+\item{t}{vector with time values}
+
+\item{x}{vector with X-axis values}
+
+\item{par}{vector with four values: t.peak (which is the maximum peak of t), 
+t.sd (which is the standard deviation of t), x.peak (which is the maximum peak of x),
+and x.sd (which is the standard deviation of x)}
+}
+\value{
+A X x X matrix containing values of the resource distribution
+}
 \description{
-getPulsedResource
+This function generates a a seasonal resource function with the following properties:
+1. The total amount of resource across space is constant throughout the year.
+2. At the beginning, middle, and end of the year the resource is uniformly distributed. 
+3. At some peak time $t_r < \tau/2$, the resource concentrates at a location $x_r < \chi/2$
+ with a spatial deviation $\sigma_x$ and a temporal deviation $\sigma_t$ (where $\tau$ 
+ is the length of the year and $\chi$ is the extent of the spatial domain).
+4. The resource peaks exactly symmetrically at time $\tau - t_r$ and location 
+$\chi - x_r$ with the same variance $\sigma_r$.
+}
+\details{
+To generate a resource with these properties, we distributing the resource in 
+space as a beta distribution, where the two shape and scale parameters vary 
+sinusoidally in such a way as to fulfill the criteria above.
 }

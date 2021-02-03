@@ -14,6 +14,7 @@ world.R1 <- world %>%
 
 # run simulation 12 years
 
+runNextYear(world.R1, Parameters=parameters)
 M <- runManyYears(world.R1, Parameters = parameters, n.years = 6)
 plotYearList(M, tau = tau)
 
@@ -23,8 +24,6 @@ resource <- world$resource
 world.R1 <- world %>% list_modify(pop = M$Year6)
 M2 <- runManyYears(world.R1, Parameters = parameters, n.years = 6)
 plotYearList(M2, tau = tau)
-
-source("code/functions_indices.R")
 
 computeCohesiveness(world$pop, world)["SC.mean"]
 computeMigratoriness(world$pop, world)$overlap

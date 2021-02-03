@@ -1,6 +1,4 @@
-  source("functions2.R")
-  source("functions_indices.R")
-
+require("memorymigration")
 # Initialize world
   
   world <- getSinePop(tau = 100, X.min = 0, X.max = 100, dx=1, 

@@ -2,10 +2,25 @@
 % Please edit documentation in R/PlottingFunctions.R
 \name{plotYearList}
 \alias{plotYearList}
-\title{Plotting Functions}
+\title{Plot Year List}
 \usage{
 plotYearList(yearlist, X.max = 100, tau = 360, log = FALSE, persp = FALSE, ...)
 }
+\arguments{
+\item{yearlist}{a list of T x X matrices describing the population 
+distribution for each year after initial population; produced by the runManyYear function}
+
+\item{X.max}{maximum value of X-axis}
+
+\item{tau}{maximum value of time T}
+
+\item{log}{logical;}
+
+\item{persp}{logical;}
+}
 \description{
-Plotting Functions
+This function plots the migratoriness population distribution over a time period.
+}
+\seealso{
+\link{runManyYears}; \link{printParameters}
 }
