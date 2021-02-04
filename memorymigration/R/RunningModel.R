@@ -50,20 +50,28 @@ runNextYear <- function(World, Parameters){
 #' following coefficient; \code{beta0} - social cohesion coefficient; \code{beta1} - 
 #' memory coefficient
 #' @param n.years number of years the population migrates 
+#' @param threshold the threshold for the social cohesion between two population 
+#' distributions from two consecutive years 
 #' @return a list of n.years containing T x X matrices describing the population 
 #' distribution for each year after initial population
 #' @seealso \link{getSinePop}, \link{runManyYears}
 
-runManyYears <- function(World, Parameters, n.years){
+runManyYears <- function(World, Parameters, n.years, threshold){
   pop.list <- list(Year1 = World$pop)
-  
-  for(i in 1:n.years){
+  i <- 1
+  cat(paste("running year ", i, "\n"))
+  World$pop <- pop.list[[i]]
+  pop.list[[i+1]] <- runNextYear(World, 
+                                 Parameters = parameters)
+  while(computeEfficiency(pop.list[[i]], pop.list[[i+1]], World)<threshold & i<n.years){
+    i <- i+1
     cat(paste("running year ", i, "\n"))
     World$pop <- pop.list[[i]]
     pop.list[[i+1]] <- runNextYear(World, 
                                    Parameters = parameters)
+    
   }
-  names(pop.list) <- paste0("Year",0:n.years)
+  names(pop.list) <- paste0("Year",0:(length(pop.list)-1))
   pop.list
 }
 

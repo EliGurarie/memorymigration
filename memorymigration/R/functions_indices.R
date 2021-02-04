@@ -7,6 +7,7 @@
 #' the mean standard deviation of the population.
 #'  
 #' @param pop One cycle of population process
+#' @param world world object
 #' @return a names vector of mean and standard deviation of SC
 #' @seealso \link{computeEfficiency}, \link{computeMigratoriness}, \link{computeIndices}
 #' @example examples/indices_examples.R
