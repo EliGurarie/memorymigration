@@ -11,7 +11,10 @@ computeEfficiency(pop, resource, world)
 
 \item{resource}{The resource in an given cycle to compare to pop}
 
-\item{world}{world object}
+\item{world}{world object; list of 5: a population distribution across the time period in a T x X matrix,
+a vector with midpoint X-values, the time points for the population as integers 1:tau,
+the dx value and the tau value. Can incorporate resource attribute into the world to make a list of 6.
+Set up by the getSinePop function.}
 }
 \value{
 a single foraging efficiecy (FE) index
@@ -29,27 +32,25 @@ dx <- 2
 parameters <- c(epsilon = 5, alpha = 300, beta0=100, beta1 = 300)
 world.R1 <- getSinePop(tau = 100, X.min = 0, X.max = 100, dx=2, 
                     peak.max = 80, peak.min = 20, sd = 10)
-world.R1$resource <- getPulsedResource(world$time, world$X, c(t.peak = 25, t.sd = 9, 
+world.R1$resource <- getPulsedResource(world.R1$time, world.R1$X, c(t.peak = 25, t.sd = 9, 
                                                            x.peak = 80, x.sd = 9))
 
+#run simulation for 12 years 
+M <- runManyYears(world.R1, Parameters = parameters, n.years = 6, 1)
 
-# run simulation 12 years
+world.R2 <- world.R1 \%>\% list_modify(pop = M$Year6)
+M2 <- runManyYears(world.R2, Parameters = parameters, n.years = 6, 1)
+plotYearList(M2, world.R2, tau = tau)
 
-M <- runManyYears(world.R1, Parameters = parameters, n.years = 6)
-plotYearList(M, tau = tau)
+#simulation runs for 3 years since that is when threshold is hit
 
-pop <- world$pop
-resource <- world$resource
+M <- runManyYears(world.R1, Parameters = parameters, n.years = 6, 0.99)
+plotYearList(M, world.R1, tau = tau)
 
-world.R1 <- world \%>\% list_modify(pop = M$Year6)
-M2 <- runManyYears(world.R1, Parameters = parameters, n.years = 6)
-plotYearList(M2, tau = tau)
-
-computeCohesiveness(world$pop, world)["SC.mean"]
-computeMigratoriness(world$pop, world)$overlap
-computeEfficiency(world$pop, world$resource, world)
-computeIndices(world$pop, world$resource, world)
-computeIndices(M[[2]], world$resource, world)
+computeCohesiveness(M[[6]], world.R1)["SC.mean"]
+computeMigratoriness(M[[6]], world.R1)$overlap
+computeEfficiency(M[[6]], world.R1$resource, world.R1)
+computeIndices(M[[6]], world.R1$resource, world.R1)
 }
 \seealso{
 \link{computeCohesiveness}, \link{computeMigratoriness}, \link{computeIndices}

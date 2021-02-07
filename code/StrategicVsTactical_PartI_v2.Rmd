@@ -34,7 +34,7 @@ For reference and replicability, I include the incrementally constructed R code,
 
 
 ```{r, message=FALSE, warning=FALSE}
-source("functions2.R")
+require("memorymigration")
 ```
 
 # Static run
@@ -141,14 +141,14 @@ parameters <- c(epsilon = 5, alpha = 0, beta0 = 20, beta1 = 5e2)
 
 eval <- FALSE
 if(eval){
-  MemSim <- runManyYears(World, Parameters = parameters, 
-                         n.years = 3)
+  MemSim <- runManyYears(world, Parameters = parameters, 
+                         n.years = 3, 0.99)
   save(MemSim, file = "../results/MemSim.rda")
 } else load("../results/MemSim.rda")
   
 par(mfrow = c(1,2), oma = c(0,0,3,0))
-plotYearList(MemSim, tau = tau)
-plotYearList(MemSim, tau = tau, persp = TRUE, scale = FALSE, expand = 100)
+plotYearList(MemSim, world, tau = tau)
+plotYearList(MemSim, world, tau = tau, persp = TRUE, scale = FALSE, expand = 100)
 title(printParameters(parameters), outer = TRUE)
 ```
 
@@ -170,14 +170,14 @@ parameters <- c(epsilon = 5, alpha = 5e2, beta0 = 0, beta1 = 0)
 
 eval <- FALSE
 if(eval){
-  FixedResourceSim <- runManyYears(world, Parameters = parameters, n.years = 3)
+  FixedResourceSim <- runManyYears(world, Parameters = parameters, n.years = 3, 0.99)
   save(FixedResourceSim, file = "../results/FixedResourceSim.rda")
 } else load("../results/FixedResourceSim.rda")
   
 
 par(mfrow = c(1,2), oma = c(0,0,3,0))
-plotYearList(FixedResourceSim, tau = tau)
-plotYearList(FixedResourceSim, tau = tau, persp = TRUE, scale = FALSE, expand = 100)
+plotYearList(FixedResourceSim, world, tau = tau)
+plotYearList(FixedResourceSim, world, tau = tau, persp = TRUE, scale = FALSE, expand = 100)
 title(printParameters(parameters), outer = TRUE)
 ```
 
@@ -194,13 +194,13 @@ parameters <- c(epsilon = 5, alpha = 3e2, beta0=20, beta1 = 5e2)
 
 eval <- FALSE
 if(eval){
-  MemResourceSim <- runManyYears(World, Parameters = parameters, n.years = 3)
+  MemResourceSim <- runManyYears(world, Parameters = parameters, n.years = 3, 0.99)
   save(MemResourceSim, file = "../results/MemResourceSim.rda")
 } else load("../results/MemResourceSim.rda")
   
 par(mfrow = c(1,2), oma = c(0,0,3,0))
-plotYearList(MemResourceSim, tau = tau)
-plotYearList(MemResourceSim, tau = tau, persp = TRUE, scale = FALSE, expand = 100)
+plotYearList(MemResourceSim, world, tau = tau)
+plotYearList(MemResourceSim, world, tau = tau, persp = TRUE, scale = FALSE, expand = 100)
 title(printParameters(parameters), outer = TRUE)
 ```
 
@@ -276,11 +276,11 @@ In these pulsed resources, we might assume that a *combination* of memory and ta
 
 ```{r PulseSim1, fig.width = 10}
 parameters <- c(epsilon = 5, alpha = 0, beta0 = 20, beta1 = 5e2)
-Memory_PulsedResource_Sim <- runManyYears(world.R3, Parameters = parameters, n.years = 6)
+Memory_PulsedResource_Sim <- runManyYears(world.R3, Parameters = parameters, n.years = 6, 0.99)
 
 par(mfrow = c(1,2), oma = c(0,0,3,0))
-plotYearList(Memory_PulsedResource_Sim, tau = tau)
-plotYearList(Memory_PulsedResource_Sim, tau = tau, persp = TRUE, scale = FALSE, expand = 100)
+plotYearList(Memory_PulsedResource_Sim, world.R3, tau = tau)
+plotYearList(Memory_PulsedResource_Sim, world.R3, tau = tau, persp = TRUE, scale = FALSE, expand = 100)
 title(printParameters(parameters), outer = TRUE)
 ```
 
@@ -290,11 +290,11 @@ This model does a surprisingly good job aggregating at the appropriate resource,
 
 ```{r PulseSim2, fig.width = 10}
 parameters <- c(epsilon = 2, alpha = 4e2, beta0 = 0, beta1 = 0)
-Tactic_PulsedResource_Sim <- runManyYears(world.R1, Parameters = parameters, n.years = 6)
+Tactic_PulsedResource_Sim <- runManyYears(world.R1, Parameters = parameters, n.years = 6, 0.99)
 
 par(mfrow = c(1,2), oma = c(0,0,3,0))
-plotYearList(Tactic_PulsedResource_Sim, tau = tau)
-plotYearList(Tactic_PulsedResource_Sim, tau = tau, persp = TRUE, scale = FALSE, expand = 100)
+plotYearList(Tactic_PulsedResource_Sim, world.R1, tau = tau)
+plotYearList(Tactic_PulsedResource_Sim, world.R1, tau = tau, persp = TRUE, scale = FALSE, expand = 100)
 title(printParameters(parameters), outer = TRUE)
 ```
 
@@ -304,11 +304,11 @@ It is not clear that the hybrid model recovers a true migration, but it seems to
 
 ```{r PulseSim3, fig.width = 10}
 parameters <- c(epsilon = 5, alpha = 2e2, beta0 = 20, beta1 = 3e2)
-Hybrid_PulsedResource_Sim <- runManyYears(world.R1, Parameters = parameters, n.years = 6)
+Hybrid_PulsedResource_Sim <- runManyYears(world.R1, Parameters = parameters, n.years = 6, 0.99)
 
 par(mfrow = c(1,2), oma = c(0,0,3,0))
-plotYearList(Hybrid_PulsedResource_Sim, tau = tau)
-plotYearList(Hybrid_PulsedResource_Sim, tau = tau, 
+plotYearList(Hybrid_PulsedResource_Sim, world.R1, tau = tau)
+plotYearList(Hybrid_PulsedResource_Sim, world.R1, tau = tau, 
              persp = TRUE, scale = FALSE, expand = 100)
 title(printParameters(parameters), outer = TRUE)
 ```
@@ -323,11 +323,11 @@ Notable concentrations at the resource peaks, but a lot of diffuse behavior in t
 
 ```{r PulseSim4_tactic, fig.width = 10}
 parameters <- c(epsilon = 2, alpha = 2e2, beta0 = 0, beta1 = 0)
-Tactic_PulsedResource_Sim2 <- runManyYears(world.R1, Parameters = parameters, n.years = 6)
+Tactic_PulsedResource_Sim2 <- runManyYears(world.R1, Parameters = parameters, n.years = 6, 0.99)
 
 par(mfrow = c(1,2), oma = c(0,0,3,0))
-plotYearList(Hybrid_PulsedResource_Sim2, tau = tau)
-plotYearList(Hybrid_PulsedResource_Sim2, tau = tau, persp = TRUE, scale = FALSE, expand = 100)
+plotYearList(Hybrid_PulsedResource_Sim2, world.R1, tau = tau)
+plotYearList(Hybrid_PulsedResource_Sim2, world.R1, tau = tau, persp = TRUE, scale = FALSE, expand = 100)
 title(printParameters(parameters), outer = TRUE)
 ```
 
@@ -338,11 +338,11 @@ Memory appears to reinforce the aggregations at the (narrow) resource peaks
 
 ```{r PulseSim4_memory, fig.width = 10}
 parameters <- c(epsilon = 5, alpha = 2e2, beta0 = 20, beta1 = 3e2)
-Hybrid_PulsedResource_Sim3 <- runManyYears(world.R4, Parameters = parameters, n.years = 6)
+Hybrid_PulsedResource_Sim3 <- runManyYears(world.R4, Parameters = parameters, n.years = 6, 0.99)
 
 par(mfrow = c(1,2), oma = c(0,0,3,0))
-plotYearList(Hybrid_PulsedResource_Sim3, tau = tau)
-plotYearList(Hybrid_PulsedResource_Sim3, tau = tau, persp = TRUE, scale = FALSE, expand = 100)
+plotYearList(Hybrid_PulsedResource_Sim3, world.R4, tau = tau)
+plotYearList(Hybrid_PulsedResource_Sim3, world.R4, tau = tau, persp = TRUE, scale = FALSE, expand = 100)
 title(printParameters(parameters), outer = TRUE)
 ```
 
@@ -350,24 +350,22 @@ title(printParameters(parameters), outer = TRUE)
 We apply the three indices to an example model. In this model, we let the population be "initialized" via a sinusoidal migration pattern, while the resource is seasonal in a broad, long peak. The model uses the parameters $\epsilon = 5, \alpha = 300, \beta0=100, \beta1 = 300$ so that the migratory population combines both memory and a tactical strategy. We run the model for 12 years and compute the three indices. Then we plot the three indices to the view the trend of the migratory population over time.  
 
 ```{r}
-source("functions_indices.R")
-  world$resource <- getPulsedResource(world$time, world$X, c(t.peak = 25, t.sd = 9, 
-                                                             x.peak = 80, x.sd = 9))
+dx <- 1
+
+parameters <- c(epsilon = 5, alpha = 300, beta0=100, beta1 = 300)
+world.R1 <- getSinePop(tau = 100, X.min = 0, X.max = 100, dx=2, 
+                    peak.max = 80, peak.min = 20, sd = 10)
+world.R1$resource <- getPulsedResource(world.R1$time, world.R1$X, c(t.peak = 25, t.sd = 9, 
+                                                           x.peak = 80, x.sd = 9))
+
+#run simulation for 12 years 
+M <- runManyYears(world.R1, Parameters = parameters, n.years = 6, 1)
+
+world.R2 <- world.R1 %>% list_modify(pop = M$Year6)
+M2 <- runManyYears(world.R2, Parameters = parameters, n.years = 6, 1)
   
-  
-  parameters <- c(epsilon = 5, alpha = 300, beta0=100, beta1 = 300)
-  world.R1 <- world %>% 
-    list_modify(resource = getPulsedResource(1:world$tau, world$X, 
-                                             c(t.peak = 25, t.sd = 9, 
-                                               x.peak = 80, x.sd = 9)))
-  M <- runManyYears(world.R1, Parameters = parameters, n.years = 6)
-  
-  world.R1 <- world %>% list_modify(pop = M$Year6)
-  M2 <- runManyYears(world.R1, Parameters = parameters, n.years = 6)
-  
-  source("functions_indices.R")
-  indices1 <- sapply(M, computeIndices, resource = world$resource, world = world) %>% t
-  indices2 <- sapply(M2, computeIndices, resource = world$resource, world = world) %>% t
+  indices1 <- sapply(M, computeIndices, resource = world.R1$resource, world = world.R1) %>% t
+  indices2 <- sapply(M2, computeIndices, resource = world.R2$resource, world = world.R2) %>% t
   I <- rbind(indices1, indices2)
   
   matplot(I, type="o", pch = 19, lty = 1) #year 6 and year 7 are the same so it is plotted twice 
@@ -375,7 +373,19 @@ source("functions_indices.R")
 
 
 ```
+Then we run the model to stop running the simulation at a certain threshold when the population reaches a "dynamic equilibrium state". In this example, the model only runs three years before hitting the threshold. 
+```{r}
+#simulation runs for 3 years since that is when threshold is hit
 
+M <- runManyYears(world.R1, Parameters = parameters, n.years = 6, 0.99)
+plotYearList(M, world.R1, tau = tau)
+
+computeCohesiveness(M[[3]], world.R1)["SC.mean"]
+computeMigratoriness(M[[3]], world.R1)$overlap
+computeEfficiency(M[[3]], world.R1$resource, world.R1)
+computeIndices(M[[3]], world.R1$resource, world.R1)
+
+```
 
 # Some summaries
 

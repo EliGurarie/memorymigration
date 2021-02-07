@@ -7,7 +7,10 @@
 #' the mean standard deviation of the population.
 #'  
 #' @param pop One cycle of population process
-#' @param world world object
+#' @param world world object; list of 5: a population distribution across the time period in a T x X matrix,
+#'  a vector with midpoint X-values, the time points for the population as integers 1:tau,
+#'  the dx value and the tau value. Can incorporate resource attribute into the world to make a list of 6.
+#'  Set up by the getSinePop function. 
 #' @return a names vector of mean and standard deviation of SC
 #' @seealso \link{computeEfficiency}, \link{computeMigratoriness}, \link{computeIndices}
 #' @example examples/indices_examples.R
@@ -34,7 +37,10 @@ computeCohesiveness <- function(pop, world){
 #' 
 #' @param pop One cycle of population process
 #' @param resource The resource in an given cycle to compare to pop
-#' @param world world object
+#' @param world world object; list of 5: a population distribution across the time period in a T x X matrix,
+#'  a vector with midpoint X-values, the time points for the population as integers 1:tau,
+#'  the dx value and the tau value. Can incorporate resource attribute into the world to make a list of 6.
+#'  Set up by the getSinePop function. 
 #' @return a single foraging efficiecy (FE) index
 #' @seealso \link{computeCohesiveness}, \link{computeMigratoriness}, \link{computeIndices}
 #' @example examples/indices_examples.R
@@ -53,7 +59,10 @@ computeEfficiency <- function(pop, resource, world){
 #' overall overlap.
 #' 
 #' @param pop One cycle of population process
-#' @param world world object
+#' @param world world object; list of 5: a population distribution across the time period in a T x X matrix,
+#'  a vector with midpoint X-values, the time points for the population as integers 1:tau,
+#'  the dx value and the tau value. Can incorporate resource attribute into the world to make a list of 6.
+#'  Set up by the getSinePop function. 
 #' @return a list with the time of the minimal overlap and the Migratoriness 
 #' (MI) index 
 #' @seealso \link{computeEfficiency}, \link{computeCohesiveness}, \link{computeIndices}
@@ -84,7 +93,10 @@ computeMigratoriness <- function(pop, world){
 #'
 #' @param pop One cycle of population process
 #' @param resource The resource in an given cycle to compare to pop
-#' @param world world object
+#' @param world world object; list of 5: a population distribution across the time period in a T x X matrix,
+#'  a vector with midpoint X-values, the time points for the population as integers 1:tau,
+#'  the dx value and the tau value. Can incorporate resource attribute into the world to make a list of 6.
+#'  Set up by the getSinePop function. 
 #' @return a data frame containing the Social Cohesiveness (SC) index,
 #' the Migratoriness (MI) index, and the Foraging Efficiency (FE) index
 #' @seealso \link{computeEfficiency}, \link{computeMigratoriness}, \link{computeCohesiveness}

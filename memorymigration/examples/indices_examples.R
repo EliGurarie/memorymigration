@@ -8,20 +8,19 @@ world.R1 <- getSinePop(tau = 100, X.min = 0, X.max = 100, dx=2,
 world.R1$resource <- getPulsedResource(world.R1$time, world.R1$X, c(t.peak = 25, t.sd = 9, 
                                                            x.peak = 80, x.sd = 9))
 
+#run simulation for 12 years 
+M <- runManyYears(world.R1, Parameters = parameters, n.years = 6, 1)
 
-# run simulation 12 years
+world.R2 <- world.R1 %>% list_modify(pop = M$Year6)
+M2 <- runManyYears(world.R2, Parameters = parameters, n.years = 6, 1)
+plotYearList(M2, world.R2, tau = tau)
+
+#simulation runs for 3 years since that is when threshold is hit
 
 M <- runManyYears(world.R1, Parameters = parameters, n.years = 6, 0.99)
-plotYearList(M, tau = tau)
+plotYearList(M, world.R1, tau = tau)
 
-pop <- world.R1$pop
-resource <- world.R1$resource
-
-world.R1 <- world %>% list_modify(pop = M$Year6)
-M2 <- runManyYears(world.R1, Parameters = parameters, n.years = 6, 0.999)
-plotYearList(M2, tau = tau)
-
-computeCohesiveness(world$pop, world)["SC.mean"]
-computeMigratoriness(world$pop, world)$overlap
-computeEfficiency(world$pop, world$resource, world)
-computeIndices(world$pop, world$resource, world)
+computeCohesiveness(M[[6]], world.R1)["SC.mean"]
+computeMigratoriness(M[[6]], world.R1)$overlap
+computeEfficiency(M[[6]], world.R1$resource, world.R1)
+computeIndices(M[[6]], world.R1$resource, world.R1)

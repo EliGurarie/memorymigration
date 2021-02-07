@@ -4,9 +4,10 @@
 #'\code{beta0} and \code{beta1}, this function determines the population 
 #'distribution for the following year. 
 #' 
-#' @param World List of 5 a population distribution across the time period in a T x X matrix,
+#' @param World List of 5: a population distribution across the time period in a T x X matrix,
 #'  a vector with midpoint X-values, the time points for the population as integers 1:tau,
-#'  the dx value and the tau value. Set up by the getSinePop function. 
+#'  the dx value and the tau value. Can incorporate resource attribute into the world to make a list of 6.
+#'  Set up by the getSinePop function. 
 #' @param Parameters named vector of parameters. \code{epsilon} - diffusion coefficient; 
 #' \code{alpha} - resource 
 #' following coefficient; \code{beta0} - social cohesion coefficient; \code{beta1} - 
@@ -42,16 +43,17 @@ runNextYear <- function(World, Parameters){
 #'\code{beta0} and \code{beta1}, this function determines the population 
 #'distribution after several years. 
 #'
-#' @param World List of 5 a population distribution across the time period in a T x X matrix,
+#' @param World World List of 5: a population distribution across the time period in a T x X matrix,
 #'  a vector with midpoint X-values, the time points for the population as integers 1:tau,
-#'  the dx value and the tau value. Set up by the getSinePop function. 
+#'  the dx value and the tau value. Can incorporate resource attribute into the world to make a list of 6.
+#'  Set up by the getSinePop function.  
 #' @param Parameters named vector of parameters. These are \code{epsilon} - diffusion coefficient; 
 #' \code{alpha} - resource 
 #' following coefficient; \code{beta0} - social cohesion coefficient; \code{beta1} - 
 #' memory coefficient
 #' @param n.years number of years the population migrates 
 #' @param threshold the threshold for the social cohesion between two population 
-#' distributions from two consecutive years 
+#' distributions from two consecutive years. This is a number between 0 and 1. 
 #' @return a list of n.years containing T x X matrices describing the population 
 #' distribution for each year after initial population
 #' @seealso \link{getSinePop}, \link{runManyYears}
