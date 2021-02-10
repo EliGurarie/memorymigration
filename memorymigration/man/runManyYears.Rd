@@ -4,7 +4,7 @@
 \alias{runManyYears}
 \title{Run Many Years}
 \usage{
-runManyYears(World, Parameters, n.years, threshold)
+runManyYears(World, Parameters, n.years, threshold, verbose = FALSE)
 }
 \arguments{
 \item{World}{World List of 5: a population distribution across the time period in a T x X matrix,

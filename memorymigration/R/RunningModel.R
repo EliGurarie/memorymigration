@@ -58,20 +58,27 @@ runNextYear <- function(World, Parameters){
 #' distribution for each year after initial population
 #' @seealso \link{getSinePop}, \link{runManyYears}
 
-runManyYears <- function(World, Parameters, n.years, threshold){
+runManyYears <- function(World, Parameters, n.years, threshold, verbose = FALSE){
   pop.list <- list(Year1 = World$pop)
-  i <- 1
-  cat(paste("running year ", i, "\n"))
+  i <- 
+    
+  if(verbose) cat(paste("running year ", i, "\n"))
   World$pop <- pop.list[[i]]
   pop.list[[i+1]] <- runNextYear(World, 
                                  Parameters = parameters)
-  while(computeEfficiency(pop.list[[i]], pop.list[[i+1]], World)<threshold & i<n.years){
+  similarity <- computeEfficiency(pop.list[[i]], pop.list[[i+1]], World)
+  if(verbose) cat(paste("similarity:", round(similarity, 4), "\n"))
+  
+  while((similarity < threshold) & (i < n.years)){
+    
     i <- i+1
-    cat(paste("running year ", i, "\n"))
+    if(verbose) cat(paste("running year ", i, "\n"))
+    
     World$pop <- pop.list[[i]]
     pop.list[[i+1]] <- runNextYear(World, 
                                    Parameters = parameters)
-    
+    similarity <- computeEfficiency(pop.list[[i]], pop.list[[i+1]], World)
+    if(verbose) cat(paste("similarity:", round(similarity, 4), "\n"))
   }
   names(pop.list) <- paste0("Year",0:(length(pop.list)-1))
   pop.list

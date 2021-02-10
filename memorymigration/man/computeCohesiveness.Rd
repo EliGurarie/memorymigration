@@ -27,7 +27,7 @@ the mean standard deviation of the population.
 \examples{
 # Initialize world
 
-dx <- 2
+dx <- 1
 
 parameters <- c(epsilon = 5, alpha = 300, beta0=100, beta1 = 300)
 world.R1 <- getSinePop(tau = 100, X.min = 0, X.max = 100, dx=2, 
@@ -44,7 +44,7 @@ plotYearList(M2, world.R2, tau = tau)
 
 #simulation runs for 3 years since that is when threshold is hit
 
-M <- runManyYears(world.R1, Parameters = parameters, n.years = 6, 0.99)
+M <- runManyYears(world.R1, Parameters = parameters, n.years = 12, 0.998)
 plotYearList(M, world.R1, tau = tau)
 
 computeCohesiveness(M[[6]], world.R1)["SC.mean"]
