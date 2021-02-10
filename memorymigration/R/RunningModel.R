@@ -58,7 +58,7 @@ runNextYear <- function(World, Parameters){
 #' distribution for each year after initial population
 #' @seealso \link{getSinePop}, \link{runManyYears}
 
-runManyYears <- function(World, Parameters, n.years, threshold, verbose = FALSE){
+runManyYears <- function(World, Parameters, n.years = 30, threshold= 0.995, verbose = FALSE){
   pop.list <- list(Year1 = World$pop)
   i <- 
     
@@ -82,5 +82,23 @@ runManyYears <- function(World, Parameters, n.years, threshold, verbose = FALSE)
   }
   names(pop.list) <- paste0("Year",0:(length(pop.list)-1))
   pop.list
+}
+
+
+#' Run Many Years for a set of parameters
+#' 
+#' Based on a migratory population's set up (the World) and the values \code{alpha},
+#'\code{beta0} and \code{beta1}, this function determines the population 
+#'distribution after several years. 
+
+
+function(parameters.df, world, ...){
+  indices.df <- data.frame()
+  for(i in 1:nrow(parameters.df)){
+    M <- runManyYears(world, Parameters = parameters.df[i,], ...) 
+    indices <- computeIndices(M[[length(M)]], world$resource, world)
+    indices.df <- rbind(indices.df, data.frame(t(parameters.df[i,]), indices), n.years = length(M))
+  }
+  return(indices.df)
 }
 
