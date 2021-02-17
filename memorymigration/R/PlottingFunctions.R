@@ -14,7 +14,8 @@
 #' @param persp whether to plot an image / contour or perspective plot
 #' @seealso \link{runManyYears}; \link{printParameters}
 #' @example examples/plotting_examples.R
-
+#' @export
+#' 
 plotYearList <- function(yearlist, World, X.max = 100, tau = 360, log = FALSE, 
                          persp = FALSE, ...){
   

@@ -14,6 +14,7 @@
 #' @return a names vector of mean and standard deviation of SC
 #' @seealso \link{computeEfficiency}, \link{computeMigratoriness}, \link{computeIndices}
 #' @example examples/indices_examples.R
+#' @export
 #' 
 computeCohesiveness <- function(pop, world){
   
@@ -44,6 +45,7 @@ computeCohesiveness <- function(pop, world){
 #' @return a single foraging efficiecy (FE) index
 #' @seealso \link{computeCohesiveness}, \link{computeMigratoriness}, \link{computeIndices}
 #' @example examples/indices_examples.R
+#' @export
 
 computeEfficiency <- function(pop, resource, world){
   dx <- world$dx
@@ -101,7 +103,8 @@ computeMigratoriness <- function(pop, world){
 #' the Migratoriness (MI) index, and the Foraging Efficiency (FE) index
 #' @seealso \link{computeEfficiency}, \link{computeMigratoriness}, \link{computeCohesiveness}
 #' @example examples/indices_examples.R
-
+#' @export
+#' 
 computeIndices <- function(pop, resource, world){
   SC = computeCohesiveness(pop, world)["SC.mean"]
   MI = computeMigratoriness(pop, world)$overlap

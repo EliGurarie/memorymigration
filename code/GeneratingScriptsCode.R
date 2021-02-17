@@ -1,6 +1,20 @@
-createShellScript("world.R1", "resource", "memorymigration", "testing.R", 5, 0, 5, 1, 2, 0, 2, 0)
-createSource("world.R1", "resource", "memorymigration", "testing.R", 5, 0, 5, 1, 2, 0, 2, 0)
+createShellScript(worldname = "world", 
+                  resourcename = "resource_R1", 
+                  directory = "shelltest", 
+                  filename = "testing", 
+                  epsilon = 5, depsilon = 1, 
+                  alpha = 5, dalpha = 1, 
+                  beta0 = 2, dbeta0 = 0, 
+                  beta1 = 2, dbeta1 = 0)
 
+createSource(worldname = "world", 
+             resourcename = "resource_R1", 
+             directory = "scripttest", 
+             filename = "testing", 
+             epsilon = 5, depsilon = 1, 
+             alpha = 5, dalpha = 0, 
+             beta0 = 2, dbeta0 = 0, 
+             beta1 = 2, dbeta1 = 0)
 
 ####################
 # OLD EXAMPLE

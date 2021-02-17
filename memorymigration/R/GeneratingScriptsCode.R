@@ -7,47 +7,59 @@
 #' @param directory string containing directory of where file will be created
 #' @param filename string containing base name of the file to be created 
 #' @param epsilon maximum value of epsilon parameter
-#' @param epsilon.difference a factor of the value of epsilon to 
+#' @param depsilon a factor of the value of epsilon to 
 #' indicate the different values of epsilon as a parameter. Then the epsilon values 
 #' evaluated in the model will be 0:epsilon in equal steps of this difference value.
 #' Set this value as 0 if only value of epsilon should be evaluated
 #' @param alpha maximum value of alpha parameter
-#' @param alpha.difference a factor of the value of alpha to 
+#' @param dalpha a factor of the value of alpha to 
 #' indicate the different values of alpha as a parameter. Then the alpha values 
 #' evaluated in the model will be 0:alpha in equal steps of this difference value.
 #' Set this value as 0 if only value of alpha should be evaluated
 #' @param beta0 maximum value of beta0 parameter
-#' @param beta0.difference a factor of the value of beta0 to 
+#' @param dbeta0 a factor of the value of beta0 to 
 #' indicate the different values of beta0 as a parameter. Then the beta0 values 
 #' evaluated in the model will be 0:beta0 in equal steps of this difference value.
 #' Set this value as 0 if only value of beta0 should be evaluated
 #' @param beta1 maximum value of beta0 parameter
-#' @param beta1.difference a factor of the value of beta1 to 
+#' @param dbeta1 a factor of the value of beta1 to 
 #' indicate the different values of beta1 as a parameter. Then the beta1 values 
 #' evaluated in the model will be 0:beta1 in equal steps of this difference value.
 #' Set this value as 0 if only value of beta1 should be evaluated
 #' @return creates .R files with scripts 
-#'  @seealso \link{createShellScript}
+#' @seealso \link{createShellScript}
+#'   require(memorymigration)
+#' @examples
+#' data(world); data(resources)
+#' parameters.df = data.frame( epsilon=seq(1, 100, length = 2), 
+#'                             alpha=1000, beta0=100, beta1=200)
+#' world$resource <-  resource_R1 
+#' results <- runManyRuns(parameters.df, world)
+#' save(results, file =paste0('scripttest/results/run1.rda'))
 
-createSource <- function(worldname, resourcename, directory, filename, episilon, epsilon.difference, alpha, alpha.difference, beta0, beta0.difference, beta1, beta1.difference){
-  if(epsilon.difference>0){epsilonvector <- seq(0, episilon, episilon.difference)} else epsilonvector <- c(episilon)
-  if(alpha.difference>0){alphavector <- seq(0, alpha, alpha.difference)} else alphavector <- c(alpha)
-  if(beta0.difference>0){beta0vector <- seq(0, beta0, beta0.difference)} else beta0vector <- c(beta0)
-  if(beta1.difference>0){beta1vector <- seq(0, beta1, beta1.difference)} else beta1vector <- c(beta1)
+
+createSource <- function(worldname = "world", resourcename, 
+                         directory, filename, 
+                         epsilon, depsilon, alpha, dalpha, 
+                         beta0, dbeta0, beta1, dbeta1){
+  if(depsilon>0){epsilonvector <- seq(0, epsilon, depsilon)} else 
+    epsilonvector <- c(epsilon)
+  if(dalpha>0){alphavector <- seq(0, alpha, dalpha)} else alphavector <- c(alpha)
+  if(dbeta0>0){beta0vector <- seq(0, beta0, dbeta0)} else beta0vector <- c(beta0)
+  if(dbeta1>0){beta1vector <- seq(0, beta1, dbeta1)} else beta1vector <- c(beta1)
   parametersexpansion <- expand.grid(epsilon = epsilonvector, alpha = alphavector, beta0 = beta0vector, beta1 = beta1vector)
   for(i in 1:nrow(parametersexpansion)){
     parameters <- parametersexpansion[i,]
-  sink(paste0(filename, i, ".R"))
+  sink(paste0(directory, "/", filename, i, ".R"))
   cat(
     "require(memorymigration)\n",
-    paste0("load(",worldname,")\n"),
-    paste0("load(",resourcename,")\n"),
-    paste("parameters.df = c(", paste0(names(parameters), "=", parameters, collapse = ", "), ")\n"), 
-    "world$resource <- resourcename \n",
+    "data(world); data(resources)\n",
+    paste("parameters = c(", paste0(names(parameters), "=", parameters, collapse = ", "), ")\n"), 
+    "world$resource <- ", resourcename, "\n",
     "M <- runManyYears(world, Parameters = parameters, n.years = 30, threshold = 0.99) \n", 
     "indices <- computeIndices(M[[length(M)]], world$resource, world) \n",
     paste0("R", i), "<- data.frame(t(parameters), indices) \n",
-    "save(", paste0("R", i, ", file =", "paste0(directory,", "results/run", i,".rda)", ")"))
+    "save(", paste0("R", i, ", file =", "paste0('", directory, "/results/run", i,".rda')", ")"))
   sink()
   }}
 
@@ -62,35 +74,38 @@ createSource <- function(worldname, resourcename, directory, filename, episilon,
 #' @param filename string containing base name of the file of the R.script to run 
 #' through the shell
 #' @param epsilon maximum value of epsilon parameter
-#' @param epsilon.difference a factor of the value of epsilon to 
+#' @param depsilon a factor of the value of epsilon to 
 #' indicate the different values of epsilon as a parameter. Then the epsilon values 
 #' evaluated in the model will be 0:epsilon in equal steps of this difference value.
 #' Set this value as 0 if only value of epsilon should be evaluated
 #' @param alpha maximum value of alpha parameter
-#' @param alpha.difference a factor of the value of alpha to 
+#' @param dalpha a factor of the value of alpha to 
 #' indicate the different values of alpha as a parameter. Then the alpha values 
 #' evaluated in the model will be 0:alpha in equal steps of this difference value.
 #' Set this value as 0 if only value of alpha should be evaluated
 #' @param beta0 maximum value of beta0 parameter
-#' @param beta0.difference a factor of the value of beta0 to 
+#' @param dbeta0 a factor of the value of beta0 to 
 #' indicate the different values of beta0 as a parameter. Then the beta0 values 
 #' evaluated in the model will be 0:beta0 in equal steps of this difference value.
 #' Set this value as 0 if only value of beta0 should be evaluated
 #' @param beta1 maximum value of beta0 parameter
-#' @param beta1.difference a factor of the value of beta1 to 
+#' @param dbeta1 a factor of the value of beta1 to 
 #' indicate the different values of beta1 as a parameter. Then the beta1 values 
 #' evaluated in the model will be 0:beta1 in equal steps of this difference value.
 #' Set this value as 0 if only value of beta1 should be evaluated
 #' @return creates .sh files 
 #' @seealso \link{createSource}
-createShellScript <- function(worldname, resourcename, directory, filename, episilon, epsilon.difference, alpha, alpha.difference, beta0, beta0.difference, beta1, beta1.difference){
-  if(epsilon.difference>0){epsilonvector <- seq(0, episilon, episilon.difference)} else epsilonvector <- c(episilon)
-  if(alpha.difference>0){alphavector <- seq(0, alpha, alpha.difference)} else alphavector <- c(alpha)
-  if(beta0.difference>0){beta0vector <- seq(0, beta0, beta0.difference)} else beta0vector <- c(beta0)
-  if(beta1.difference>0){beta1vector <- seq(0, beta1, beta1.difference)} else beta1vector <- c(beta1)
+createShellScript <- function(worldname, resourcename, directory, filename, epsilon, 
+                              depsilon, alpha, dalpha, beta0, dbeta0, 
+                              beta1, dbeta1){
+  if(depsilon>0){epsilonvector <- seq(0, epsilon, depsilon)} else 
+    epsilonvector <- c(epsilon)
+  if(dalpha>0){alphavector <- seq(0, alpha, dalpha)} else alphavector <- c(alpha)
+  if(dbeta0>0){beta0vector <- seq(0, beta0, dbeta0)} else beta0vector <- c(beta0)
+  if(dbeta1>0){beta1vector <- seq(0, beta1, dbeta1)} else beta1vector <- c(beta1)
   parametersexpansion <- expand.grid(epsilon = epsilonvector, alpha = alphavector, beta0 = beta0vector, beta1 = beta1vector)
   for(i in 1:nrow(parametersexpansion)){
-  sink(paste0(filename,i,".sh"))
+  sink(paste0(directory, "/", filename, i,".sh"))
   cat(
     paste("#!/bin/bash \n"),
     paste("#SBATCH --ntasks=1 \n"),

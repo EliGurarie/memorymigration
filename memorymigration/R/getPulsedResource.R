@@ -19,7 +19,7 @@
 #' t.sd (which is the standard deviation of t), x.peak (which is the maximum peak of x),
 #' and x.sd (which is the standard deviation of x)
 #' @return A X x X matrix containing values of the resource distribution
-
+#' @export
 
 getPulsedResource <- function(t, x, par){
   

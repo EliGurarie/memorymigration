@@ -9,14 +9,14 @@ createShellScript(
   resourcename,
   directory,
   filename,
-  episilon,
-  epsilon.difference,
+  epsilon,
+  depsilon,
   alpha,
-  alpha.difference,
+  dalpha,
   beta0,
-  beta0.difference,
+  dbeta0,
   beta1,
-  beta1.difference
+  dbeta1
 )
 }
 \arguments{
@@ -29,33 +29,33 @@ createShellScript(
 \item{filename}{string containing base name of the file of the R.script to run 
 through the shell}
 
-\item{epsilon.difference}{a factor of the value of epsilon to 
+\item{epsilon}{maximum value of epsilon parameter}
+
+\item{depsilon}{a factor of the value of epsilon to 
 indicate the different values of epsilon as a parameter. Then the epsilon values 
 evaluated in the model will be 0:epsilon in equal steps of this difference value.
 Set this value as 0 if only value of epsilon should be evaluated}
 
 \item{alpha}{maximum value of alpha parameter}
 
-\item{alpha.difference}{a factor of the value of alpha to 
+\item{dalpha}{a factor of the value of alpha to 
 indicate the different values of alpha as a parameter. Then the alpha values 
 evaluated in the model will be 0:alpha in equal steps of this difference value.
 Set this value as 0 if only value of alpha should be evaluated}
 
 \item{beta0}{maximum value of beta0 parameter}
 
-\item{beta0.difference}{a factor of the value of beta0 to 
+\item{dbeta0}{a factor of the value of beta0 to 
 indicate the different values of beta0 as a parameter. Then the beta0 values 
 evaluated in the model will be 0:beta0 in equal steps of this difference value.
 Set this value as 0 if only value of beta0 should be evaluated}
 
 \item{beta1}{maximum value of beta0 parameter}
 
-\item{beta1.difference}{a factor of the value of beta1 to 
+\item{dbeta1}{a factor of the value of beta1 to 
 indicate the different values of beta1 as a parameter. Then the beta1 values 
 evaluated in the model will be 0:beta1 in equal steps of this difference value.
 Set this value as 0 if only value of beta1 should be evaluated}
-
-\item{epsilon}{maximum value of epsilon parameter}
 }
 \value{
 creates .sh files

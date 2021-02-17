@@ -13,6 +13,7 @@
 #' @param resource a T x X distribution of the (potentially) dynamic resource.
 #' @param dx time step
 #' @return Model setup; output of \code{\link{tran.1D}} function. 
+#' @export
 
 ForagingMemoryModel <- function(t, pop, parms, pop_lag, resource, 
                                 dx = dx){

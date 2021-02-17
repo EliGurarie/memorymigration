@@ -16,4 +16,4 @@ BuildType: Package
 PackageUseDevtools: Yes
 PackagePath: memorymigration
 PackageInstallArgs: --no-multiarch --with-keep.source
-PackageRoxygenize: rd,collate
+PackageRoxygenize: rd,collate,namespace

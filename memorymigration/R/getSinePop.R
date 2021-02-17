@@ -13,7 +13,8 @@
 #' @return list of 5 which includes a population distribution across the time period in a T x X matrix,
 #'  a vector with midpoint X-values, the time points for the population as integers 1:tau,
 #'  the dx value and the tau value.
-
+#' @export
+#' 
 getSinePop <- function(tau, X.min = 0, X.max = 100, dx, 
                        peak.max, peak.min, sd){
   Time <- 1:tau

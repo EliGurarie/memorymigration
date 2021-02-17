@@ -14,7 +14,8 @@
 #' memory coefficient
 #' @return a T x X matrix describing the population distribution for the next year
 #' @seealso \link{getSinePop}, \link{runManyYears}
-
+#' @export
+#' 
 runNextYear <- function(World, Parameters){
   pop1 <- World$pop
   pop2 <- pop1*0
@@ -22,13 +23,15 @@ runNextYear <- function(World, Parameters){
   
   Time <- World$time
   Resource <- World$resource
+  p <- as.numeric(Parameters)
+  names(p) <- names(Parameters)
   
   for(t in Time){
     pop_lastyear <- c(0,pop1[t,],0) 
     if(t == 1) pop_now <- pop1[nrow(pop1),] else pop_now <- pop2[t-1,]
     pop2[t,] <- ode(y = pop_now, 
                     times = 0:1, 
-                    parms = Parameters,
+                    parms = p,
                     func = ForagingMemoryModel, 
                     resource = c(0,Resource[t,],0),
                     pop_lag = pop_lastyear,
@@ -57,11 +60,12 @@ runNextYear <- function(World, Parameters){
 #' @return a list of n.years containing T x X matrices describing the population 
 #' distribution for each year after initial population
 #' @seealso \link{getSinePop}, \link{runManyYears}
-
-runManyYears <- function(World, Parameters, n.years = 30, threshold= 0.995, verbose = FALSE){
+#' @export
+#' 
+runManyYears <- function(World, parameters, n.years = 30, threshold= 0.995, verbose = FALSE){
   pop.list <- list(Year1 = World$pop)
   i <- 1
-    
+  
   if(verbose) cat(paste("running year ", i, "\n"))
   World$pop <- pop.list[[i]]
   pop.list[[i+1]] <- runNextYear(World, 
@@ -90,15 +94,20 @@ runManyYears <- function(World, Parameters, n.years = 30, threshold= 0.995, verb
 #' Based on a migratory population's set up (the World) and the values \code{alpha},
 #'\code{beta0} and \code{beta1}, this function determines the population 
 #'distribution after several years. 
-
-
-function(parameters.df, world, ...){
-  indices.df <- data.frame()
+#' @export
+#' 
+runManyRuns <- function(parameters.df, world, ...){
+  results <- data.frame() 
+  
   for(i in 1:nrow(parameters.df)){
-    M <- runManyYears(world, Parameters = parameters.df[i,], ...) 
-    indices <- computeIndices(M[[length(M)]], world$resource, world)
-    indices.df <- rbind(indices.df, data.frame(t(parameters.df[i,]), indices), n.years = length(M))
+    M <- runManyYears(world, parameters = parameters.df[i,], 
+                      n.years = 30, threshold = 0.99, 
+                      verbose = TRUE) 
+    myR <- data.frame(parameters.df[i,], 
+                      computeIndices(M[[length(M)]], 
+                                     world$resource, world))
+    results <- rbind(results, myR)
   }
-  return(indices.df)
+  return(results)
 }
 
