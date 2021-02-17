@@ -1,25 +1,6 @@
+createShellScript("world.R1", "resource", "memorymigration", "testing.R", 5, 0, 5, 1, 2, 0, 2, 0)
+createSource("world.R1", "resource", "memorymigration", "testing.R", 5, 0, 5, 1, 2, 0, 2, 0)
 
-parameters <- c(epsilon = 10, alpha = 300, beta0=100, beta1 = 300)
-
-
-createSource <- function(parameters, worldname, resourcename, directory, filename){
-  dput(parameters) %>% is
-
-  sink(filename)
-  cat(
-    "require(memorymigration)\n",
-    paste0("load(",worldname,")\n"),
-    paste0("load(",resourcename,")\n"),
-    paste("parameters.df = c(", paste0(names(parameters), "=", parameters, collapse = ", "), ")\n"), 
-    "world$resource <- resourcename \n",
-    "M <- runManyYears(world, Parameters = parameters, n.years = 30, threshold = 0.99) \n", 
-    "indices <- computeIndices(M[[length(M)]], world$resource, world) \n",
-    "R2 <- data.frame(t(parameters), indices) \n", 
-    paste("save(R2, file = paste0(", directory, "results/run2.rda"))
-  sink()
-}
-
-createSource(parameters, "world", "resource", ".", "testing.R")
 
 ####################
 # OLD EXAMPLE
