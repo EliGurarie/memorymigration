@@ -1,10 +1,10 @@
 createShellScript(worldname = "world", 
                   resourcename = "resource_R1", 
-                  directory = "shelltest", 
+                  directory = "scripttest", 
                   filename = "testing", 
                   epsilon = 5, depsilon = 1, 
                   alpha = 5, dalpha = 1, 
-                  beta0 = 2, dbeta0 = 0, 
+                  beta0 = 2, dbeta0 = 1, 
                   beta1 = 2, dbeta1 = 0)
 
 createSource(worldname = "world", 
@@ -12,9 +12,12 @@ createSource(worldname = "world",
              directory = "scripttest", 
              filename = "testing", 
              epsilon = 5, depsilon = 1, 
-             alpha = 5, dalpha = 0, 
-             beta0 = 2, dbeta0 = 0, 
+             alpha = 5, dalpha = 1, 
+             beta0 = 3, dbeta0 = 1, 
              beta1 = 2, dbeta1 = 0)
+
+
+
 
 ####################
 # OLD EXAMPLE

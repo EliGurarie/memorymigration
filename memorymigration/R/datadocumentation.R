@@ -3,15 +3,15 @@
 #' memorymigration set up for running models
 #'
 #' @usage
-#' data(wah)
+#' data(world)
 #'
 #' @format List of 5:
 #' \describe{
 #'   \item{pop}{100 x 50 matrix of initial population ... (sinusoid output of )}
-#'   \item{X}{}
-#'   \item{time}{}
-#'   \item{dx}{}
-#'   \item{tau}{}
+#'   \item{X}{a vector with midpoint X-values}
+#'   \item{time}{the time points for the population as integers 1:tau}
+#'   \item{dx}{time step}
+#'   \item{tau}{maximum value of time}
 #' }
 #' @examples
 #' # code to create world

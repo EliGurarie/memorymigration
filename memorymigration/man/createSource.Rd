@@ -63,6 +63,7 @@ creates .R files with scripts
 Generates R.scripts to run many different parameters of the same model
 }
 \examples{
+require(memorymigration)
 data(world); data(resources)
 parameters.df = data.frame( epsilon=seq(1, 100, length = 2), 
                             alpha=1000, beta0=100, beta1=200)
@@ -71,6 +72,5 @@ results <- runManyRuns(parameters.df, world)
 save(results, file =paste0('scripttest/results/run1.rda'))
 }
 \seealso{
-\link{createShellScript}
-  require(memorymigration)
+\link{createShellScript}, \link{parameterGrid}
 }

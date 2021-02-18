@@ -65,5 +65,5 @@ Generates .sh files to run many different parameters of the same model through
 the shell.
 }
 \seealso{
-\link{createSource}
+\link{createSource}, \link{parameterGrid}
 }

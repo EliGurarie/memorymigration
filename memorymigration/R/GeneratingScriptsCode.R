@@ -27,9 +27,9 @@
 #' evaluated in the model will be 0:beta1 in equal steps of this difference value.
 #' Set this value as 0 if only value of beta1 should be evaluated
 #' @return creates .R files with scripts 
-#' @seealso \link{createShellScript}
-#'   require(memorymigration)
+#' @seealso \link{createShellScript}, \link{parameterGrid}
 #' @examples
+#' require(memorymigration)
 #' data(world); data(resources)
 #' parameters.df = data.frame( epsilon=seq(1, 100, length = 2), 
 #'                             alpha=1000, beta0=100, beta1=200)
@@ -42,26 +42,21 @@ createSource <- function(worldname = "world", resourcename,
                          directory, filename, 
                          epsilon, depsilon, alpha, dalpha, 
                          beta0, dbeta0, beta1, dbeta1){
-  if(depsilon>0){epsilonvector <- seq(0, epsilon, depsilon)} else 
-    epsilonvector <- c(epsilon)
-  if(dalpha>0){alphavector <- seq(0, alpha, dalpha)} else alphavector <- c(alpha)
-  if(dbeta0>0){beta0vector <- seq(0, beta0, dbeta0)} else beta0vector <- c(beta0)
-  if(dbeta1>0){beta1vector <- seq(0, beta1, dbeta1)} else beta1vector <- c(beta1)
-  parametersexpansion <- expand.grid(epsilon = epsilonvector, alpha = alphavector, beta0 = beta0vector, beta1 = beta1vector)
-  for(i in 1:nrow(parametersexpansion)){
-    parameters <- parametersexpansion[i,]
-  sink(paste0(directory, "/", filename, i, ".R"))
-  cat(
-    "require(memorymigration)\n",
-    "data(world); data(resources)\n",
-    paste("parameters = c(", paste0(names(parameters), "=", parameters, collapse = ", "), ")\n"), 
-    "world$resource <- ", resourcename, "\n",
-    "M <- runManyYears(world, Parameters = parameters, n.years = 30, threshold = 0.99) \n", 
-    "indices <- computeIndices(M[[length(M)]], world$resource, world) \n",
-    paste0("R", i), "<- data.frame(t(parameters), indices) \n",
-    "save(", paste0("R", i, ", file =", "paste0('", directory, "/results/run", i,".rda')", ")"))
-  sink()
-  }}
+  runparametersplit <- parameterGrid(epsilon, depsilon, alpha, dalpha, 
+                                     beta0, dbeta0, beta1, dbeta1)
+  for(i in 1:length(runparametersplit)){
+    sink(paste0(directory, "/", filename, i, ".R"))
+    cat(
+      "require(memorymigration)\n",
+      "data(world); data(resources)\n",
+      "world$resource <-", resourcename,"\n",
+      paste0("parametersplit <- parameterGrid(",epsilon,",", depsilon,",", alpha,",", dalpha,",", 
+             beta0,",", dbeta0,",", beta1,",", dbeta1,")\n"))
+    cat(paste0("parameters.df",i, "= parametersplit[[",i,"]]\n"),
+        "results <- runManyRuns(",paste0("parameters.df",i,", world)\n"),
+        "save(results, file =",paste0("(paste0('scripttest/results/run",i,".rda')))\n"))
+    sink()}
+}
 
 #'Create Shell Script
 #'
@@ -94,24 +89,62 @@ createSource <- function(worldname = "world", resourcename,
 #' evaluated in the model will be 0:beta1 in equal steps of this difference value.
 #' Set this value as 0 if only value of beta1 should be evaluated
 #' @return creates .sh files 
-#' @seealso \link{createSource}
+#' @seealso \link{createSource}, \link{parameterGrid}
 createShellScript <- function(worldname, resourcename, directory, filename, epsilon, 
                               depsilon, alpha, dalpha, beta0, dbeta0, 
                               beta1, dbeta1){
+  runparametersplit <- parameterGrid(epsilon, depsilon, alpha, dalpha, 
+                                     beta0, dbeta0, beta1, dbeta1)
+  sink(paste0(directory, "/", filename,".sh"))
+  cat(
+    paste("#!/bin/bash \n"),
+    paste0("#SBATCH --ntasks=",length(runparametersplit), "\n"),
+    paste("#SBATCH --time=06:00:00 \n"), 
+    paste0("#SBATCH --job-name=",worldname, resourcename, "\n"))
+    for(i in 1:length(runparametersplit)){
+      cat(paste0("R CMD BATCH /research-home/",directory,"/", filename, i, ".R) \n"))}
+    
+  sink()
+  }
+  
+
+#' Parameter Grid
+#' 
+#' Generates a data frame splitting up all of the combinations of parameters
+#' 
+#' @param epsilon maximum value of epsilon parameter
+#' @param depsilon a factor of the value of epsilon to 
+#' indicate the different values of epsilon as a parameter. Then the epsilon values 
+#' evaluated in the model will be 0:epsilon in equal steps of this difference value.
+#' Set this value as 0 if only value of epsilon should be evaluated
+#' @param alpha maximum value of alpha parameter
+#' @param dalpha a factor of the value of alpha to 
+#' indicate the different values of alpha as a parameter. Then the alpha values 
+#' evaluated in the model will be 0:alpha in equal steps of this difference value.
+#' Set this value as 0 if only value of alpha should be evaluated
+#' @param beta0 maximum value of beta0 parameter
+#' @param dbeta0 a factor of the value of beta0 to 
+#' indicate the different values of beta0 as a parameter. Then the beta0 values 
+#' evaluated in the model will be 0:beta0 in equal steps of this difference value.
+#' Set this value as 0 if only value of beta0 should be evaluated
+#' @param beta1 maximum value of beta0 parameter
+#' @param dbeta1 a factor of the value of beta1 to 
+#' indicate the different values of beta1 as a parameter. Then the beta1 values 
+#' evaluated in the model will be 0:beta1 in equal steps of this difference value.
+#' Set this value as 0 if only value of beta1 should be evaluated
+#' @return list of data frames 
+#' @seealso \link{createShellScript}, \link{createSource}
+#' @examples
+#' parameterGrid(epsilon = 5, depsilon = 1, alpha = 5, dalpha = 1, beta0 = 3, dbeta0 = 1, beta1 = 2, dbeta1 = 0)
+
+parameterGrid <- function(epsilon, depsilon, alpha, dalpha, 
+beta0, dbeta0, beta1, dbeta1){
   if(depsilon>0){epsilonvector <- seq(0, epsilon, depsilon)} else 
     epsilonvector <- c(epsilon)
   if(dalpha>0){alphavector <- seq(0, alpha, dalpha)} else alphavector <- c(alpha)
   if(dbeta0>0){beta0vector <- seq(0, beta0, dbeta0)} else beta0vector <- c(beta0)
   if(dbeta1>0){beta1vector <- seq(0, beta1, dbeta1)} else beta1vector <- c(beta1)
   parametersexpansion <- expand.grid(epsilon = epsilonvector, alpha = alphavector, beta0 = beta0vector, beta1 = beta1vector)
-  for(i in 1:nrow(parametersexpansion)){
-  sink(paste0(directory, "/", filename, i,".sh"))
-  cat(
-    paste("#!/bin/bash \n"),
-    paste("#SBATCH --ntasks=1 \n"),
-    paste("#SBATCH --time=00:05:00 \n"), 
-    paste0("#SBATCH --job-name=",worldname, resourcename, i, "\n"),
-    paste0("R CMD BATCH /research-home/",directory,"/", filename, i, ".R) \n")
-  )
-  sink()}
-  }
+  parametersplit <- split(parametersexpansion, parametersexpansion$epsilon)
+  parametersplit
+}
