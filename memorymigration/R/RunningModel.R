@@ -62,7 +62,8 @@ runNextYear <- function(World, Parameters){
 #' @seealso \link{getSinePop}, \link{runManyYears}
 #' @export
 #' 
-runManyYears <- function(World, parameters, n.years = 30, threshold= 0.995, verbose = FALSE){
+runManyYears <- function(World, parameters, n.years = 30, 
+                         threshold= 0.995, verbose = FALSE){
   pop.list <- list(Year1 = World$pop)
   i <- 1
   
