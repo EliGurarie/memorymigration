@@ -1,7 +1,4 @@
-createShellScript(shell.dir = "testscripts", 
-                  code.dir = "testscripts/Rcode", 
-                  runname = "testing", 
-                  filename = "scripttest")
+require(memorymigration)
 
 createSource(worldname = "world", 
              resourcename = "resource_R1", 
@@ -11,6 +8,13 @@ createSource(worldname = "world",
              alpha = 5, dalpha = 1, 
              beta0 = 3, dbeta0 = 1, 
              beta1 = 2, dbeta1 = 0)
+
+
+
+createShellScript(shell.dir = "testscripts", 
+                  code.dir = "testscripts/Rcode", 
+                  runname = "testing", 
+                  filename = "scripttest")
 
 
 
