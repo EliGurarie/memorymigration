@@ -72,7 +72,10 @@ runManyYears <- function(World, parameters, n.years = 30,
   pop.list[[i+1]] <- runNextYear(World, 
                                  Parameters = parameters)
   similarity <- computeEfficiency(pop.list[[i]], pop.list[[i+1]], World)
-  if(verbose) cat(paste("similarity:", round(similarity, 4), "\n"))
+  if(verbose){
+    cat(paste("parameters:", parameters, "\n"))
+    cat(paste("similarity:", round(similarity, 4), "\n"))
+  } 
   
   while((similarity < threshold) & (i < n.years)){
     
@@ -102,12 +105,11 @@ runManyRuns <- function(parameters.df, world, ...){
   
   for(i in 1:nrow(parameters.df)){
     M <- runManyYears(world, parameters = parameters.df[i,], 
-                      n.years = 30, threshold = 0.99, 
-                      verbose = TRUE) 
+                      n.years = 30, threshold = 0.99) 
     myR <- data.frame(parameters.df[i,], 
                       computeIndices(M[[length(M)]], 
                                      world$resource, world))
-    results <- rbind(results, myR)
+    results <- rbind(results, myR, n.runs = length(M)-1)
   }
   return(results)
 }
