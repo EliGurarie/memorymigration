@@ -46,7 +46,7 @@ createSource <- function(worldname = "world", resourcename,
   runparametersplit <- parameterGrid(epsilon, depsilon, alpha, dalpha, 
                                      beta0, dbeta0, beta1, dbeta1)
   for(i in 1:length(runparametersplit)){
-    sink(paste0(directory, "/", filename, i, ".R"))
+    sink(paste0(code.dir, "/", filename, i, ".R"))
     cat(
       "require(memorymigration)\n",
       "data(world); data(resources)\n",
