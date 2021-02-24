@@ -9,8 +9,6 @@ createSource(worldname = "world",
              beta0 = 3, dbeta0 = 1, 
              beta1 = 2, dbeta1 = 0)
 
-
-
 createShellScript(shell.dir = "testscripts", 
                   code.dir = "testscripts/Rcode", 
                   runname = "testing", 
