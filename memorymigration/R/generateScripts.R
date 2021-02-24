@@ -27,6 +27,7 @@
 #' evaluated in the model will be 0:beta1 in equal steps of this difference value.
 #' Set this value as 0 if only value of beta1 should be evaluated
 #' @return creates .R files with scripts 
+#' @export
 #' @seealso \link{createShellScript}, \link{parameterGrid}
 #' @examples
 #' require(memorymigration)
@@ -63,49 +64,27 @@ createSource <- function(worldname = "world", resourcename,
 #'Generates .sh files to run many different parameters of the same model through
 #'the shell. 
 #'
-#'@param worldname string containing name of the world of the model
-#' @param resourcename string containing name of resource of the model
-#' @param directory string containing directory of where file results should be stored
+#'@param shell.dir ...
+#' @param code.dir ...
+#' @param runname ...
 #' @param filename string containing base name of the file of the R.script to run 
 #' through the shell
-#' @param epsilon maximum value of epsilon parameter
-#' @param depsilon a factor of the value of epsilon to 
-#' indicate the different values of epsilon as a parameter. Then the epsilon values 
-#' evaluated in the model will be 0:epsilon in equal steps of this difference value.
-#' Set this value as 0 if only value of epsilon should be evaluated
-#' @param alpha maximum value of alpha parameter
-#' @param dalpha a factor of the value of alpha to 
-#' indicate the different values of alpha as a parameter. Then the alpha values 
-#' evaluated in the model will be 0:alpha in equal steps of this difference value.
-#' Set this value as 0 if only value of alpha should be evaluated
-#' @param beta0 maximum value of beta0 parameter
-#' @param dbeta0 a factor of the value of beta0 to 
-#' indicate the different values of beta0 as a parameter. Then the beta0 values 
-#' evaluated in the model will be 0:beta0 in equal steps of this difference value.
-#' Set this value as 0 if only value of beta0 should be evaluated
-#' @param beta1 maximum value of beta0 parameter
-#' @param dbeta1 a factor of the value of beta1 to 
-#' indicate the different values of beta1 as a parameter. Then the beta1 values 
-#' evaluated in the model will be 0:beta1 in equal steps of this difference value.
-#' Set this value as 0 if only value of beta1 should be evaluated
 #' @return creates .sh files 
+#' @export
 #' @seealso \link{createSource}, \link{parameterGrid}
-createShellScript <- function(worldname, resourcename, directory, filename, epsilon, 
-                              depsilon, alpha, dalpha, beta0, dbeta0, 
-                              beta1, dbeta1){
-  runparametersplit <- parameterGrid(epsilon, depsilon, alpha, dalpha, 
-                                     beta0, dbeta0, beta1, dbeta1)
-  sink(paste0(directory, "/", filename,".sh"))
-  cat(
-    paste("#!/bin/bash \n"),
-    paste0("#SBATCH --ntasks=",length(runparametersplit), "\n"),
-    paste("#SBATCH --time=06:00:00 \n"), 
-    paste0("#SBATCH --job-name=",worldname, resourcename, "\n"))
-    for(i in 1:length(runparametersplit)){
-      cat(paste0("R CMD BATCH /research-home/",directory,"/", filename, i, ".R) \n"))}
-    
+
+createShellScript <- function(shell.dir, code.dir, runname, filename){
+  files <- list.files(code.dir)
+  sink(paste0(shell.dir, "/", filename,".sh"))
+  cat("#!/bin/bash \n")
+  cat(paste0("#SBATCH --ntasks=", length(files), "\n"))
+  cat("#SBATCH --time=06:00:00 \n")
+  cat(paste0("#SBATCH --job-name=", runname, "\n"))
+  for(i in 1:length(files))
+    cat(paste0("R CMD BATCH /research-home/",directory,"/", files[i],"\n"))
   sink()
-  }
+}
+
   
 
 #' Parameter Grid
@@ -134,6 +113,7 @@ createShellScript <- function(worldname, resourcename, directory, filename, epsi
 #' Set this value as 0 if only value of beta1 should be evaluated
 #' @return list of data frames 
 #' @seealso \link{createShellScript}, \link{createSource}
+#' @export
 #' @examples
 #' parameterGrid(epsilon = 5, depsilon = 1, alpha = 5, dalpha = 1, beta0 = 3, dbeta0 = 1, beta1 = 2, dbeta1 = 0)
 

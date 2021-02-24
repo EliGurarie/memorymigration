@@ -1,11 +1,7 @@
-createShellScript(worldname = "world", 
-                  resourcename = "resource_R1", 
-                  directory = "scripttest", 
-                  filename = "testing", 
-                  epsilon = 5, depsilon = 1, 
-                  alpha = 5, dalpha = 1, 
-                  beta0 = 2, dbeta0 = 1, 
-                  beta1 = 2, dbeta1 = 0)
+createShellScript(shell.dir = "testscripts", 
+                  code.dir = "testscripts/Rcode", 
+                  runname = "testing", 
+                  filename = "scripttest")
 
 createSource(worldname = "world", 
              resourcename = "resource_R1", 
