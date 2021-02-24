@@ -104,7 +104,7 @@ runManyRuns <- function(parameters.df, world, ...){
     myR <- data.frame(parameters.df[i,], 
                       computeIndices(M[[length(M)]], 
                                      world$resource, world))
-    results <- rbind(results, myR, n.runs = length(M)-1)
+    results <- rbind(results, c(myR, n.runs = length(M)-1))
   }
   return(results)
 }
