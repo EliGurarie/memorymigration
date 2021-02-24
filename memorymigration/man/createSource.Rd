@@ -7,8 +7,9 @@
 createSource(
   worldname = "world",
   resourcename,
-  directory,
+  code.dir,
   filename,
+  results.dir,
   epsilon,
   depsilon,
   alpha,
@@ -23,8 +24,6 @@ createSource(
 \item{worldname}{string containing name of the world}
 
 \item{resourcename}{string containing name of resource}
-
-\item{directory}{string containing directory of where file will be created}
 
 \item{filename}{string containing base name of the file to be created}
 
@@ -55,6 +54,8 @@ Set this value as 0 if only value of beta0 should be evaluated}
 indicate the different values of beta1 as a parameter. Then the beta1 values 
 evaluated in the model will be 0:beta1 in equal steps of this difference value.
 Set this value as 0 if only value of beta1 should be evaluated}
+
+\item{directory}{string containing directory of where file will be created}
 }
 \value{
 creates .R files with scripts

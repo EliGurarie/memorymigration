@@ -72,21 +72,16 @@ runManyYears <- function(World, parameters, n.years = 30,
   pop.list[[i+1]] <- runNextYear(World, 
                                  Parameters = parameters)
   similarity <- computeEfficiency(pop.list[[i]], pop.list[[i+1]], World)
-  if(verbose){
-    cat(paste("parameters:", parameters, "\n"))
-    cat(paste("similarity:", round(similarity, 4), "\n"))
-  } 
+  cat(paste("parameters:", parameters, "\n"))
   
   while((similarity < threshold) & (i < n.years)){
     
     i <- i+1
-    if(verbose) cat(paste("running year ", i, "\n"))
-    
+    cat(paste("running year ", i, "\n"))
     World$pop <- pop.list[[i]]
     pop.list[[i+1]] <- runNextYear(World, 
                                    Parameters = parameters)
     similarity <- computeEfficiency(pop.list[[i]], pop.list[[i+1]], World)
-    if(verbose) cat(paste("similarity:", round(similarity, 4), "\n"))
   }
   names(pop.list) <- paste0("Year",0:(length(pop.list)-1))
   pop.list
