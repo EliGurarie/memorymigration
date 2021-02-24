@@ -55,7 +55,7 @@ createSource <- function(worldname = "world", resourcename,
              beta0,",", dbeta0,",", beta1,",", dbeta1,")\n"))
     cat(paste0("parameters.df",i, "= parametersplit[[",i,"]]\n"),
         "results <- runManyRuns(",paste0("parameters.df",i,", world)\n"),
-        "save(results, file =",paste0("paste0('",results.dir,"/run",i,".rda'))\n"))
+        "save(results, file =",paste0("paste0('~/Rprojects/memorymigration/",results.dir,"/run",i,".rda'))\n"))
     sink()}
 }
 
