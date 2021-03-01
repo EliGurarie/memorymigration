@@ -103,8 +103,8 @@ runManyRuns <- function(parameters.df, world, ...){
                       n.years = 30, threshold = 0.99) 
     myR <- data.frame(parameters.df[i,], 
                       computeIndices(M[[length(M)]], 
-                                     world$resource, world))
-    results <- rbind(results, c(myR, n.runs = length(M)-1))
+                                     world$resource, world), n.runs = length(M)-1)
+    results <- rbind(results, c(myR))
   }
   return(results)
 }

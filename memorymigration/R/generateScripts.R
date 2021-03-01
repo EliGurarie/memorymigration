@@ -4,8 +4,9 @@
 #' 
 #' @param worldname string containing name of the world
 #' @param resourcename string containing name of resource
-#' @param directory string containing directory of where file will be created
+#' @param code.dir string containing directory of where R scripts will be created
 #' @param filename string containing base name of the file to be created 
+#' @param results.dir string containing directory of where results from the R scripts will be stored
 #' @param epsilon maximum value of epsilon parameter
 #' @param depsilon a factor of the value of epsilon to 
 #' indicate the different values of epsilon as a parameter. Then the epsilon values 
@@ -30,13 +31,9 @@
 #' @export
 #' @seealso \link{createShellScript}, \link{parameterGrid}
 #' @examples
-#' require(memorymigration)
-#' data(world); data(resources)
-#' parameters.df = data.frame( epsilon=seq(1, 100, length = 2), 
-#'                             alpha=1000, beta0=100, beta1=200)
-#' world$resource <-  resource_R1 
-#' results <- runManyRuns(parameters.df, world)
-#' save(results, file =paste0('scripttest/results/run1.rda'))
+#' createSource(worldname = "world", resourcename = "resource_R1", 
+#' code.dir = "scripttest", filename = "testing", results.dir="results", 
+#' epsilon = 5, depsilon = 1, alpha = 5, dalpha = 1, beta0 = 3, dbeta0 = 1, beta1 = 2, dbeta1 = 0)
 
 
 createSource <- function(worldname = "world", resourcename, 
@@ -64,12 +61,12 @@ createSource <- function(worldname = "world", resourcename,
 #'Generates .sh files to run many different parameters of the same model through
 #'the shell. 
 #'
-#'@param shell.dir ...
-#' @param code.dir ...
-#' @param runname ...
+#'@param shell.dir string containing directory of where R scripts will be created
+#' @param code.dir string containing directory of where R scripts our scored
+#' @param runname string containing run name for server 
 #' @param filename string containing base name of the file of the R.script to run 
 #' through the shell
-#' @return creates .sh files 
+#' @return creates one .sh file 
 #' @export
 #' @seealso \link{createSource}, \link{parameterGrid}
 
