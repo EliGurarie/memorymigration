@@ -61,7 +61,7 @@ createSource <- function(worldname = "world", resourcename,
 #'Generates .sh files to run many different parameters of the same model through
 #'the shell. 
 #'
-#'@param shell.dir string containing directory of where R scripts will be created
+#'@param shell.dir string containing directory of where shell scripts will be created
 #' @param code.dir string containing directory of where R scripts our scored
 #' @param runname string containing run name for server 
 #' @param filename string containing base name of the file of the R.script to run 
@@ -88,13 +88,14 @@ createShellScripts <- function(shell.dir, code.dir, runname, filename){
 #' 
 #' Generates one .sh file listing all of the .sh files for model to run at once
 #' 
-#' @param shell.dir string containing directory of where R scripts will be created
+#' @param shellfinal.dir string containing directory of where this final shell script will be created
+#' @param shell.dir string containing directory of where shell scripts that were created are located
 #' @param runname string containing run name for server 
 #' @return creates one .sh file
 #' @seealso \link{createSource}, \link{parameterGrid}, \link{createShellScripts}
 #' @export
 
-createFinalShellScript <- function(shellfinal.dir, runname){
+createFinalShellScript <- function(shellfinal.dir, shell.dir, runname){
   files <- list.files(shell.dir)
   sink(paste0(shellfinal.dir, "/", runname, "runthisshell", ".sh"))
   cat("#!/bin/bash \n")
