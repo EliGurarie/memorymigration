@@ -25,7 +25,11 @@ createSource(
 
 \item{resourcename}{string containing name of resource}
 
+\item{code.dir}{string containing directory of where R scripts will be created}
+
 \item{filename}{string containing base name of the file to be created}
+
+\item{results.dir}{string containing directory of where results from the R scripts will be stored}
 
 \item{epsilon}{maximum value of epsilon parameter}
 
@@ -54,8 +58,6 @@ Set this value as 0 if only value of beta0 should be evaluated}
 indicate the different values of beta1 as a parameter. Then the beta1 values 
 evaluated in the model will be 0:beta1 in equal steps of this difference value.
 Set this value as 0 if only value of beta1 should be evaluated}
-
-\item{directory}{string containing directory of where file will be created}
 }
 \value{
 creates .R files with scripts
@@ -64,14 +66,10 @@ creates .R files with scripts
 Generates R.scripts to run many different parameters of the same model
 }
 \examples{
-require(memorymigration)
-data(world); data(resources)
-parameters.df = data.frame( epsilon=seq(1, 100, length = 2), 
-                            alpha=1000, beta0=100, beta1=200)
-world$resource <-  resource_R1 
-results <- runManyRuns(parameters.df, world)
-save(results, file =paste0('scripttest/results/run1.rda'))
+createSource(worldname = "world", resourcename = "resource_R1", 
+code.dir = "scripttest", filename = "testing", results.dir="results", 
+epsilon = 5, depsilon = 1, alpha = 5, dalpha = 1, beta0 = 3, dbeta0 = 1, beta1 = 2, dbeta1 = 0)
 }
 \seealso{
-\link{createShellScript}, \link{parameterGrid}
+\link{createShellScript}, \link{parameterGrid}, \link{createFinalShellScript}
 }

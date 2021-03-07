@@ -29,7 +29,7 @@
 #' Set this value as 0 if only value of beta1 should be evaluated
 #' @return creates .R files with scripts 
 #' @export
-#' @seealso \link{createShellScript}, \link{parameterGrid}
+#' @seealso \link{createShellScript}, \link{parameterGrid}, \link{createFinalShellScript}
 #' @examples
 #' createSource(worldname = "world", resourcename = "resource_R1", 
 #' code.dir = "scripttest", filename = "testing", results.dir="results", 
@@ -56,7 +56,7 @@ createSource <- function(worldname = "world", resourcename,
     sink()}
 }
 
-#'Create Shell Script
+#'Create Shell Scripts
 #'
 #'Generates .sh files to run many different parameters of the same model through
 #'the shell. 
@@ -66,20 +66,41 @@ createSource <- function(worldname = "world", resourcename,
 #' @param runname string containing run name for server 
 #' @param filename string containing base name of the file of the R.script to run 
 #' through the shell
-#' @return creates one .sh file 
+#' @return creates a .sh file for each R script in code.dir
 #' @export
-#' @seealso \link{createSource}, \link{parameterGrid}
+#' @seealso \link{createSource}, \link{parameterGrid}, \link{createFinalShellScript}
 
-createShellScript <- function(shell.dir, code.dir, runname, filename){
+createShellScripts <- function(shell.dir, code.dir, runname, filename){
   files <- list.files(code.dir)
-  sink(paste0(shell.dir, "/", filename,".sh"))
+  for(i in 1:length(files)){
+  sink(paste0(shell.dir, "/", filename, i, ".sh"))
   cat("#!/bin/bash \n")
-  cat(paste0("#SBATCH --ntasks=", length(files), "\n"))
+  cat("#SBATCH --ntasks=1 \n")
   cat("#SBATCH --time=06:00:00 \n")
   cat(paste0("#SBATCH --job-name=", runname, "\n"))
-  for(i in 1:length(files))
+ 
     cat(paste0("R CMD BATCH ~/Rprojects/memorymigration/",code.dir,"/", files[i],"\n"))
-  sink()
+  sink() }
+  
+  }
+  
+#' Create Final Shell Scripts
+#' 
+#' Generates one .sh file listing all of the .sh files for model to run at once
+#' 
+#' @param shell.dir string containing directory of where R scripts will be created
+#' @param runname string containing run name for server 
+#' @return creates one .sh file
+#' @seealso \link{createSource}, \link{parameterGrid}, \link{createShellScripts}
+#' @export
+
+createFinalShellScript <- function(shell.dir, runname){
+  files <- list.files(shell.dir)
+  sink(paste0(shell.dir, "/", runname, "runthisshell", ".sh"))
+  cat("#!/bin/bash \n")
+  for(i in 1:length(files)){
+    cat(paste0("sbatch --share ", files[i], "\n"))}
+    sink()
 }
 
   
@@ -109,7 +130,7 @@ createShellScript <- function(shell.dir, code.dir, runname, filename){
 #' evaluated in the model will be 0:beta1 in equal steps of this difference value.
 #' Set this value as 0 if only value of beta1 should be evaluated
 #' @return list of data frames 
-#' @seealso \link{createShellScript}, \link{createSource}
+#' @seealso \link{createShellScript}, \link{createSource}, \link{createFinalShellScript}
 #' @export
 #' @examples
 #' parameterGrid(epsilon = 5, depsilon = 1, alpha = 5, dalpha = 1, beta0 = 3, dbeta0 = 1, beta1 = 2, dbeta1 = 0)

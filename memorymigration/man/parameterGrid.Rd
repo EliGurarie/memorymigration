@@ -45,5 +45,5 @@ Generates a data frame splitting up all of the combinations of parameters
 parameterGrid(epsilon = 5, depsilon = 1, alpha = 5, dalpha = 1, beta0 = 3, dbeta0 = 1, beta1 = 2, dbeta1 = 0)
 }
 \seealso{
-\link{createShellScript}, \link{createSource}
+\link{createShellScript}, \link{createSource}, \link{createFinalShellScript}
 }
