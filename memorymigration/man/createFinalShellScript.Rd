@@ -4,12 +4,12 @@
 \alias{createFinalShellScript}
 \title{Create Final Shell Scripts}
 \usage{
-createFinalShellScript(shell.dir, runname)
+createFinalShellScript(shellfinal.dir, runname)
 }
 \arguments{
-\item{shell.dir}{string containing directory of where R scripts will be created}
-
 \item{runname}{string containing run name for server}
+
+\item{shell.dir}{string containing directory of where R scripts will be created}
 }
 \value{
 creates one .sh file

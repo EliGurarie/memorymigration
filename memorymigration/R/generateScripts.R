@@ -94,9 +94,9 @@ createShellScripts <- function(shell.dir, code.dir, runname, filename){
 #' @seealso \link{createSource}, \link{parameterGrid}, \link{createShellScripts}
 #' @export
 
-createFinalShellScript <- function(shell.dir, runname){
+createFinalShellScript <- function(shellfinal.dir, runname){
   files <- list.files(shell.dir)
-  sink(paste0(shell.dir, "/", runname, "runthisshell", ".sh"))
+  sink(paste0(shellfinal.dir, "/", runname, "runthisshell", ".sh"))
   cat("#!/bin/bash \n")
   for(i in 1:length(files)){
     cat(paste0("sbatch --share ", files[i], "\n"))}
