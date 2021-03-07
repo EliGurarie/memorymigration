@@ -4,18 +4,20 @@
 \alias{createFinalShellScript}
 \title{Create Final Shell Scripts}
 \usage{
-createFinalShellScript(shellfinal.dir, runname)
+createFinalShellScript(shell.dir, runname)
 }
 \arguments{
-\item{runname}{string containing run name for server}
+\item{shell.dir}{string containing directory of where shell scripts that were created are located;
+this is also where this .sh file will be located}
 
-\item{shell.dir}{string containing directory of where R scripts will be created}
+\item{runname}{string containing run name for server}
 }
 \value{
 creates one .sh file
 }
 \description{
 Generates one .sh file listing all of the .sh files for model to run at once
+Make sure to delete this file if you need to rewrite it
 }
 \seealso{
 \link{createSource}, \link{parameterGrid}, \link{createShellScripts}

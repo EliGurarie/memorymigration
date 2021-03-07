@@ -7,7 +7,7 @@
 createShellScripts(shell.dir, code.dir, runname, filename)
 }
 \arguments{
-\item{shell.dir}{string containing directory of where R scripts will be created}
+\item{shell.dir}{string containing directory of where shell scripts will be created}
 
 \item{code.dir}{string containing directory of where R scripts our scored}
 

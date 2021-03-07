@@ -87,21 +87,22 @@ createShellScripts <- function(shell.dir, code.dir, runname, filename){
 #' Create Final Shell Scripts
 #' 
 #' Generates one .sh file listing all of the .sh files for model to run at once
+#' Make sure to delete this file if you need to rewrite it 
 #' 
-#' @param shellfinal.dir string containing directory of where this final shell script will be created
-#' @param shell.dir string containing directory of where shell scripts that were created are located
+#' @param shell.dir string containing directory of where shell scripts that were created are located;
+#' this is also where this .sh file will be located
 #' @param runname string containing run name for server 
 #' @return creates one .sh file
 #' @seealso \link{createSource}, \link{parameterGrid}, \link{createShellScripts}
 #' @export
 
-createFinalShellScript <- function(shellfinal.dir, shell.dir, runname){
+createFinalShellScript <- function(shell.dir, runname){
   files <- list.files(shell.dir)
-  sink(paste0(shellfinal.dir, "/", runname, "runthisshell", ".sh"))
+  sink(paste0(shell.dir, "/", runname, "runthisshell", ".sh"))
   cat("#!/bin/bash \n")
   for(i in 1:length(files)){
     cat(paste0("sbatch --share ", files[i], "\n"))}
-    sink()
+  sink()
 }
 
   
