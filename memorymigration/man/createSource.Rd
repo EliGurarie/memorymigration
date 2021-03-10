@@ -10,14 +10,11 @@ createSource(
   code.dir,
   filename,
   results.dir,
-  epsilon,
-  depsilon,
-  alpha,
-  dalpha,
-  beta0,
-  dbeta0,
-  beta1,
-  dbeta1
+  epsilons,
+  alphas,
+  beta0s,
+  beta1s,
+  existing = NULL
 )
 }
 \arguments{

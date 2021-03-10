@@ -4,36 +4,16 @@
 \alias{parameterGrid}
 \title{Parameter Grid}
 \usage{
-parameterGrid(epsilon, depsilon, alpha, dalpha, beta0, dbeta0, beta1, dbeta1)
+parameterGrid(epsilons, alphas, beta0s, beta1s)
 }
 \arguments{
-\item{epsilon}{maximum value of epsilon parameter}
+\item{epsilons}{values of epsilon parameter}
 
-\item{depsilon}{a factor of the value of epsilon to 
-indicate the different values of epsilon as a parameter. Then the epsilon values 
-evaluated in the model will be 0:epsilon in equal steps of this difference value.
-Set this value as 0 if only value of epsilon should be evaluated}
+\item{alphas}{values value of alpha parameter}
 
-\item{alpha}{maximum value of alpha parameter}
+\item{beta0s}{values value of beta0 parameter}
 
-\item{dalpha}{a factor of the value of alpha to 
-indicate the different values of alpha as a parameter. Then the alpha values 
-evaluated in the model will be 0:alpha in equal steps of this difference value.
-Set this value as 0 if only value of alpha should be evaluated}
-
-\item{beta0}{maximum value of beta0 parameter}
-
-\item{dbeta0}{a factor of the value of beta0 to 
-indicate the different values of beta0 as a parameter. Then the beta0 values 
-evaluated in the model will be 0:beta0 in equal steps of this difference value.
-Set this value as 0 if only value of beta0 should be evaluated}
-
-\item{beta1}{maximum value of beta0 parameter}
-
-\item{dbeta1}{a factor of the value of beta1 to 
-indicate the different values of beta1 as a parameter. Then the beta1 values 
-evaluated in the model will be 0:beta1 in equal steps of this difference value.
-Set this value as 0 if only value of beta1 should be evaluated}
+\item{beta1s}{values value of beta1 parameter}
 }
 \value{
 list of data frames
