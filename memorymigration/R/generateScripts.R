@@ -25,15 +25,22 @@ createSource <- function(worldname = "world", resourcename,
                          epsilons, alphas, beta0s,  beta1s,
                          existing){
   runparametersplit <- parameterGrid(epsilons, alphas, beta0s, beta1s, existing)
-  
+
   for(i in 1:length(runparametersplit)){
     sink(paste0(code.dir, "/", filename, i, ".R"))
     cat(
       "require(memorymigration)\n",
       "data(world); data(resources)\n",
       "world$resource <-", resourcename,"\n",
-      paste0("parametersplit <- parameterGrid(",epsilons,",", alphas,",", 
-             beta0s,",", beta1s,",", existing,")\n"))
+      "dir.list <- list(R1 = 'results/Resource1/', 
+        R2 = 'results/Resource2/', 
+        R3 = 'results/Resource3/',
+        R4 = 'results/Resource4/') \n",
+      "require(plyr) \n",
+      "results <- ldply(dir.list, getCompiledResults) \n",
+      paste0("parametersplit <- parameterGrid(", 
+             list(epsilons), ",", list(alphas), ",", list(beta0s), ",", list(beta1s), 
+             ", results)\n"))
     cat(paste0("parameters.df",i, "= parametersplit[[",i,"]]\n"),
         "results <- runManyRuns(",paste0("parameters.df",i,", world)\n"),
         "save(results, file =",paste0("paste0('~/Rprojects/memorymigration/",results.dir,"/run",i,".rda'))\n"))
