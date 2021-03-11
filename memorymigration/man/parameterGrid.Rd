@@ -4,7 +4,7 @@
 \alias{parameterGrid}
 \title{Parameter Grid}
 \usage{
-parameterGrid(epsilons, alphas, beta0s, beta1s)
+parameterGrid(epsilons, alphas, beta0s, beta1s, existing)
 }
 \arguments{
 \item{epsilons}{values of epsilon parameter}
@@ -14,6 +14,9 @@ parameterGrid(epsilons, alphas, beta0s, beta1s)
 \item{beta0s}{values value of beta0 parameter}
 
 \item{beta1s}{values value of beta1 parameter}
+
+\item{existing}{a data frame with existing values already tested; if there is no 
+existing values, enter this parameter as an empty data frame}
 }
 \value{
 list of data frames
@@ -22,7 +25,7 @@ list of data frames
 Generates a data frame splitting up all of the combinations of parameters
 }
 \examples{
-parameterGrid(epsilon = 5, depsilon = 1, alpha = 5, dalpha = 1, beta0 = 3, dbeta0 = 1, beta1 = 2, dbeta1 = 0)
+parameterGrid(c(1,2,3), c(2,3), seq(1,4), 4)
 }
 \seealso{
 \link{createShellScript}, \link{createSource}, \link{createFinalShellScript}

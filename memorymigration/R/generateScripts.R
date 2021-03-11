@@ -7,51 +7,23 @@
 #' @param code.dir string containing directory of where R scripts will be created
 #' @param filename string containing base name of the file to be created 
 #' @param results.dir string containing directory of where results from the R scripts will be stored
-#' @param epsilon maximum value of epsilon parameter
-#' @param depsilon a factor of the value of epsilon to 
-#' indicate the different values of epsilon as a parameter. Then the epsilon values 
-#' evaluated in the model will be 0:epsilon in equal steps of this difference value.
-#' Set this value as 0 if only value of epsilon should be evaluated
-#' @param alpha maximum value of alpha parameter
-#' @param dalpha a factor of the value of alpha to 
-#' indicate the different values of alpha as a parameter. Then the alpha values 
-#' evaluated in the model will be 0:alpha in equal steps of this difference value.
-#' Set this value as 0 if only value of alpha should be evaluated
-#' @param beta0 maximum value of beta0 parameter
-#' @param dbeta0 a factor of the value of beta0 to 
-#' indicate the different values of beta0 as a parameter. Then the beta0 values 
-#' evaluated in the model will be 0:beta0 in equal steps of this difference value.
-#' Set this value as 0 if only value of beta0 should be evaluated
-#' @param beta1 maximum value of beta0 parameter
-#' @param dbeta1 a factor of the value of beta1 to 
-#' indicate the different values of beta1 as a parameter. Then the beta1 values 
-#' evaluated in the model will be 0:beta1 in equal steps of this difference value.
-#' Set this value as 0 if only value of beta1 should be evaluated
+#' @param epsilons values of epsilon parameter
+#' @param alphas values value of alpha parameter
+#' @param beta0s values value of beta0 parameter
+#' @param beta1s values value of beta1 parameter
+#' @param existing a data frame with existing values already tested; if there is no 
+#' existing values, enter this parameter as an empty data frame
 #' @return creates .R files with scripts 
 #' @export
 #' @seealso \link{createShellScript}, \link{parameterGrid}, \link{createFinalShellScript}
 #' @examples
-#' createSource(worldname = "world", resourcename = "resource_R1", 
-#' code.dir = "scripttest", filename = "testing", results.dir="results", 
-#' epsilon = 5, depsilon = 1, alpha = 5, dalpha = 1, beta0 = 3, dbeta0 = 1, beta1 = 2, dbeta1 = 0)
+#' 
 
 
 createSource <- function(worldname = "world", resourcename, 
                          code.dir, filename, results.dir,
                          epsilons, alphas, beta0s,  beta1s,
-                         existing = NULL){
-  
-  require(gtools)
-  params.df <- expand.grid(epsilon = epsilons, alpha = alphas, beta0 = beta0s, beta1 = beta1s)
-  if(!is.null(existing)){
-    keep <-   !((params.df$epsilon %in% existing$epsilon) &
-                  (params.df$alpha %in% existing$alpha) & 
-                  (params.df$beta0 %in% existing$beta0) & 
-                  (params.df$beta1 %in% existing$beta1))
-    params.df <- params.df[keep,]
-  }
-
-  runparametersplit <- split(params.df, params.df$epsilon)
+                         existing){
   
   for(i in 1:length(runparametersplit)){
     sink(paste0(code.dir, "/", filename, i, ".R"))
@@ -59,8 +31,8 @@ createSource <- function(worldname = "world", resourcename,
       "require(memorymigration)\n",
       "data(world); data(resources)\n",
       "world$resource <-", resourcename,"\n",
-      paste0("parametersplit <- parameterGrid(",epsilon,",", depsilon,",", alpha,",", dalpha,",", 
-             beta0,",", dbeta0,",", beta1,",", dbeta1,")\n"))
+      paste0("parametersplit <- parameterGrid(",epsilons,",", alphas,",", 
+             beta0s,",", beta1s,",", existing,")\n"))
     cat(paste0("parameters.df",i, "= parametersplit[[",i,"]]\n"),
         "results <- runManyRuns(",paste0("parameters.df",i,", world)\n"),
         "save(results, file =",paste0("paste0('~/Rprojects/memorymigration/",results.dir,"/run",i,".rda'))\n"))
@@ -122,19 +94,28 @@ createFinalShellScript <- function(shell.dir, runname){
 #' 
 #' Generates a data frame splitting up all of the combinations of parameters
 #' 
-#' @param epsilons  values of epsilon parameter
+#' @param epsilons values of epsilon parameter
 #' @param alphas values value of alpha parameter
 #' @param beta0s values value of beta0 parameter
 #' @param beta1s values value of beta1 parameter
-
+#' @param existing a data frame with existing values already tested; if there is no 
+#' existing values, enter this parameter as an empty data frame
 #' @return list of data frames 
 #' @seealso \link{createShellScript}, \link{createSource}, \link{createFinalShellScript}
 #' @export
 #' @examples
-#' parameterGrid(epsilon = 5, depsilon = 1, alpha = 5, dalpha = 1, beta0 = 3, dbeta0 = 1, beta1 = 2, dbeta1 = 0)
+#' parameterGrid(c(1,2,3), c(2,3), seq(1,4), 4)
 
-parameterGrid <- function(epsilons, alphas, beta0s, beta1s){
-  parametersexpansion <- expand.grid(epsilon = epsilons, alpha = alphas, beta0 = beta0s, beta1 = beta1s)
-  parametersplit <- split(parametersexpansion, parametersexpansion$epsilon)
+parameterGrid <- function(epsilons, alphas, beta0s, beta1s, existing){
+  params.df <- expand.grid(epsilon = epsilons, alpha = alphas, beta0 = beta0s, beta1 = beta1s)
+  require(gtools)
+  
+  keep <- !((params.df$epsilon %in% existing$epsilon) &
+              (params.df$alpha %in% existing$alpha) &
+              (params.df$beta0 %in% existing$beta0) & 
+              (params.df$beta1 %in% existing$beta1))
+  params.df <- params.df[keep,]
+  
+  parametersplit <- split(params.df, params.df$epsilon)
   parametersplit
 }

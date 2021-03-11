@@ -14,7 +14,7 @@ createSource(
   alphas,
   beta0s,
   beta1s,
-  existing = NULL
+  existing
 )
 }
 \arguments{
@@ -28,33 +28,16 @@ createSource(
 
 \item{results.dir}{string containing directory of where results from the R scripts will be stored}
 
-\item{epsilon}{maximum value of epsilon parameter}
+\item{epsilons}{values of epsilon parameter}
 
-\item{depsilon}{a factor of the value of epsilon to 
-indicate the different values of epsilon as a parameter. Then the epsilon values 
-evaluated in the model will be 0:epsilon in equal steps of this difference value.
-Set this value as 0 if only value of epsilon should be evaluated}
+\item{alphas}{values value of alpha parameter}
 
-\item{alpha}{maximum value of alpha parameter}
+\item{beta0s}{values value of beta0 parameter}
 
-\item{dalpha}{a factor of the value of alpha to 
-indicate the different values of alpha as a parameter. Then the alpha values 
-evaluated in the model will be 0:alpha in equal steps of this difference value.
-Set this value as 0 if only value of alpha should be evaluated}
+\item{beta1s}{values value of beta1 parameter}
 
-\item{beta0}{maximum value of beta0 parameter}
-
-\item{dbeta0}{a factor of the value of beta0 to 
-indicate the different values of beta0 as a parameter. Then the beta0 values 
-evaluated in the model will be 0:beta0 in equal steps of this difference value.
-Set this value as 0 if only value of beta0 should be evaluated}
-
-\item{beta1}{maximum value of beta0 parameter}
-
-\item{dbeta1}{a factor of the value of beta1 to 
-indicate the different values of beta1 as a parameter. Then the beta1 values 
-evaluated in the model will be 0:beta1 in equal steps of this difference value.
-Set this value as 0 if only value of beta1 should be evaluated}
+\item{existing}{a data frame with existing values already tested; if there is no 
+existing values, enter this parameter as an empty data frame}
 }
 \value{
 creates .R files with scripts
@@ -63,9 +46,7 @@ creates .R files with scripts
 Generates R.scripts to run many different parameters of the same model
 }
 \examples{
-createSource(worldname = "world", resourcename = "resource_R1", 
-code.dir = "scripttest", filename = "testing", results.dir="results", 
-epsilon = 5, depsilon = 1, alpha = 5, dalpha = 1, beta0 = 3, dbeta0 = 1, beta1 = 2, dbeta1 = 0)
+
 }
 \seealso{
 \link{createShellScript}, \link{parameterGrid}, \link{createFinalShellScript}
