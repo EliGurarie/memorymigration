@@ -24,6 +24,7 @@ createSource <- function(worldname = "world", resourcename,
                          code.dir, filename, results.dir,
                          epsilons, alphas, beta0s,  beta1s,
                          existing){
+  runparametersplit <- parameterGrid(epsilons, alphas, beta0s, beta1s, existing)
   
   for(i in 1:length(runparametersplit)){
     sink(paste0(code.dir, "/", filename, i, ".R"))
@@ -88,7 +89,6 @@ createFinalShellScript <- function(shell.dir, runname){
   sink()
 }
 
-  
 
 #' Parameter Grid
 #' 
