@@ -11,7 +11,10 @@
 #' @param alphas values value of alpha parameter
 #' @param beta0s values value of beta0 parameter
 #' @param beta1s values value of beta1 parameter
-#' @param existingfile name of file containing a data frame with existing values already tested; 
+#' @param existing a data frame with existing values already tested
+#' for server to access;  if there is no existing values, enter an empty data frame
+#' @param existingfile name of file containing a data frame with existing values already tested
+#' for server to access; 
 #' if there is no existing values, enter create a file with an empty data frame
 #' @param
 #' @return creates .R files with scripts 
@@ -24,7 +27,7 @@
 createSource <- function(worldname = "world", resourcename, 
                          code.dir, filename, results.dir,
                          epsilons, alphas, beta0s,  beta1s,
-                         existingfile){
+                         existing, existingfile){
   runparametersplit <- parameterGrid(epsilons, alphas, beta0s, beta1s, existing)
 
   for(i in 1:length(runparametersplit)){
