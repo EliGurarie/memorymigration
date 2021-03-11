@@ -32,7 +32,7 @@ createSource <- function(worldname = "world", resourcename,
       "require(memorymigration)\n",
       "data(world); data(resources)\n",
       "world$resource <-", resourcename,"\n",
-      "load(compiledresults.rda \n",
+      "load(compiledresults.Rda) \n",
       paste0("parametersplit <- parameterGrid(", 
              list(epsilons), ",", list(alphas), ",", list(beta0s), ",", list(beta1s), 
              ", results)\n"))
