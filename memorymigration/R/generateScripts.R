@@ -11,8 +11,9 @@
 #' @param alphas values value of alpha parameter
 #' @param beta0s values value of beta0 parameter
 #' @param beta1s values value of beta1 parameter
-#' @param existing a data frame with existing values already tested; if there is no 
-#' existing values, enter this parameter as an empty data frame
+#' @param existingfile name of file containing a data frame with existing values already tested; 
+#' if there is no existing values, enter create a file with an empty data frame
+#' @param
 #' @return creates .R files with scripts 
 #' @export
 #' @seealso \link{createShellScript}, \link{parameterGrid}, \link{createFinalShellScript}
@@ -23,7 +24,7 @@
 createSource <- function(worldname = "world", resourcename, 
                          code.dir, filename, results.dir,
                          epsilons, alphas, beta0s,  beta1s,
-                         existing){
+                         existingfile){
   runparametersplit <- parameterGrid(epsilons, alphas, beta0s, beta1s, existing)
 
   for(i in 1:length(runparametersplit)){
@@ -32,7 +33,7 @@ createSource <- function(worldname = "world", resourcename,
       "require(memorymigration)\n",
       "data(world); data(resources)\n",
       "world$resource <-", resourcename,"\n",
-      "load(compiledresults.Rda) \n",
+      paste0("load(", existingfile, ") \n"),
       paste0("parametersplit <- parameterGrid(", 
              list(epsilons), ",", list(alphas), ",", list(beta0s), ",", list(beta1s), 
              ", results)\n"))
