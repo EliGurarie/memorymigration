@@ -36,7 +36,7 @@ createSource <- function(worldname = "world", resourcename,
       "require(memorymigration)\n",
       "data(world); data(resources)\n",
       "world$resource <-", resourcename,"\n",
-      paste0("load(", existingfile, ") \n"),
+      paste0("load('", existingfile, "') \n"),
       paste0("parametersplit <- parameterGrid(", 
              list(epsilons), ",", list(alphas), ",", list(beta0s), ",", list(beta1s), 
              ", results)\n"))
