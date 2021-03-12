@@ -11,7 +11,7 @@ getCompiledResults <- function(results.dir){
   for(f in files){
     print(f)
     load(paste0(results.dir, f))
-    results.compiled <- rbind(results.compiled, results)
+    results.compiled <- rbind(results.compiled, newresults)
   }
   data.frame(rid = 1:nrow(results.compiled), results.compiled)
 }
