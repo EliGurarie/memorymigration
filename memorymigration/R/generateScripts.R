@@ -12,11 +12,11 @@
 #' @param beta0s values value of beta0 parameter
 #' @param beta1s values value of beta1 parameter
 #' @param existing a data frame with existing values already tested
-#' for server to access;  if there is no existing values, enter an empty data frame
+#' for server to access;  if there is no existing values, enter an empty data frame. 
+#' Save this data frame as results. 
 #' @param existingfile name of file containing a data frame with existing values already tested
 #' for server to access; 
 #' if there is no existing values, enter create a file with an empty data frame
-#' @param
 #' @return creates .R files with scripts 
 #' @export
 #' @seealso \link{createShellScript}, \link{parameterGrid}, \link{createFinalShellScript}
@@ -39,7 +39,7 @@ createSource <- function(worldname = "world", resourcename,
       paste0("load('", existingfile, "') \n"),
       paste0("parametersplit <- parameterGrid(", 
              list(epsilons), ",", list(alphas), ",", list(beta0s), ",", list(beta1s), 
-             ", newresults)\n"))
+             ", results)\n"))
     cat(paste0("parameters.df",i, "= parametersplit[[",i,"]]\n"),
         "newresults <- runManyRuns(",paste0("parameters.df",i,", world)\n"),
         "save(newresults, file =",paste0("paste0('~/Rprojects/memorymigration/",results.dir,"/",filename, "run_", i,".rda'))\n"))
