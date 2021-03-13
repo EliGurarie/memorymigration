@@ -38,7 +38,8 @@ createSource(
 \item{beta1s}{values value of beta1 parameter}
 
 \item{existing}{a data frame with existing values already tested
-for server to access;  if there is no existing values, enter an empty data frame}
+for server to access;  if there is no existing values, enter an empty data frame. 
+Save this data frame as results.}
 
 \item{existingfile}{name of file containing a data frame with existing values already tested
 for server to access; 
