@@ -1,0 +1,470 @@
+---
+title: "Can Selective Predation Slow the Spread of CWD?"
+subtitle: "Modeling disease, predation, dispersal, and population dynamics in Wisconsin"
+author: "Elie Gurarie"
+date: "March 30, 2020"
+header-includes:	
+   - \input{preamble.tex}
+fontsize: 11pt
+classoption: "aspectratio=43"
+output: 
+  beamer_presentation:
+    theme: "Madrid"
+    keep_tex: true
+---
+
+```{r setup, include=FALSE}
+
+knitr::knit_hooks$set(mysize = function(before, options, envir) {
+  if (before) 
+    return(options$size)
+})
+knitr::opts_chunk$set(echo = FALSE, cache = TRUE, encoding = "utf-8", message = FALSE, warning = FALSE)
+```
+```{r set-options, echo=FALSE, cache=FALSE}
+options(width = 100)
+```
+
+
+# Acknowledgement
+
+\bcol
+
+\col[.3]
+\col[.3]
+\PlotW{../images/VanDeelen}
+\PlotW{../images/FWE}
+\col[.3]
+\ecol
+
+\bc Prof. Tim Van Deelen \ec
+
+
+# The setting: **Wisconsin**
+
+\PlotW{../images/Wisconsin_in_United_States.png}
+
+
+# The setting: **Wisconsin**
+
+
+  \bc
+  \PlotW[.45]{../images/WisconsinVegetation}
+  \PlotW[.45]{../images/TensionZone}
+  \ec
+   
+* **Southwest:** Mainly agricultural / ex-prairie and oak savanna.
+* **Northeast:** Conifer-hardwood forest / bogs / also agriculture
+  
+
+# The setting: **Wisconsin**
+
+  \bc  \PlotW[.7]{../images/Treaty1837} \ec
+  Wildlife management and fishing rights largely retained by Ojibwe tribes in the North. 
+
+
+# Three characters
+
+\Large
+
+1. White-tailed deer
+2. Chronic wasting disease
+3. Wolves
+
+
+# White-tailed deer in Wisconsin
+
+\bcol
+
+\col[.6]
+
+\bbb{\emph{Odoiceulus virginiacus}}
+
+\small
+- (over)-abundant: 1.9-2.1 million ind.
+- major ecological impacts
+- $\approx$ 350,000 hunted annually (and falling)
+- \$1.4 billion dollars / year to economy
+- a big chunk of which funds research / mitigation of those ecological impacts
+
+\ebb
+
+\col[.4]
+\PlotW{../images/deer}
+\bc\scriptsize \bl{Todd Hubler - \emph{The Isthmus}}\ec
+\ecol
+
+
+# Chronic Wasting Disease
+
+\bcol
+
+\col[.6]
+
+\small
+
+\bbb{Transmissible spongiform encephalopathy}
+
+- Turns brains into sponges
+- Invariably fatal 
+- Caused by **prion** 
+   - misfolded protein found in nervous system
+- Only affects cervids 
+   - only TSE in *wildlife* 
+- Major focus of concern / research among agencies
+
+\ebb
+
+\col[.4]
+
+\PlotW{../images/misfold}
+\PlotW{../images/bse_sponge}
+
+\ecol
+
+
+# Chronic Wasting Disease
+
+\bcol
+
+\col[.5]
+
+\small
+
+\bbb{Clinical Signs}
+
+"Zombie Disease"
+
+- Emaciation
+- Lack of coordination
+- Drooping head/ears
+- Excessive drooling
+- Excessive drinking
+- Excessive urination
+
+\ebb
+
+\col[.5]
+
+\PlotW{../images/sickdeer}
+\ecol
+
+**Incubation:** (asymptomatic) period lasts on average 18 months
+
+**Transmission:** urine, feces, blood.  Direct contact. Long-term environmental persistence (even uptake by plants). 
+
+
+# Chronic Wasting Disease
+
+\bcol
+
+\col[.4]
+
+\footnotesize
+
+\bbb{Global Expansion}
+
+- 1967 - First detected (mule deer) in research facility Colorado. 
+- 1981 - First wild animal (elk) detected in Colorado
+- 2002 - Found in wild WTD in Wisconsin
+- 2011 - Found in wild WTD in Maryland
+- 2017 - Appeared in 3 reindeer in Norway (!) - entire 2000 animal herd summarily executed
+
+\ebb
+
+\col[.6]
+
+\PlotW{../images/CWD_NorthAmerica}
+
+\ecol
+
+# Chronic Wasting Disease: In Wisconsin
+
+Concentrated in southern counties, up to 25\% prevalance.
+
+\bc \PlotW[.6]{../images/CWDprevalence} \ec
+
+***Good data:***  In affected counties, all hunted carcasses need to be tested.  In non-affected counties, a sample of carcasses is tested. 
+
+# Wolves in Wisconsin
+
+\small
+Extirpated early 1900's.  Re-colonized from Minnesota post-ESA. 
+
+\bcol
+
+\col
+
+\PlotW[.9]{../images/WolfMap2019}
+
+\col
+
+```{r WolfNums, fig.width = 4, fig.height = 4}
+ww <- read.csv("../data/wolfcounts.csv")
+require(ggplot2); require(ggthemes); require(gridExtra)
+p1 <- ggplot(ww, aes(Year, Wisconsin)) + geom_point() + ylab("N. wolves in WI")
+p2 <- ggplot(ww, aes(Year, Wisconsin)) + geom_point() + geom_smooth() + scale_y_log10()  + ylab("N. wolves in WI")
+grid.arrange(p1, p2, ncol = 1)
+```
+
+\ecol
+
+
+Currently, approx. 1000 ind. mainly in North.  Expansion slowing. ***Good Data.***
+
+
+# The question
+
+\small
+
+Wolves selectively predate on old, young, weak or **infirm(?)** individuals ... though there is no direct evidence w.r.t. CWD (or - actually - other diseases). 
+
+Given that CWD is concentrated in the SW - and expanding - and wolves are concentrated in NE - and maybe still expanding? - What happens when they meet?  
+
+Specifically, how do wolf presence and selective predation influence:
+
+- **CWD prevalence**
+- **CWD spread**
+- **Deer abundance**
+
+
+# Approaches to look at this question
+
+Lots of ***Mathematical Modeling!!***  Mainly, continuous-time, non-spatial SEIR-type ODE's. 
+
+\bcol
+\col
+\PlotW{../images/WildTitle}
+\PlotW{../images/WildEquations}
+
+Very influential, but no data (and no spatial structure)
+
+\col
+\bc
+\PlotW{../images/TannerTitle}
+\PlotW[0.7]{../images/TannerEquations}
+\ec
+
+Lots of compartments - and some data (but no spatial structure) 
+
+\ecol
+
+
+# Modeling goals
+
+* Capturing dynamics of:
+  - **disease**, 
+  - **predation**, 
+  - **population** 
+  - **dispersal**
+
+* Biologically meaningful parameters
+  - independently estimated / estimable?  
+
+* Provide spatially and temporally explicit predictions
+
+* Balances realism with tractability 
+
+
+# Basic model structure:
+
+## Discrete time / discrete space
+
+- **Annual** - matches data collection and deer biology (birth / seasonal mortality / dispersal?)
+
+- **County-level metapopulation** - matches data reporting and collection
+
+
+## Two classes: Susceptible and Infected
+\small
+\begin{align}
+S_{i,t+1} &= S_{i,t} - \rd{infected} & + \bl{recruited}& - \rd{died} + \bl{immigrated} - \rd{emigrated} \nonumber\\
+I_{i, t+1} &= I_{i,t} + \bl{infected} & &  -\rd{died} + \bl{immigrated} - \rd{emigrated} \nonumber
+\end{align}
+
+
+# Complete model
+
+\bc
+
+\scriptsize
+|   |  Susceptible $(S_{i,t+1})$|  Infected $(I_{i,t+1})$|  
+|---|:---:|:---:|
+| disease          | $- \gamma {S_{i,t} I_{i,t} \over area}$ | $\gamma{ S_{i,t} I_{i,t} \over area}$ |
+| predation        | $-\left({S_{i,t} \over S_{i,t}+I_{i,t}}\right) \left({1 \over 1 + \alpha}\right) W_{max}$ |  $-\left({I_{i,t} \over S_{i,t}+I_{i,t}}\right) \left({\alpha \over 1 + \alpha}\right) W_{max}$      |
+| other mortality  | $- \mu_s S_{i,t}$ |  $- \mu_I I_{i,t}$ |
+| recruitment      |  $\rho S_{i,t}(1 - S_{i,t}/K_i)$  |  |
+| immigration      | $\sum_{j} M_{S,ij}$  | $\sum_{j} M_{I,ij}$ |
+| emigration       | $-\sum_{j} E_{s,ji}$ | $-\sum_{j} E_{i,ji}$ |
+
+
+\PlotW[.7]{../images/gif/crudity_1}
+
+\ec
+
+
+# Recruitment
+
+##
+Approximate number of new (non-infected) individuals entering population annually:
+\Large
+$$\rho \, S_{i,t}(1 - S_{i,t}/K_i)$$
+\normalsize
+
+Assumptions: 
+
+1. Logistic, density dependent growth with carrying capacity: $K$
+2. Intrinsic adult recruitment rate, $\rho$, uniform across range
+
+
+
+# Mortality
+
+## Non-Wolf:
+
+Annual mortality rate: \rd{$\mu_S$} and \rd{$\mu_I$ }:
+
+- Equal (!?)
+- Constant across range (?))
+
+
+# Mortality
+
+## Wolf: 
+
+Assume: **Wolves gonna kill what wolves gonna kill** - (almost entirely deer).  
+
+- \small e.g. 10 wolves, each kills 20 deer / year = 200 deer/year/county killed 
+
+\normalsize Apportioning of S and I killed is proportional to the *availability* ($I \over S+I$) and the *preference* ($\alpha \over 1+\alpha$). 
+
+- \small $P(I \, killed) \propto P(I) \times P(killed \,|\, I) = \left({I \over S + I}\right)  \left(\alpha  \over 1 + \alpha \right) N_w K_{rate}$
+- \small  $P(S \, killed) \propto P(S) \times P(killed \,|\, S) = \left({S \over S + I}\right)  \left(1  \over 1 + \alpha \right) N_w K_{rate}$
+  
+where \gr{$\alpha$} is the odds of selecting infected over non-infected deer, i.e. the \gr{Predation Selection Coefficient} (presumably $>$ 1). 
+\nd
+
+__This is the key, unobservable parameter of interest!__
+
+
+# Disease dynamics
+
+## Number of infected ...
+(by county by year)
+\Large
+$$- \gamma {S \times I \over area}$$
+\large
+
+- $\gamma$ is infection rate per encounter  
+- Total number of infections is higher if areas are smaller (densities are higher). 
+- Lots of mechanism and structure swept under rug here!
+
+
+# Dispersal 
+
+**Necessary for disease to spread! (or not spread)**
+
+## Immigration
+$$M_i  = {\kappa_m} \sum_{j} S_j \exp {\left(- {d_{ij} \over \lambda} \right)^\beta}$$
+
+## Emigration
+$$E_j  = {\kappa_e} S_i \sum_{j} \exp {\left(- {d_{ij} \over \lambda} \right)^\beta}$$
+
+\footnotesize
+- **Exponential** ($\beta = 1$) or **Gaussian** ($\beta = 2$) dispersal kernel with mean $\lambda$
+- $\kappa$ - normalization, so that probability of emigrating from site $j$ sums to 1
+- Assumes homogenous dispersal in all directions, dependent only on distance. 
+- *Estimable (and refinable) from movement data!?*
+
+
+# Data
+
+## **Deer Abundance**
+Wisconsin DNR winter population survey: [https://dnr.wi.gov/topic/hunt/maps.html](https://dnr.wi.gov/topic/hunt/maps.html)
+\bc
+\PlotW[.45]{../images/overwinter.pdf}
+\PlotW[.45]{../images/winterpoppertotal.pdf}
+\ec
+Fall population estimates - total harvest, by county.
+
+\nd Working assumption: Carrying Capacity $K_i = 2 N_i$.  
+
+
+# Data 
+
+## **CWD prevalence**
+Wisconsin DNR CWD monitoring efforts (by county) 
+\nd
+
+\bc
+\PlotW[.7]{../images/CWDprevalence}
+\ec
+
+\small https://dnr.wi.gov/wmcwd/Summary/YearCounty/2019
+
+# Data
+
+## **Wolves**
+
+Latest estimate from DNR: 950 ind.
+
+\bc \PlotH[.5]{../images/WolfMap2019.png} \,\,\, \PlotH[.5]{../images/WolfMapElie.png} \ec
+
+County data not readily available ... so I allocated 1000 wolves across the counties north of this line. 
+
+
+# Model
+
+## Shiny App.
+
+A brand new skill!
+Facilitates exploring parameters and visualizing results. 
+
+\bc
+(enjoy demo)
+\ec
+
+
+# A Result:  Selective Predation Decreases CWD Prevalence!
+\bc
+\PlotW[.9]{../images/SimResults1.png}
+\ec
+
+\small
+In ALL parameterizations, wolves depress CWD.  Note - dispersal scale (10 and 80 km) AND shape both important. 
+
+\footnotesize `rho = 0.5, gamma = .02, mu_S = 0.06, mu_I = 0.06, W_max = 60, lambda = 10 or 80`
+ 
+# Next steps
+
+\footnotesize
+
+## Model structure
+* Add **Male / Female** sex classes!
+* Separate **Infected / Asymptomatic** from **Infected / Symptomatic**
+* Assess assumptions:  Density dependence? | Disease transmission? 
+\pause
+
+## Data
+- Obtain better **wolf distribution** and **predation** data
+- Use **Harvest** for mortality!
+- Use **GPS data** for dispersal portion
+- Fit to historical data!?
+  - Infer $\gamma$ by matching to observed CWD spread? 
+\pause
+
+## Larger strategy
+- Thoroughly analyze / explore parameter space
+- Find PhD student to do the work!?
+- Get funding! 
+
+# 
+
+\bc
+\Huge
+Thanks!
+\ec
+
+
+
+

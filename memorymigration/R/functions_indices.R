@@ -21,7 +21,7 @@ computeCohesiveness <- function(pop, world){
   getSD <- function(p, world){
     EX <- sum( world$X * p) * world$dx
     EX2 <- sum( world$X^2 * p) * world$dx
-    sd  = sqrt(EX2 - EX^2)
+    sqrt(EX2 - EX^2)
   }
   
   SDs <- apply(pop, 1, getSD, world = world)
