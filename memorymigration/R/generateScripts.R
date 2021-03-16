@@ -66,7 +66,7 @@ createShellScripts <- function(shell.dir, code.dir, runname, filename){
   sink(paste0(shell.dir, "/", filename, i, ".sh"))
   cat("#!/bin/bash \n")
   cat("#SBATCH --ntasks=1 \n")
-  cat("#SBATCH --time=20:00:00 \n")
+  cat("#SBATCH --time='UNLIMITED' \n")
   cat(paste0("#SBATCH --job-name=", runname, "\n"))
  
     cat(paste0("R CMD BATCH ~/Rprojects/memorymigration/",code.dir,"/", files[i],"\n"))
