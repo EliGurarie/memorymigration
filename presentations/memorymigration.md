@@ -8,14 +8,16 @@ width: 1600
 height: 900
 
 
+
+
+
+
 Premise
 ========================================================
 
 To optimally forage in a dynamic environment, you need both **tactical** responses (adapting to local changes in resource gradients), and **strategic** responses (using memory to guide long-term decisions). 
 
 ***
-
-
 
 
 
@@ -42,6 +44,7 @@ $$R(x,t, \theta) = \chi B(x/\chi, a(t, \theta), b(t, \theta))$$
 4. The resource peaks exactly symmetrically at time $\tau - t_r$ and location $\chi - x_r$ with the same variance $\sigma_r$.
 (where $\tau$ is the length of the year and $\chi$ is the extent of the spatial domain)
 
+***
 
 ![](images/exampleResourcePlots-1.png)
 
@@ -54,6 +57,21 @@ Running the model
 - SESYNC cluster 
 - server-based Rstudio
 
+
+Example run: with Memory
+==============================
+
+$\alpha = 200; \beta_0 = 250; \beta_1 = 250$
+
+
+![](images/Sim_withMemory.png)
+
+
+Example run: no Sociality, only Memory
+==============================
+
+Example run: no Memory, no Sociality
+==============================
 
 
 Metrics
@@ -75,18 +93,48 @@ where $$\sigma_u^2(t) = \int_D \left(x - \mu_u(t)\right)^2 \, u(x,t)\, dx$$
 and $\mu_u$ is the mean of $u$ at time $t$.
 
 Definition: The mean standard deviation of the population across the equilibrium year
-Problem: For the skewed population distribution, standard deviation is not the best measure
 
 ***
 
-Image
+![plot of chunk SC_example](memorymigration-figure/SC_example-1.png)
+
+
+
+Social Cohesiveness: Problem
+=========================
+
+
+For skewed of bimodal population distribution, standard deviation are a poor measure ...
+
+
+
+
+![](images/BadSC.png)
+
+**Not sure how to deal with this ...**
 
 
 Metrics: Foraging Efficiency 
 ==========================
 $$FE = {1\over \tau} \int_{0}^\tau \int_{0}^{X_{max}} \sqrt{u(x,t) \, h(x,t)} \, dx\,dt$$
 
-Defintion: The Bhattacharyya Coefficient quantifies similarity between two distributions. We take the mean of the coefficient over the equilibrium year to determine foraging efficiency (FE)
+**Bhattacharyya Coefficient** quantifies similarity between two distributions.
+
+
+
+![](images/FEexample.png)
+
+
+Metrics: Foraging Efficiency - Issues
+==========================
+
+Seems to always be very high!
+
+Also - assumes that there is some sort of space inhibition ... the actually highest efficiency is when animals pile in at indefinitely high density at the location of highest resource availability. 
+
+***
+
+![](images/FEexample.png)
 
 
 Metrics: Migratoriness
