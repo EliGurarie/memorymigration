@@ -122,6 +122,6 @@ parameterGrid <- function(epsilons, alphas, beta0s, beta1s, existing){
               (params.df$beta1 %in% existing$beta1))
   params.df <- params.df[keep,]
   
-  parametersplit <- split(params.df, params.df$alpha)
+  parametersplit <- split(params.df, params.df$alpha) 
   parametersplit
 }
