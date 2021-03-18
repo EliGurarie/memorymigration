@@ -24,28 +24,21 @@ getCompiledResults <- function(results.dir){
 #' and Migratoriness
 #' @export 
 
-plotCompiled <- function(r){
+plotCompiled <- function (r) 
+{
   require(ggplot2)
-  p1 <- ggplot(r, 
-               aes(alpha, SC, col = factor(epsilon))) +
-    facet_grid(beta0~beta1, labeller = label_both) + 
-    geom_point() + 
+  p1 <- ggplot(r, aes(alpha, SC, col = factor(epsilon))) + 
+    facet_grid(beta0 ~ beta1, labeller = label_both)  + 
     geom_path() + ggtitle(paste(r$.id[1], "Social Cohesion"))
-  
-  p2 <- ggplot(r, 
-               aes(alpha, FE, col = factor(epsilon))) +
-    facet_grid(beta0~beta1, labeller = label_both) + 
-    geom_point() + 
+  p2 <- ggplot(r, aes(alpha, FE, col = factor(epsilon))) + 
+    facet_grid(beta0 ~ beta1, labeller = label_both)  + 
     geom_path() + ggtitle("Foraging Efficiency")
-  
-  p3 <- ggplot(r, 
-               aes(alpha, MI, col = factor(epsilon))) +
-    facet_grid(beta0~beta1, labeller = label_both) + 
-    geom_point() + 
+  p3 <- ggplot(r, aes(alpha, MI, col = factor(epsilon))) + 
+    facet_grid(beta0 ~ beta1, labeller = label_both)  + 
     geom_path() + ggtitle("Migratoriness")
-  
   require(gridExtra)
-  grid.arrange(p1, p2, p3, ncol = 3)
-  
+  grid.arrange(p1 + theme_few(), 
+               p2 + theme_few(), 
+               p3 + theme_few(), ncol = 3)
 }
 
