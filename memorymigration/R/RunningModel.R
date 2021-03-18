@@ -95,16 +95,16 @@ runManyYears <- function(World, parameters, n.years = 30,
 #'distribution after several years. 
 #' @export
 #' 
-runManyRuns <- function(parameters.df, world, ...){
-  results <- data.frame() 
-  
-  for(i in 1:nrow(parameters.df)){
-    M <- runManyYears(world, parameters = parameters.df[i,], 
-                      n.years = 30, threshold = 0.99) 
-    myR <- data.frame(parameters.df[i,], 
-                      computeIndices(M[[length(M)]], 
-                                     world$resource, world), n.runs = length(M)-1)
-    results <- rbind(results, c(myR))
+runManyRuns <- function (parameters.df, world, ...) 
+{
+  results <- data.frame()
+  for (i in 1:nrow(parameters.df)) {
+    M <- try(runManyYears(world, parameters = parameters.df[i,], n.years = 30, threshold = 0.99))
+    if(!inherits(M, "try-error")){
+      myR <- data.frame(parameters.df[i, ], computeIndices(M[[length(M)]], 
+                                                           world$resource, world), n.runs = length(M) - 1)
+      results <- rbind(results, c(myR))
+    }
   }
   return(results)
 }
