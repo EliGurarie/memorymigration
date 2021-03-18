@@ -114,13 +114,7 @@ createFinalShellScript <- function(shell.dir, runname){
 
 parameterGrid <- function(epsilons, alphas, beta0s, beta1s, existing){
   params.df <- expand.grid(epsilon = epsilons, alpha = alphas, beta0 = beta0s, beta1 = beta1s)
-  require(gtools)
-  
-  keep <- !((params.df$epsilon %in% existing$epsilon) &
-              (params.df$alpha %in% existing$alpha) &
-              (params.df$beta0 %in% existing$beta0) & 
-              (params.df$beta1 %in% existing$beta1))
-  params.df <- params.df[keep,]
+  params.df <- setdiff(params.df, existing)
   
   parametersplit <- split(params.df, params.df$alpha)
   parametersplit
