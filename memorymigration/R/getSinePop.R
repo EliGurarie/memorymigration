@@ -25,5 +25,5 @@ getSinePop <- function(tau, X.min = 0, X.max = 100, dx,
                function(t,x) 
                  dnorm(x, mean = X.max/2 + (peak.max-peak.min) / 2 * sin( 2*(t * pi)/max(Time)),sd = sd))
   pop <- apply(pop, 1, function(x) x/sum(x)/dx) %>% t
-  list(pop = pop, X = X, time = Time, dx = dx, tau = tau)
+  list(pop = pop, X = X, time = Time, dx = dx, tau = tau, X.max = X.max)
 }

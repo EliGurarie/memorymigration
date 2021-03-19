@@ -13,24 +13,27 @@
 #' space as a beta distribution, where the two shape and scale parameters vary 
 #' sinusoidally in such a way as to fulfill the criteria above. 
 #' 
-#' @param t vector with time values 
-#' @param x vector with X-axis values
+#' @param world object (e.g. from getSinePop) containing at minimum tau, X and X.max
 #' @param par vector with four values: t.peak (which is the maximum peak of t), 
 #' t.sd (which is the standard deviation of t), x.peak (which is the maximum peak of x),
 #' and x.sd (which is the standard deviation of x)
 #' @return A X x X matrix containing values of the resource distribution
 #' @export
 
-getPulsedResource <- function(t, x, par){
+getPulsedResource <- function(world, par){
+  
+  t <- 1:world$tau
+  x <- world$X
+  x.max <- world$X.max
   
   t.peak <- par["t.peak"] 
   t.sd <- par["t.sd"] 
   x.peak <- par["x.peak"]
   x.sd <- par["x.sd"]
   
-  x.scaled <- x/max(x)
-  x.peak <- x.peak/max(x)
-  x.sd <- x.sd/max(x)
+  x.scaled <- x/x.max
+  x.peak <- x.peak/x.max
+  x.sd <- x.sd/x.max
   
   t1 <- t[1:(length(t)/2)]
   
@@ -47,8 +50,8 @@ getPulsedResource <- function(t, x, par){
   b = ((m-1)*s^2+m^3-2*m^2+m)/s^2
   
   R <- sapply(1:length(t), function(i) dbeta(x.scaled, a[i], b[i])) %>% t
-  R[,1] <- 1
-  R[,length(x)] <- 1
+  #R[,1] <- 1
+  #R[,length(x)] <- 1
   colnames(R) <- x
   rownames(R) <- t
   R <- apply(R, 1, function(x) x/sum(x)) %>% t

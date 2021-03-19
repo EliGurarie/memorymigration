@@ -10,14 +10,10 @@ fixed_Resource <- matrix((fr1 + fr2)/2, byrow = TRUE,
                          nrow = nrow(world$pop), 
                          ncol = ncol(world$pop))
 
-resource_R1 <- getPulsedResource(1:world$tau, world$X, 
-                                 c(t.peak = 25, t.sd = 10, x.peak = 80, x.sd = 10))
-resource_R2 <- getPulsedResource(1:world$tau, world$X, 
-                                 c(t.peak = 25, t.sd = 10, x.peak = 80, x.sd = 4))
-resource_R3 <- getPulsedResource(1:world$tau, world$X, 
-                                 c(t.peak = 25, t.sd = 4, x.peak = 80, x.sd = 10))
-resource_R4 <- getPulsedResource(1:world$tau, world$X, 
-                                 c(t.peak = 25, t.sd = 4, x.peak = 80, x.sd = 4))
+resource_R1 <- getPulsedResource(world, c(t.peak = 25, t.sd = 10, x.peak = 75, x.sd = 10))
+resource_R2 <- getPulsedResource(world, c(t.peak = 25, t.sd = 10, x.peak = 75, x.sd = 4))
+resource_R3 <- getPulsedResource(world, c(t.peak = 25, t.sd = 4, x.peak = 75, x.sd = 10))
+resource_R4 <- getPulsedResource(world, c(t.peak = 25, t.sd = 4, x.peak = 75, x.sd = 4))
 
 
 save(resource_R1, resource_R2, resource_R3, resource_R4, fixed_Resource, 
