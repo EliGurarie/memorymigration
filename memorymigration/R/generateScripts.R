@@ -41,10 +41,12 @@ createSource <- function(worldname = "world", resourcename,
              list(epsilons), ",", list(alphas), ",", list(beta0s), ",", list(beta1s), 
              ", results)\n"))
     cat(paste0("parameters.df",i, "= parametersplit[[",i,"]]\n"),
-        "newresults <- runManyRuns(",paste0("parameters.df",i,", world)\n"),
-        "save(newresults, file =",paste0("paste0('~/Rprojects/memorymigration/",results.dir,"/",filename, "run_", i,".rda'))\n"))
+        "newresults <- runManyRuns(",paste0("parameters.df",i,", world", results.dir)\n"),
+    ")
     sink()}
 }
+# save(newresults, file =",paste0("paste0('~/Rprojects/memorymigration/",results.dir,"/",filename, "run_", i,".rda'))\n"))
+
 
 #'Create Shell Scripts
 #'

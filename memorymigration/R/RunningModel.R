@@ -95,7 +95,7 @@ runManyYears <- function(World, parameters, n.years = 30,
 #'distribution after several years. 
 #' @export
 #' 
-runManyRuns <- function (parameters.df, world, ...) 
+runManyRuns <- function (parameters.df, world, results.dir = NULL, filename = NULL,  ...) 
 {
   results <- data.frame()
   for (i in 1:nrow(parameters.df)) {
@@ -105,6 +105,8 @@ runManyRuns <- function (parameters.df, world, ...)
                                                            world$resource, world), n.runs = length(M) - 1)
       results <- rbind(results, c(myR))
     }
+    if(!is.null(results.dir) & (i %% 10 == 0 | i == max(i)))  
+      save(results, file =paste0("~/Rprojects/memorymigration/",results.dir,"/",filename))
   }
   return(results)
 }
