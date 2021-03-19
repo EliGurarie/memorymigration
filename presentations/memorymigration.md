@@ -27,9 +27,9 @@ Model
 $${\frac{\partial u(x,t)}{\partial t}} = -\varepsilon {\frac{\partial^2 u(x,t)}{\partial x^2}} + \alpha \frac{\partial h(x,t)}{\partial x} + \sum_{i = 0}^n \beta_i \frac{\partial u(x, t - i\tau)}{\partial x}$$
 
 - $\epsilon$: diffusion, exploration / search
-- $\alpha$: taxis, resource followign
+- $\alpha$: taxis, resource following
 - $\beta_0$: cohesion, tendency to stick to group
-- $\beta_1$: memory - tendency to do what was done previous year
+- $\beta_1$: memory, tendency to do what was done previous year
 
 Seasonal resource
 ========================================================
@@ -58,10 +58,10 @@ Running the model
 - server-based Rstudio
 
 
-Example run: with Memory
+Example run: with Memory and Sociality
 ==============================
 
-$\alpha = 200; \beta_0 = 250; \beta_1 = 250$
+$\epsilon =20; \alpha = 200; \beta_0 = 250; \beta_1 = 250$
 
 
 ![](images/Sim_withMemory.png)
@@ -69,10 +69,25 @@ $\alpha = 200; \beta_0 = 250; \beta_1 = 250$
 
 Example run: no Sociality, only Memory
 ==============================
+$\epsilon =20; \alpha = 200; \beta_0 = 0; \beta_1 = 250$
 
-Example run: no Memory, no Sociality
+
+![](images/Sim_onlyMemory.png)
+
+Example run: no Memory, only Sociality
+==============================
+$\epsilon =20; \alpha = 200; \beta_0 = 250; \beta_1 = 0$
+
+
+![](images/Sim_noMemory.png)
+
+Comparing Examples
 ==============================
 
+<img src="images/Sim_withMemory.png" title="plot of chunk unnamed-chunk-4" alt="plot of chunk unnamed-chunk-4" width="33%" /><img src="images/Sim_onlyMemory.png" title="plot of chunk unnamed-chunk-4" alt="plot of chunk unnamed-chunk-4" width="33%" /><img src="images/Sim_noMemory.png" title="plot of chunk unnamed-chunk-4" alt="plot of chunk unnamed-chunk-4" width="33%" />
+1. Memory and Sociality
+2. Only Memory
+3. Only Sociality
 
 Metrics
 ======================
@@ -105,7 +120,7 @@ Social Cohesiveness: Problem
 
 
 For skewed of bimodal population distribution, standard deviation are a poor measure ...
-
+$\epsilon = 8; \alpha = 200; \beta_0 = 500; \beta_1 = 0$
 
 
 
@@ -121,7 +136,8 @@ $$FE = {1\over \tau} \int_{0}^\tau \int_{0}^{X_{max}} \sqrt{u(x,t) \, h(x,t)} \,
 **Bhattacharyya Coefficient** quantifies similarity between two distributions.
 
 
-
+***
+$\epsilon = 8; \alpha = 200; \beta_0 = 500; \beta_1 = 0$ 
 ![](images/FEexample.png)
 
 
@@ -142,8 +158,12 @@ Metrics: Migratoriness
 $$MI = 1-min(O(t_1, t_2))$$
 $$O(t_1, t_2) = \int_D \sqrt{u(x, t_1) \, u(x, t_2)} \, dx $$
 
-Definition: We calculate overlap of the population from two different times within the year, choosing those times to minimize the overlap, and reporting the overall overlap. We find the values of $t_1$ and $t_2$ that minimize $O$, corresponding to the periods of maximum distance. We subtract this minimum value to calculate migratoriness of the population
+Definition: We calculate overlap of the population from two different times within the year, choosing those times to minimize the overlap, and reporting the overall overlap. We find the values of $t_1$ and $t_2$ that minimize $O$, corresponding to the periods of maximum distance and subtract to calculate migratoriness. 
 
+
+***
+$\epsilon = 8; \alpha = 200; \beta_0 = 500; \beta_1 = 0$
+![](images/MIexample.png)
 
 
 Questions that this model can answer: 
@@ -164,7 +184,5 @@ Q3. As conditions CHANGE, how resilient is the population at various Diffusion, 
 ![](images/brainstorm.png)
 
 
-Preliminary results: 
-================================
 
 
