@@ -7,3 +7,4 @@ code/*_cache
 code/*_files
 .DS_Store
 presentations/*_files
+presentations/*.html
