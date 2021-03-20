@@ -12,11 +12,9 @@
 #' @param beta0s values value of beta0 parameter
 #' @param beta1s values value of beta1 parameter
 #' @param existing a data frame with existing values already tested
-#' for server to access;  if there is no existing values, enter an empty data frame. 
-#' Save this data frame as results. 
-#' @param existingfile name of file containing a data frame with existing values already tested
-#' for server to access; 
-#' if there is no existing values, enter create a file with an empty data frame
+#' for server to access. Save the existing values as results
+#' @param existingfile string name of file containing a data frame with existing values already tested
+#' for server to access
 #' @return creates .R files with scripts 
 #' @export
 #' @seealso \link{createShellScript}, \link{parameterGrid}, \link{createFinalShellScript}
@@ -27,24 +25,43 @@
 createSource <- function(worldname = "world", resourcename, 
                          code.dir, filename, results.dir,
                          epsilons, alphas, beta0s,  beta1s,
-                         existing, existingfile){
-  runparametersplit <- parameterGrid(epsilons, alphas, beta0s, beta1s, existing)
+                         existing=NULL, existingfile=NULL){
+  if(!is.null(existing)){
+    runparametersplit <- parameterGrid(epsilons, alphas, beta0s, beta1s, existing)
+  }
+  if(is.null(existing)){
+    runparametersplit <- parameterGrid(epsilons, alphas, beta0s, beta1s)
+  }
 
   for(i in 1:length(runparametersplit)){
     sink(paste0(code.dir, "/", filename, i, ".R"))
     cat(
       "require(memorymigration)\n",
       "data(world); data(resources)\n",
-      "world$resource <-", resourcename,"\n",
-      paste0("load('", existingfile, "') \n"),
-      paste0("parametersplit <- parameterGrid(", 
+      "world$resource <-", resourcename,"\n")
+      if(!is.null(existingfile)){
+        cat(paste0("load('", existingfile, "') \n"))}
+      
+    if(!is.null(existing)){
+          cat(paste0("parametersplit <- parameterGrid(", 
              list(epsilons), ",", list(alphas), ",", list(beta0s), ",", list(beta1s), 
-             ", results)\n"))
-    cat(
-      paste0("parameters.df",i, "= parametersplit[[",i,"]]\n"),
-        "newresults <- runManyRuns(",paste0("parameters.df",i,", world", filename, results.dir,")"))
-    sink()}
-}
+             ", results)\n"))}
+    
+    if(is.null(existing)){
+      cat(paste0("parametersplit <- parameterGrid(", 
+                   list(epsilons), ",", list(alphas), ",", list(beta0s), ",", list(beta1s), 
+                    ")\n"))}
+      
+  if(is.null(existing)){cat(paste0("parameters.df",i, "= parametersplit[[",i,"]]\n"),
+                            "newresults <- runManyRuns(",paste0("parameters.df",i,", world,'", filename, "','", results.dir,"')"))}
+  
+  if(!is.null(existing)){cat(paste0("parameters.df",i, "= parametersplit[[",i,"]]\n"),
+                            "newresults <- runManyRuns(",paste0("parameters.df",i,", world,'", filename, "','", results.dir,"')"))}}
+  
+    sink()
+    }
+
+
 # save(newresults, file =",paste0("paste0('~/Rprojects/memorymigration/",results.dir,"/",filename, "run_", i,".rda'))\n"))
 
 

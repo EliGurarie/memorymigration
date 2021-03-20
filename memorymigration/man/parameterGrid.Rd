@@ -4,7 +4,7 @@
 \alias{parameterGrid}
 \title{Parameter Grid}
 \usage{
-parameterGrid(epsilons, alphas, beta0s, beta1s, existing)
+parameterGrid(epsilons, alphas, beta0s, beta1s, existing = NULL)
 }
 \arguments{
 \item{epsilons}{values of epsilon parameter}
@@ -15,8 +15,7 @@ parameterGrid(epsilons, alphas, beta0s, beta1s, existing)
 
 \item{beta1s}{values value of beta1 parameter}
 
-\item{existing}{a data frame with existing values already tested; if there is no 
-existing values, enter this parameter as an empty data frame}
+\item{existing}{a data frame with existing values already tested}
 }
 \value{
 list of data frames
