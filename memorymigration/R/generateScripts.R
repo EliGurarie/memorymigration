@@ -40,9 +40,9 @@ createSource <- function(worldname = "world", resourcename,
       paste0("parametersplit <- parameterGrid(", 
              list(epsilons), ",", list(alphas), ",", list(beta0s), ",", list(beta1s), 
              ", results)\n"))
-    cat(paste0("parameters.df",i, "= parametersplit[[",i,"]]\n"),
-        "newresults <- runManyRuns(",paste0("parameters.df",i,", world", results.dir)\n"),
-    ")
+    cat(
+      paste0("parameters.df",i, "= parametersplit[[",i,"]]\n"),
+        "newresults <- runManyRuns(",paste0("parameters.df",i,", world", filename, results.dir,")"))
     sink()}
 }
 # save(newresults, file =",paste0("paste0('~/Rprojects/memorymigration/",results.dir,"/",filename, "run_", i,".rda'))\n"))
@@ -70,6 +70,7 @@ createShellScripts <- function(shell.dir, code.dir, runname, filename){
   cat("#SBATCH --ntasks=1 \n")
   cat("#SBATCH --time='UNLIMITED' \n")
   cat(paste0("#SBATCH --job-name=", runname, "\n"))
+  cat("#SBATCH --exclusive=user \n")
  
     cat(paste0("R CMD BATCH ~/Rprojects/memorymigration/",code.dir,"/", files[i],"\n"))
   sink() }
@@ -106,18 +107,19 @@ createFinalShellScript <- function(shell.dir, runname){
 #' @param alphas values value of alpha parameter
 #' @param beta0s values value of beta0 parameter
 #' @param beta1s values value of beta1 parameter
-#' @param existing a data frame with existing values already tested; if there is no 
-#' existing values, enter this parameter as an empty data frame
+#' @param existing a data frame with existing values already tested
 #' @return list of data frames 
 #' @seealso \link{createShellScript}, \link{createSource}, \link{createFinalShellScript}
 #' @export
 #' @examples
 #' parameterGrid(c(1,2,3), c(2,3), seq(1,4), 4)
 
-parameterGrid <- function(epsilons, alphas, beta0s, beta1s, existing){
+parameterGrid <- function(epsilons, alphas, beta0s, beta1s, existing=NULL){
   params.df <- expand.grid(epsilon = epsilons, alpha = alphas, beta0 = beta0s, beta1 = beta1s)
-  params.df <- setdiff(params.df, existing)
+  params.df <-  split(params.df, params.df$alpha)
   
-  parametersplit <- split(params.df, params.df$alpha)
-  parametersplit
+  if(!is.null(existing))
+    params.df <- setdiff(params.df, existing)
+  
+  params.df
 }

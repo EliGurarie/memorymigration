@@ -4,12 +4,10 @@
 \alias{getPulsedResource}
 \title{Get Pulsed Resource}
 \usage{
-getPulsedResource(t, x, par)
+getPulsedResource(world, par)
 }
 \arguments{
-\item{t}{vector with time values}
-
-\item{x}{vector with X-axis values}
+\item{world}{object (e.g. from getSinePop) containing at minimum tau, X and X.max}
 
 \item{par}{vector with four values: t.peak (which is the maximum peak of t), 
 t.sd (which is the standard deviation of t), x.peak (which is the maximum peak of x),

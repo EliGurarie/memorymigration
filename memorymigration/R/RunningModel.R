@@ -72,7 +72,10 @@ runManyYears <- function(World, parameters, n.years = 30,
   pop.list[[i+1]] <- runNextYear(World, 
                                  Parameters = parameters)
   similarity <- computeEfficiency(pop.list[[i]], pop.list[[i+1]], World)
-  cat(paste("parameters:", parameters, "\n"))
+  cat(paste("epsilon:", parameters[[1]], "\n"))
+  cat(paste("alpha:", parameters[[2]], "\n"))
+  cat(paste("beta0:", parameters[[3]], "\n"))
+  cat(paste("beta1:", parameters[[4]], "\n"))
   
   while((similarity < threshold) & (i < n.years)){
     
@@ -90,24 +93,34 @@ runManyYears <- function(World, parameters, n.years = 30,
 
 #' Run Many Years for a set of parameters
 #' 
-#' Based on a migratory population's set up (the World) and the values \code{alpha},
+#' Based on a migratory population's set up (the World) and the values \code{epsilon}, \code{alpha},
 #'\code{beta0} and \code{beta1}, this function determines the population 
 #'distribution after several years. 
+#'
+#'
+#'@param parameters.df list of data frames with values of \code{epsilon}, \code{alpha},
+#'\code{beta0} and \code{beta1} to test
+#'@param world World List of 5: a population distribution across the time period in a T x X matrix,
+#'  a vector with midpoint X-values, the time points for the population as integers 1:tau,
+#'  the dx value and the tau value. Can incorporate resource attribute into the world to make a list of 6.
+#'  Set up by the getSinePop function.  
+#' @param filename string containing base name of the file to be created 
+#' @param results.dir string containing directory of where results from the R scripts will be stored
 #' @export
 #' 
-runManyRuns <- function (parameters.df, world, results.dir = NULL, filename = NULL,  ...) 
+runManyRuns <- function (parameters.df, world, filename = NULL, results.dir = NULL, ...) 
 {
-  results <- data.frame()
+  newresults <- data.frame()
   for (i in 1:nrow(parameters.df)) {
     M <- try(runManyYears(world, parameters = parameters.df[i,], n.years = 30, threshold = 0.99))
     if(!inherits(M, "try-error")){
       myR <- data.frame(parameters.df[i, ], computeIndices(M[[length(M)]], 
                                                            world$resource, world), n.runs = length(M) - 1)
-      results <- rbind(results, c(myR))
+      newresults <- rbind(newresults, c(myR))
     }
     if(!is.null(results.dir) & (i %% 10 == 0 | i == max(i)))  
-      save(results, file =paste0("~/Rprojects/memorymigration/",results.dir,"/",filename))
+      save(newresults, file =paste0("~/Rprojects/memorymigration/",results.dir,"/",filename, ".rda"))
   }
-  return(results)
+  return(newresults)
 }
 

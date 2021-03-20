@@ -4,10 +4,23 @@
 \alias{runManyRuns}
 \title{Run Many Years for a set of parameters}
 \usage{
-runManyRuns(parameters.df, world, ...)
+runManyRuns(parameters.df, world, filename = NULL, results.dir = NULL, ...)
+}
+\arguments{
+\item{parameters.df}{list of data frames with values of \code{epsilon}, \code{alpha},
+\code{beta0} and \code{beta1} to test}
+
+\item{world}{World List of 5: a population distribution across the time period in a T x X matrix,
+a vector with midpoint X-values, the time points for the population as integers 1:tau,
+the dx value and the tau value. Can incorporate resource attribute into the world to make a list of 6.
+Set up by the getSinePop function.}
+
+\item{filename}{string containing base name of the file to be created}
+
+\item{results.dir}{string containing directory of where results from the R scripts will be stored}
 }
 \description{
-Based on a migratory population's set up (the World) and the values \code{alpha},
+Based on a migratory population's set up (the World) and the values \code{epsilon}, \code{alpha},
 \code{beta0} and \code{beta1}, this function determines the population 
 distribution after several years.
 }
