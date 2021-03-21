@@ -119,7 +119,8 @@ runManyRuns <- function (parameters.df, world, filename = NULL, results.dir = NU
       newresults <- rbind(newresults, c(myR))
     }
     if(!is.null(results.dir) & (i %% 10 == 0 | i == max(i)))  
-      save(newresults, file =paste0("~/Rprojects/memorymigration/",results.dir,"/",filename, ".rda"))
+      save(newresults, file =paste0("~/Rprojects/memorymigration/",results.dir,"/",filename, "_",
+                                    parameters.df[1,2], ".rda"))
   }
   return(newresults)
 }
