@@ -39,11 +39,11 @@ resource_R129 <- getPulsedResource(world, c(t.peak = 25, t.sd = 12, x.peak = 75,
 resource_R1212 <- getPulsedResource(world, c(t.peak = 25, t.sd = 12, x.peak = 75, x.sd = 12))
 resource_R1215 <- getPulsedResource(world, c(t.peak = 25, t.sd = 12, x.peak = 75, x.sd = 15))
 
-resource_R153 <- getPulsedResource(world, c(t.peak = 25, t.sd = 3, x.peak = 75, x.sd = 3))
-resource_R156 <- getPulsedResource(world, c(t.peak = 25, t.sd = 3, x.peak = 75, x.sd = 6))
-resource_R159 <- getPulsedResource(world, c(t.peak = 25, t.sd = 3, x.peak = 75, x.sd = 9))
-resource_R1512 <- getPulsedResource(world, c(t.peak = 25, t.sd = 3, x.peak = 75, x.sd = 12))
-resource_R1515 <- getPulsedResource(world, c(t.peak = 25, t.sd = 3, x.peak = 75, x.sd = 15))
+resource_R153 <- getPulsedResource(world, c(t.peak = 25, t.sd = 15, x.peak = 75, x.sd = 3))
+resource_R156 <- getPulsedResource(world, c(t.peak = 25, t.sd = 15, x.peak = 75, x.sd = 6))
+resource_R159 <- getPulsedResource(world, c(t.peak = 25, t.sd = 15, x.peak = 75, x.sd = 9))
+resource_R1512 <- getPulsedResource(world, c(t.peak = 25, t.sd = 15, x.peak = 75, x.sd = 12))
+resource_R1515 <- getPulsedResource(world, c(t.peak = 25, t.sd = 15, x.peak = 75, x.sd = 15))
 
 
 save(resource_R1, resource_R2, resource_R3, resource_R4, fixed_Resource, 
