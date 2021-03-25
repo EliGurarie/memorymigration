@@ -60,24 +60,28 @@ Importantly: we explore a range of **spatial concentrations** and **temporal dur
 
 ---
 
-**Running the model**
-
 <div class='left' style='float:left;width:48%'>
+## Running the model
+
+
 - R package `deSolve` and `ReacTran` - fluid transport pde solvers.
 - Functions all in `memorymigration` GitHub project. 
 - SESYNC cluster 
 - server-based Rstudio
 </div>
 
+
+
 <div class='right' style='float:right;width:48%'>
+## Assessing the model
 
-**Assessing the model**
-
-Three metrics: 
+Four metrics: 
 
 1. Social cohesiveness
 2. Foraging Efficiency
 3. Migratoriness
+4. Time to equilibrium
+
 </div>
 
 # Metrics: Cohesiveness
@@ -98,7 +102,7 @@ Definition: The mean standard deviation of the population across the equilibrium
 
 <div class='right' style='float:right;width:50%'>
 
-```{r SC_example, fig.width = 4}
+```{r SC_example, fig.width = 6}
 require(memorymigration)
 data(resources)
 par(mfrow = c(2,1), mar = c(3,3,3,1), mgp = c(2,.25,0), las = 1, tck = 0.01)
@@ -205,6 +209,7 @@ computeEfficiency(resource_R2, sim[[length(sim)]], world)
 <center>
 
 $\epsilon = 8; \alpha = 200; \beta_0 = 500; \beta_1 = 0$
+
 ![](images/MIexample.png){width=70%}
 
 </center>
@@ -230,38 +235,89 @@ Q3. As conditions CHANGE, how resilient is the population at various Diffusion, 
 
 </div>
 
+# Runs
 
-# Example simulations:
+Lots of them! (8100)
+
+## Model parameters
+
+- $\alpha$ - tactic response: 0, 100, 1000
+- $\epsilon$ - diffusion: 10, 30, 100
+- $\beta_0$ - sociality: 0, 100, 200, 300, 400, 500
+- $\beta_1$ - memory: 0, 100, 200, 300, 400, 500
 
 
-```{r, out.width = "33%", eval = FALSE}
-include_graphics(c("images/Sim_withMemory.png","images/Sim_onlyMemory.png", "images/Sim_noMemory.png"))
+## Resource pulse parameters
 
-``` 
+- Duration (2 x sd): 6,12,18,24,30
+- Spatial extent (2 x sd): 6,12,18,24,30
 
-1. Only Tactics
-1. Memory and Sociality
-2. Only Memory
-3. Only Sociality
 
+# Basic Metrics
+
+<div class='left' style='float:left;width:60%'>
+actic response**
+2. High overall mobility (high tactic + high diffusion) =  high foraging efficiency
+3. Slow diffusion leads to longer time to attain equilibrium
+
+We mainly focus on **low diffusion** and **high tactic**, where most of the (migratory) "action" is. 
+
+</div>
+
+<div class='right' style='float:right;width:40%'>
+![](images/MetricComparisons.png){width=100%}
+</div>
+
+# Example simulations
+
+![](images/resource.png){width=20%}![](images/sim0.png){width=70%}
+
+# Example: Memory 0 / Sociality 500
+
+![](images/resource.png){width=20%}![](images/sim2.png){width=70%}
+
+# Example: Memory 500 / Sociality 0
+
+![](images/resource.png){width=20%}![](images/sim1.png){width=70%}
+
+# Example: Memory 200 / Sociality 200
+
+![](images/resource.png){width=20%}![](images/sim3.png){width=70%}
+
+# Example: Memory 500 / Sociality 200 (sometimes things fall apart)
+
+![](images/resource.png){width=20%}![](images/sim4.png){width=70%}
 
 
 # Some results  
 
-<div class='left' style='float:left;width:55%'>
+<div class='left' style='float:left;width:50%'>
 
 1. Migratoriness results from **concentrated** and **long** resource pulses. 
-2. Migratoriness is **increased** by **memory**, but **attenuated** by **sociality**. 
-3.  Foraging is easiest (obviously) for **diluted** and **short** resource pulses, as the resource is distributed mainly uniformly. 
+2. Both migratoriness and sociality **increase migratoriness**. 
+3. Foraging efficiency is highest for **diluted** and **short** resource pulses (resource is distributed mainly uniformly).
+4. In a "stationary" (equilibrium) scenario, memory and sociality don't contribute much to foraging efficiency (**caveated!**). 
 
 </div>
 
-<div class='right' style='float:right;width:45%'>
+<div class='right' style='float:right;width:50%'>
 
-![](images/ComparingResourceDynamics_v1.png){width=100%}
+![](images/ComparingResourceDynamics.png){width=100%}
 
 </div>
 
-# Take-aways
 
-1. This is a convenient, flexible and fast tool for exploring a wide range of dynamics
+---
+
+## Main take-away
+
+1. This is a convenient, flexible and fast tool for exploring a wide range of memory / tactic / sociality dynamics
+
+## Going forward
+
+"Stress" the system to assess plasticity of a population: 
+
+- Make the pulses more isolated (weaken usefulness of tactical strategy).
+- Drift the **location** and **timing** of pulse
+- Make the pulse more **patchy** and **stochastic**
+
