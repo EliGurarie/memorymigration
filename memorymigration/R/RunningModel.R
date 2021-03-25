@@ -112,7 +112,7 @@ runManyRuns <- function (parameters.df, world, filename = NULL, results.dir = NU
 {
   newresults <- data.frame()
   for (i in 1:nrow(parameters.df)) {
-    M <- try(runManyYears(world, parameters = parameters.df[i,], n.years = 30, threshold = 0.99))
+    M <- try(runManyYears(world, parameters = parameters.df[i,], n.years = 60, threshold = 0.995))
     if(!inherits(M, "try-error")){
       myR <- data.frame(parameters.df[i, ], computeIndices(M[[length(M)]], 
                                                            world$resource, world), 
