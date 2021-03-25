@@ -1,6 +1,6 @@
 ---
 title: "Modeling tactical and memory-driven migration in dynamic environments"
-author: "Sriya Potluri and Elie Gurarie"
+author: "Elie Gurarie, Sriya Potluri, Bill Fagan"
 date: "3/24/2021"
 output: slidy_presentation
 ---
@@ -256,7 +256,7 @@ Lots of them! (8100)
 # Basic Metrics
 
 <div class='left' style='float:left;width:60%'>
-actic response**
+1. Highest mirgation with **low diffusion** but **high tactic response**
 2. High overall mobility (high tactic + high diffusion) =  high foraging efficiency
 3. Slow diffusion leads to longer time to attain equilibrium
 
@@ -312,6 +312,7 @@ We mainly focus on **low diffusion** and **high tactic**, where most of the (mig
 ## Main take-away
 
 1. This is a convenient, flexible and fast tool for exploring a wide range of memory / tactic / sociality dynamics
+2. Plusses / Minusses versus individual-based approach? 
 
 ## Going forward
 
