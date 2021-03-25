@@ -115,7 +115,10 @@ runManyRuns <- function (parameters.df, world, filename = NULL, results.dir = NU
     M <- try(runManyYears(world, parameters = parameters.df[i,], n.years = 30, threshold = 0.99))
     if(!inherits(M, "try-error")){
       myR <- data.frame(parameters.df[i, ], computeIndices(M[[length(M)]], 
-                                                           world$resource, world), n.runs = length(M) - 1)
+                                                           world$resource, world), 
+                        n.runs = length(M) - 1,
+                        final_similarity = computeEfficiency(M[[length(M)-1]], 
+                                                             M[[length(M)]], world))
       newresults <- rbind(newresults, c(myR))
     }
     if(!is.null(results.dir) & (i %% 10 == 0 | i == max(i)))  

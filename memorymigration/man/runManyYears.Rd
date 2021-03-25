@@ -7,7 +7,7 @@
 runManyYears(
   World,
   parameters,
-  n.years = 30,
+  n.years = 60,
   threshold = 0.995,
   verbose = FALSE
 )

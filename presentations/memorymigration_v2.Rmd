@@ -261,3 +261,7 @@ include_graphics(c("images/Sim_withMemory.png","images/Sim_onlyMemory.png", "ima
 ![](images/ComparingResourceDynamics_v1.png){width=100%}
 
 </div>
+
+# Take-aways
+
+1. This is a convenient, flexible and fast tool for exploring a wide range of dynamics
