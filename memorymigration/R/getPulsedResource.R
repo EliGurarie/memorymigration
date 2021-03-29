@@ -18,6 +18,7 @@
 #' t.sd (which is the standard deviation of t), x.peak (which is the maximum peak of x),
 #' and x.sd (which is the standard deviation of x)
 #' @return A X x X matrix containing values of the resource distribution
+#' @example examples/WorldsandResources.R
 #' @export
 
 getPulsedResource <- function(world, par){
@@ -55,5 +56,31 @@ getPulsedResource <- function(world, par){
   colnames(R) <- x
   rownames(R) <- t
   R <- apply(R, 1, function(x) x/sum(x)) %>% t
+  return(R)
+}
+
+getPulsedResource_v2 <- function(world, par){
+  
+  t <- 1:world$tau
+  x <- world$X
+  x.max <- world$X.max
+  
+  t.peak <- par["t.peak"] 
+  t.sd <- par["t.sd"] 
+  x.peak <- par["x.peak"]
+  x.sd <- par["x.sd"]
+  
+  season2 <- season1 <- sapply(t, function(t1){
+                   dmvnorm(cbind(t1,x), 
+                     mean = c(t.peak, x.peak), 
+                     sigma = diag(c(t.sd^2, x.sd^2)))}) %>% t
+  
+  season2[nrow(season1):1, ncol(season1):1] <- season1
+  
+  R <- season1 + season2
+  colnames(R) <- x
+  rownames(R) <- t
+  R <- R/sum(R) * 100
+  
   return(R)
 }

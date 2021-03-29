@@ -157,6 +157,12 @@ for(i in 1:14)
 title("With memory and sociality", outer = TRUE, cex.main = 2)
 dev.off()
 
+par(mfrow = c(5,12), mar=c(0,0,0,0))
+for(i in 1:60) 
+  image(1:100, 1:100, sim3[[i]], main = paste("year", i-1), yaxt = "n", xaxt = "n")
+title("With memory and sociality", outer = TRUE, cex.main = 2)
+
+
 
 par(mfrow = c(2,4), mar = c(0,0,0,0), oma = c(2,2,4,2))
 for(i in 1:length(sim1)) image(sim1[[i]])

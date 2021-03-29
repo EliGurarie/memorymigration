@@ -26,19 +26,14 @@ NULL
 #' 
 #' @usage 
 #' data(resources)
+#' data(resources_drifting)
+#' data(resources_island)
 #' 
-#' @examples 
-#' # code to create resource
-#' resource_R1 <- getPulsedResource(1:world$tau, world$X, 
-#'     c(t.peak = 25, t.sd = 9, x.peak = 80, x.sd = 9))
-#' # visualize
-#' data(resources)
-#' par(mfrow = c(2,2))
-#' image(resource_R1) 
-#' image(resource_R2) 
-#' image(resource_R3) 
-#' image(resource_R4) 
-#' image(fixed_Resource) 
+#' @example examples/WorldsandResources.R
+#' 
 #' @keywords data
+#' @aliases resources_drifting, resources_island
 #' @export
 NULL
+
+
