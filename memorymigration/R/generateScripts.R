@@ -4,6 +4,7 @@
 #' 
 #' @param worldname string containing name of the world
 #' @param resourcename string containing name of resource
+#' @param resourcefile the name of rda file that contains the resource
 #' @param code.dir string containing directory of where R scripts will be created
 #' @param filename string containing base name of the file to be created 
 #' @param results.dir string containing directory of where results from the R scripts will be stored
@@ -22,7 +23,7 @@
 #' 
 
 
-createSource <- function(worldname = "world", resourcename, 
+createSource <- function(worldname, resourcename, resourcefile, 
                          code.dir, filename, results.dir,
                          epsilons, alphas, beta0s,  beta1s,
                          existing=NULL, existingfile=NULL){
@@ -37,8 +38,8 @@ createSource <- function(worldname = "world", resourcename,
     sink(paste0(code.dir, "/", filename, i, ".R"))
     cat(
       "require(memorymigration)\n",
-      "data(world); data(resources)\n",
-      "world$resource <-", resourcename,"\n")
+      paste0("data(world); data(,",resourcefile,")\n"),
+      paste0("world$resource <- with(",resourcefile, ",{(", resourcename,")})\n"))
       if(!is.null(existingfile)){
         cat(paste0("load('", existingfile, "') \n"))}
       

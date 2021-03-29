@@ -33,8 +33,10 @@ sinusoidally in such a way as to fulfill the criteria above.
 }
 \examples{
 ## Worlds
-world <- getSinePop(tau = 100, X.min = 0, X.max = 100, dx=1, 
+world1 <- getSinePop(tau = 100, X.min = 0, X.max = 100, dx=1, 
                        peak.max = 20, peak.min = 20, sd = 10)
+world2 <- getSinePop(tau = 100, X.min = 0, X.max = 100, dx=1, 
+                    peak.max = 80, peak.min = 20, sd = 10)
 save(world, file = "memorymigration/data/world.rda")
 
 

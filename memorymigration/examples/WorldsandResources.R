@@ -1,7 +1,9 @@
 ## Worlds
-world <- getSinePop(tau = 100, X.min = 0, X.max = 100, dx=1, 
+world_gaussian <- getSinePop(tau = 100, X.min = 0, X.max = 100, dx=1, 
                        peak.max = 20, peak.min = 20, sd = 10)
-save(world, file = "memorymigration/data/world.rda")
+world_sinusoidal <- getSinePop(tau = 100, X.min = 0, X.max = 100, dx=1, 
+                    peak.max = 80, peak.min = 20, sd = 10)
+save(world_gaussian, world_sinusoidal, file = "memorymigration/data/world.rda")
 
 
 ## Fixed (bimodal) resource example
