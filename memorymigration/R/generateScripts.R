@@ -39,7 +39,8 @@ createSource <- function(worldname, resourcename, resourcefile,
     cat(
       "require(memorymigration)\n",
       paste0("data(world); data(",resourcefile,")\n"),
-      paste0("world$resource <- with(",resourcefile, ",{(", resourcename,")})\n"))
+      paste0("world<-", worldname,"\n"),
+      paste0("world$resource <-", resourcefile, "[[", resourcename,"]]\n"))
       if(!is.null(existingfile)){
         cat(paste0("load('", existingfile, "') \n"))}
       
