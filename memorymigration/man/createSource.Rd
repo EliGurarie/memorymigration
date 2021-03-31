@@ -5,8 +5,9 @@
 \title{Create Sources}
 \usage{
 createSource(
-  worldname = "world",
+  worldname,
   resourcename,
+  resourcefile,
   code.dir,
   filename,
   results.dir,
@@ -22,6 +23,8 @@ createSource(
 \item{worldname}{string containing name of the world}
 
 \item{resourcename}{string containing name of resource}
+
+\item{resourcefile}{string containng the name of rda file that contains the resource}
 
 \item{code.dir}{string containing directory of where R scripts will be created}
 

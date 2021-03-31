@@ -1,8 +1,8 @@
 
 compareResourceTypes <- function(df, beta0.high = 200, beta1.high = 300){
   p <- ggplot(df %>% 
-                mutate(extent = (space.sd*2) %>% factor,
-                       duration = (time.sd*2) %>% factor,
+                mutate(extent = (x.sd*2) %>% factor,
+                       duration = (t.sd*2) %>% factor,
                        model = ifelse(beta0 == 0 & beta1 == 500, "c) Memory: 500",
                                       ifelse(beta0 == 500 & beta1 == 0, "b) Sociality: 500",
                                              ifelse(beta0 == beta0.high & beta1 == beta1.high, 
