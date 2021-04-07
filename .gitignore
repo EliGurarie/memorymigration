@@ -9,3 +9,5 @@ code/*_files
 presentations/*_files
 presentations/*.html
 presentations/*_cache
+text/*_files
+text/*_cache

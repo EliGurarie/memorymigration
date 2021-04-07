@@ -1,0 +1,414 @@
+---
+title: "Modeling memory and taxis to analyze migrations"
+author: "E. Gurarie, S. Potluri, B. Fagan, others"
+date: "`r Sys.Date()`"
+output:
+  word_document:
+    toc: yes
+  html_document:
+    toc: yes
+    toc_float: yes
+theme: cerulean
+editor_options:
+  chunk_output_type: console
+bibliography: ../library/memorymigration.bib
+csl: ecology.csl
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, cache = TRUE, message = FALSE, warning = FALSE, eval = FALSE)
+```
+
+
+# Introduction
+
+Diffusion-advection models have a long pedigree in animal movement modeling [@Skellam1951;@Turchin1998;Okubo2001].  Essentially, these models are grounded in the general idea that animal movements - somewhat like movements of physical particles - might combine a random (diffusive) component with a directed (advective) component and that the two can be separated and modeled.  While the links between diffusion models and movement data are somewhat tenuous (see @Gurarie2011a for quantitative links between obervations and diffusion parameters and @Ovaskainen2004 for applications to mark-recapture data), as a theoretical tool for exploring processes they are invaluable for their versatility and the relative ease of numeric computation of the partial differential equations (PDEs) that are used to describe diffusion-advection models mathematically. Even as equations become analytically intractable, 
+
+Thus, much theoretical and some applied work has been done on refining the basic assumptions of diffusion models, e.g. by including heterogeneity in populations [@Skalski2003;@Gurarie2009], fat-tailed dispersal kernels [@Kot1996], non-linear or otherwise complex responses to resources and consepecifics (**refs**).  
+
+But perhaps the greatest difference between animals and the randomly moving passive particles that are best described by diffusion models is the cognitive abilities, including social behavior and memory. Refinements to diffusion-advection equations have revealed conditions under which non-local information gathering [@Fagan2017] and behavioral switching may confer foraging advantages [@Fagan2019], in particular when resources are dynamic and patchy.   The interacting role of memory and sociality have been comparatively little studied.  
+
+Migration is a strategic behavior, typically involving a major trade-off between the costs of the migration against the benefits of accessing resources (whether food or predator refuge) that are highly seasonal and localized.  To perform a migration, a direct resource-following tactic (taxis) is likely to fail. 
+
+
+
+
+# Model
+
+We intend to study how a blending of a *tactical* (i.e. direct response to resource availability or perception) and a *strategic* (i.e. memory-driven and forward-thinking) behavior can help a forager navigate a dynamic and heterogeneous resource environment, with a particular emphasis on the aquisition and adaptabilty of **migratory behavior**.  
+Our model is an advection diffusion with two advective terms corresponding to a direct response to the environment and to memory.  Importantly, the environment is *approximately periodic*, i.e. one in which the distribution of the resource at a given time is approximately equal to that resource distribution at a fixed previous time period, i.e. $h(t) \approx h(t - \tau)$. This models annual variations, and the period corresponds to one year.  The *tactical* process is straightforward taxis up a resource gradient, while the *collective memory* corresponds to a tendency of the organisms to repeat the behavior of the population in previous years.  Thus:
+
+$${\frac{\partial u(x,t)}{\partial t}} = -\varepsilon {\frac{\partial^2 u(x,t)}{\partial x^2}} + \alpha \frac{\partial}{\partial x}\left(u \frac{\partial h(x,t)}{\partial x}\right) + \sum_{i = 0}^n \beta_i \frac{\partial u(x, t - i\tau)}{\partial x}$$
+where $u$ represents a population distributed in time and space, $\varepsilon$ is a rate of randomness (diffusion), $\alpha$ is the strength of advection in the direction of the resource $h(x,t)$ gradient), and $\beta_i$ is the strength of advection up the gradient of the *population* distribution in an $i$'th earlier seasonal cycle (year), up to $n \in N$.  
+
+Note that $\beta_0$ is similar to an index of "cohesion", essentially encouraging the population to stay close together.  Higher terms of $\beta_i$ should be simple, e.g., if the collective memory reaches only one year back then $n = 1$ and $\beta_i$ is a single constant. Alternatively, a form of memory might discounts older "traditions" via $\beta_i = \beta \exp(-i/\gamma)$, where $\gamma$ represents a generational scale of memory. 
+
+For reference and replicability, I include the incrementally constructed R code, which relies heavily on the `deSolve` [@Soetaert2010] and `ReacTran` [@Soetaert2012] packages, which efficiently implement transport ODE and PDE systems in R. 
+
+
+```{r, message=FALSE, warning=FALSE}
+require("memorymigration")
+```
+
+# Results
+
+```{r}
+ForagingMemoryModel <- function(t, pop, parms, pop_lag, resource, 
+                                dx = attributes(pop)$dx){
+  tran.1D(C = pop, D = parms["epsilon"], 
+                   flux.up = 0, flux.down = 0, 
+                   v = parms["alpha"] * diff(resource)/dx + 
+                       parms["beta"] * diff(pop_lag)/dx, 
+                   dx = dx)
+}
+```
+
+
+As a simple illustration of a model run, below the ultimate evolution of a forager that begins in the left part of space and uses a combination of the previous year's location (to the right) and the current resource distribution, and ultimately "splits up" into being attracted to the resource in the middle and its previous year's distribution, with a somewhat stronger taxis towards the resource than the memory:
+
+```{r GradientExample, echo=FALSE, cache=TRUE, message=FALSE, warning=FALSE}
+dx <- .01
+X.max <- 100
+x.edges <- seq(0,100, length=X.max/dx + 1)
+x.mids <- (x.edges[-1] + x.edges[-length(x.edges)])/2
+
+parameters <- c(epsilon = 0.1, alpha = 4, beta = 2)
+pop <- dnorm(x.mids, mean=20, sd = 2) %>% {./sum(.)/dx} 
+attributes(pop)$dx <- dx
+
+pop_lag <- c(0,dnorm(x.mids, mean=80, sd = 2) %>% {./sum(.)/dx},0)
+resource <- c(0,dnorm(x.mids, mean = 50, sd = 4) %>% {./sum(.)/dx},0)
+
+pop.inf <- steady.1D(func = ForagingMemoryModel, 
+                   y = pop, parms = parameters, 
+                   resource = resource, 
+                   pop_lag = pop_lag, 
+                   nspec=1, 
+                   dx = attributes(pop)$dx)$y %>% {./sum(.)/attributes(pop)$dx}
+
+n <- length(x.mids)
+
+cols <- c("black", "darkgrey", "green",  "red")
+lwds <- c(1,3,3,1)
+ltys = c(1,3,3,1)
+
+par(bty = "l", mgp = c(1.5,.25,0), tck = 0.01, las = 1)
+
+plot(x.mids, pop, type = "l", xlab = "space", ylab = "density", 
+     col = cols[1], lwd = lwds[1], lty = ltys[1])
+lines(x.mids, pop_lag[-c(1,n+1)], col = cols[2], lwd = lwds[2], lty = ltys[2])
+lines(x.mids, resource[-c(1,n+1)], col = cols[3], lwd = lwds[3], lty = ltys[3])
+lines(x.mids, pop.inf, col = cols[4], lwd = lwds[4], lty = ltys[4])
+
+legend("top", legend = c("pop. initial", "pop. previous year", "resource", "pop. final"), 
+       lty = ltys, lwd = lwds, col = cols, bty = "n")
+#title(parse(text = printParameters(p)))
+
+printParameters <- function(p) 
+  parse(text = paste0("list(",paste(names(p), p, sep = "==", collapse = ", "),")"))
+
+title(printParameters(parameters))
+
+```
+
+
+This example is completely static and symmetric around the two drivers.  Note that all the populations (previous, initial, final) are normalizes (integrate to 1) and that the space is defined between 0 and 100. 
+
+# Dynamic initial population
+
+In the following example, we let the population be "initialized" via a sinusoidal migration pattern, while the resource is fixed in the middle of the space (as above).  The memory is a one-year memory.  In this context, migration is not, in fact, optimal.  But the important piece is to see how the response mixes attraction to the resource with attraction to the previous year's behavior.  Note that the year here (for simplicity, speed and symmetry), is 100 days long. 
+
+```{r setupEnvironment}
+getSinePop <- function(tau, X.min = 0, X.max = 100, dx, 
+                       peak.max, peak.min, sd){
+  Time <- 1:tau
+
+  X.edge <- seq(X.min, X.max, dx)
+  X <- (X.edge[-1] + X.edge[-length(X.edge)])/2
+  pop <- outer(Time, X,
+                     function(t,x) 
+                       dnorm(x, mean = X.max/2 + (peak.max-peak.min) / 2 * sin( 2*(t * pi)/max(Time)),sd = sd))
+  pop <- apply(pop, 1, function(x) x/sum(x)/dx) %>% t
+  list(pop = pop, X = X, time = Time, dx = dx, tau = tau)
+}
+
+world <- getSinePop(tau = 100, X.min = 0, X.max = 100, dx=1, 
+                    peak.max = 80, peak.min = 20, sd = 10)
+
+fr1 <- dnorm(world$X, mean = 80, sd = 10) %>% {./sum(.)/world$dx}
+fr2 <- dnorm(world$X, mean = 20, sd = 10) %>% {./sum(.)/world$dx}
+fixed.Resource <- matrix((fr1 + fr2)/2, byrow = TRUE, 
+                         nrow = nrow(world$pop), 
+                         ncol = ncol(world$pop))
+
+world$resource <- fixed.Resource
+```
+
+The following examples illustrate how an initially migrating population evolves, even as it is attracted to a resource that is distributed in two different locations. In these examples, the first year (year 0) is a sinusoidal migration.  We run the simulations for 3 subsequent years.
+
+## Only memory
+
+```{r memoryOnly, fig.height = 5, fig.width = 10}
+
+parameters <- c(epsilon = 5, alpha = 0, beta0 = 20, beta1 = 5e2)
+
+eval <- FALSE
+if(eval){
+  MemSim <- runManyYears(world, Parameters = parameters, 
+                         n.years = 3, 0.99)
+  save(MemSim, file = "../results/MemSim.rda")
+} else load("../results/MemSim.rda")
+  
+par(mfrow = c(1,2), oma = c(0,0,3,0))
+plotYearList(MemSim, world, tau = tau)
+plotYearList(MemSim, world, tau = tau, persp = TRUE, scale = FALSE, expand = 100)
+title(printParameters(parameters), outer = TRUE)
+```
+
+The population roughly echoes its initial track, but degrades from year to year. 
+
+
+## Resource only
+
+In the following simulations, we add a resource distributed as follows in two concentrations:
+
+```{r fixedResource, fig.height = 3, fig.width = 4}
+with(world, 
+  image(X, 1:tau, resource, main = "resource", ylab = "x")
+)
+```
+
+```{r resourceOnly, fig.height = 5, fig.width = 10}
+parameters <- c(epsilon = 5, alpha = 5e2, beta0 = 0, beta1 = 0)
+
+eval <- FALSE
+if(eval){
+  FixedResourceSim <- runManyYears(world, Parameters = parameters, n.years = 3, 0.99)
+  save(FixedResourceSim, file = "../results/FixedResourceSim.rda")
+} else load("../results/FixedResourceSim.rda")
+  
+
+par(mfrow = c(1,2), oma = c(0,0,3,0))
+plotYearList(FixedResourceSim, world, tau = tau)
+plotYearList(FixedResourceSim, world, tau = tau, persp = TRUE, scale = FALSE, expand = 100)
+title(printParameters(parameters), outer = TRUE)
+```
+
+
+Here, the population disregards its memory and only pursues a tactic stategy. Within a year, the population has gathered around the resource. 
+
+
+## Resource and memory
+
+Finally, we combine both resource following and memory:
+
+```{r resourceAndMemory, fig.height = 5, fig.width = 10}
+parameters <- c(epsilon = 5, alpha = 3e2, beta0=20, beta1 = 5e2)
+
+eval <- FALSE
+if(eval){
+  MemResourceSim <- runManyYears(world, Parameters = parameters, n.years = 3, 0.99)
+  save(MemResourceSim, file = "../results/MemResourceSim.rda")
+} else load("../results/MemResourceSim.rda")
+  
+par(mfrow = c(1,2), oma = c(0,0,3,0))
+plotYearList(MemResourceSim, world, tau = tau)
+plotYearList(MemResourceSim, world, tau = tau, persp = TRUE, scale = FALSE, expand = 100)
+title(printParameters(parameters), outer = TRUE)
+```
+
+Here, the strong cultural memory is slowly blended with a strategy to simply concentrate in one of the two resource hot-spots. 
+
+# Seasonal resource
+
+There is obviously nothing particularly adaptive about migrating when resources are fixed.  In the following scenaries, we explore a seasonal resource. We developed (with some fuss!) a seasonal resource function with the following properties:
+
+1. The total amount of resource across space is constant throughout the year.
+2. At the beginning, middle, and end of the year the resource is uniformly distributed. 
+3. At some peak time $t_r < \tau/2$, the resource concentrates at a location $x_r < \chi/2$ with a spatial deviation $\sigma_x$ and a temporal deviation $\sigma_t$ (where $\tau$ is the length of the year and $\chi$ is the extent of the spatial domain).
+4. The resource peaks exactly symmetrically at time $\tau - t_r$ and location $\chi - x_r$ with the same variance $\sigma_r$.
+
+To generate a resource with these properties, we distributing the resource in space as a beta distribution, where the two shape and scale parameters vary sinusoidally in such a way as to fulfill the criteria above.  Thus:
+
+$$R(x,t, \theta) = \chi B(x/\chi, a(t, \theta), b(t, \theta))$$
+
+where $\chi$ is the maximum value (domain) of $x$, $B(x, a, b)$ is the beta distribution, $\theta$ represents the set of parameters $t_r, x_r, \sigma_t, \sigma_x$, and the two shape parameters are given by:
+
+$$a(t) = \frac{m}{s^2}( s^2 + m - m^2)$$
+$$b(t, x', \sigma') = (m-1)\left(1 + \frac{m}{s}(m-1)\right) $$
+
+where $m(t)$ and $s(t)$ describe the dynamic mean and variance of the resource peak.  These equations are solutions to the mean and variance of the beta distribution, $\mu = \alpha/(\alpha + \beta)$, $\sigma^2 = \frac{\alpha\beta}{(\alpha+\beta)^2(\alpha+\beta+1)}$.
+
+The means and variances themselves are Gaussian pulses, with the mean peaking at $x_r$ at time $t_r$ with standard deviation $\sigma_t$ and at $\chi - x_t$ at time $\tau - t_r$ and the standard deviation pulsing from $\chi/\sqrt{12}$ (corresponding to a uniform distribution) at times 0, $\tau/2$ and $\tau$ down to $\sigma_x$ at $t_r$ and $\tau - t_r$, with standard deviation (in time) $\sigma_t$. 
+
+
+All of these details boil down to the ability to generate various seasonal scenarios. 
+
+
+```{r exampleResourcePlots, fig.width = 10, fig.height = 6}
+source("functions2.R")
+
+world.R1 <- world %>% 
+  list_modify(resource = getPulsedResource(1:world$tau, world$X, c(t.peak = 25, t.sd = 9, x.peak = 80, x.sd = 9)))
+
+world.R2 <- world %>% 
+  list_modify(resource = getPulsedResource(1:world$tau, world$X, c(t.peak = 25, t.sd = 9, x.peak = 80, x.sd = 5)))
+
+world.R3 <- world %>% 
+  list_modify(resource = getPulsedResource(1:world$tau, world$X, c(t.peak = 25, t.sd = 5, x.peak = 80, x.sd = 9)))
+
+world.R4 <- world %>% 
+  list_modify(resource = getPulsedResource(1:world$tau, world$X, c(t.peak = 25, t.sd = 5, x.peak = 80, x.sd = 5)))
+
+par(mfrow = c(2,2), mar = c(3,3,3,1), mgp = c(2,.25,0), las = 1, tck = 0.01)
+with(world.R1, {     
+  image(1:tau,X,resource, main = "Broad, long peak")
+  contour(1:tau,X,resource, add = TRUE)
+  })
+with(world.R2, {     
+  image(1:tau,X,resource, main = "Narrow, long peak")
+  contour(1:tau,X,resource, add = TRUE)
+  })
+with(world.R3, {     
+  image(1:tau,X,resource, main = "Broad, short peak")
+  contour(1:tau,X,resource, add = TRUE)
+  })
+with(world.R4, {     
+  image(1:tau,X,resource, main = "Narrow, short peak")
+  contour(1:tau,X,resource, add = TRUE)
+  })
+     
+```
+
+# Running the model in a seasonal environment
+# Note: to view any of the resource models, change the world 
+
+In these pulsed resources, we might assume that a *combination* of memory and tactic responses would yield more optimal behavior, and might observe some shift in the migratory strategy. 
+
+## Memory only
+
+```{r PulseSim1, fig.width = 10}
+parameters <- c(epsilon = 5, alpha = 0, beta0 = 20, beta1 = 5e2)
+Memory_PulsedResource_Sim <- runManyYears(world.R3, Parameters = parameters, n.years = 6, 0.99)
+
+par(mfrow = c(1,2), oma = c(0,0,3,0))
+plotYearList(Memory_PulsedResource_Sim, world.R3, tau = tau)
+plotYearList(Memory_PulsedResource_Sim, world.R3, tau = tau, persp = TRUE, scale = FALSE, expand = 100)
+title(printParameters(parameters), outer = TRUE)
+```
+
+## Tactics only
+
+This model does a surprisingly good job aggregating at the appropriate resource, but appears to only locally aggregate, not to migrate per se. 
+
+```{r PulseSim2, fig.width = 10}
+parameters <- c(epsilon = 2, alpha = 4e2, beta0 = 0, beta1 = 0)
+Tactic_PulsedResource_Sim <- runManyYears(world.R1, Parameters = parameters, n.years = 6, 0.99)
+
+par(mfrow = c(1,2), oma = c(0,0,3,0))
+plotYearList(Tactic_PulsedResource_Sim, world.R1, tau = tau)
+plotYearList(Tactic_PulsedResource_Sim, world.R1, tau = tau, persp = TRUE, scale = FALSE, expand = 100)
+title(printParameters(parameters), outer = TRUE)
+```
+
+## Memory and tactics
+
+It is not clear that the hybrid model recovers a true migration, but it seems to retain somewhat more concentration along the migratory corridors. 
+
+```{r PulseSim3, fig.width = 10}
+parameters <- c(epsilon = 5, alpha = 2e2, beta0 = 20, beta1 = 3e2)
+Hybrid_PulsedResource_Sim <- runManyYears(world.R1, Parameters = parameters, n.years = 6, 0.99)
+
+par(mfrow = c(1,2), oma = c(0,0,3,0))
+plotYearList(Hybrid_PulsedResource_Sim, world.R1, tau = tau)
+plotYearList(Hybrid_PulsedResource_Sim, world.R1, tau = tau, 
+             persp = TRUE, scale = FALSE, expand = 100)
+title(printParameters(parameters), outer = TRUE)
+```
+
+## Memory and tactics: Narrow resource
+
+Here we compare a memory with and without memory exploiting the "narrow - long" resource combination, and the tendency to 
+
+### No memory - strong tactics
+
+Notable concentrations at the resource peaks, but a lot of diffuse behavior in the interim seasons
+
+```{r PulseSim4_tactic, fig.width = 10}
+parameters <- c(epsilon = 2, alpha = 2e2, beta0 = 0, beta1 = 0)
+Tactic_PulsedResource_Sim2 <- runManyYears(world.R1, Parameters = parameters, n.years = 6, 0.99)
+
+par(mfrow = c(1,2), oma = c(0,0,3,0))
+plotYearList(Hybrid_PulsedResource_Sim2, world.R1, tau = tau)
+plotYearList(Hybrid_PulsedResource_Sim2, world.R1, tau = tau, persp = TRUE, scale = FALSE, expand = 100)
+title(printParameters(parameters), outer = TRUE)
+```
+
+
+### Hybrid model
+
+Memory appears to reinforce the aggregations at the (narrow) resource peaks
+
+```{r PulseSim4_memory, fig.width = 10}
+parameters <- c(epsilon = 5, alpha = 2e2, beta0 = 20, beta1 = 3e2)
+Hybrid_PulsedResource_Sim3 <- runManyYears(world.R4, Parameters = parameters, n.years = 6, 0.99)
+
+par(mfrow = c(1,2), oma = c(0,0,3,0))
+plotYearList(Hybrid_PulsedResource_Sim3, world.R4, tau = tau)
+plotYearList(Hybrid_PulsedResource_Sim3, world.R4, tau = tau, persp = TRUE, scale = FALSE, expand = 100)
+title(printParameters(parameters), outer = TRUE)
+```
+
+## Example
+We apply the three indices to an example model. In this model, we let the population be "initialized" via a sinusoidal migration pattern, while the resource is seasonal in a broad, long peak. The model uses the parameters $\epsilon = 5, \alpha = 300, \beta0=100, \beta1 = 300$ so that the migratory population combines both memory and a tactical strategy. We run the model for 12 years and compute the three indices. Then we plot the three indices to the view the trend of the migratory population over time.  
+
+```{r}
+dx <- 1
+
+parameters <- c(epsilon = 5, alpha = 300, beta0=100, beta1 = 300)
+world.R1 <- getSinePop(tau = 100, X.min = 0, X.max = 100, dx=2, 
+                    peak.max = 80, peak.min = 20, sd = 10)
+world.R1$resource <- getPulsedResource(world.R1$time, world.R1$X, c(t.peak = 25, t.sd = 9, 
+                                                           x.peak = 80, x.sd = 9))
+
+#run simulation for 12 years 
+M <- runManyYears(world.R1, Parameters = parameters, n.years = 6, 1)
+
+world.R2 <- world.R1 %>% list_modify(pop = M$Year6)
+M2 <- runManyYears(world.R2, Parameters = parameters, n.years = 6, 1)
+  
+  indices1 <- sapply(M, computeIndices, resource = world.R1$resource, world = world.R1) %>% t
+  indices2 <- sapply(M2, computeIndices, resource = world.R2$resource, world = world.R2) %>% t
+  I <- rbind(indices1, indices2)
+  
+  matplot(I, type="o", pch = 19, lty = 1) #year 6 and year 7 are the same so it is plotted twice 
+  legend("topright", pch = 19, col = 1:3, legend = colnames(I))
+
+
+```
+Then we run the model to stop running the simulation at a certain threshold when the population reaches a "dynamic equilibrium state". In this example, the model only runs three years before hitting the threshold. 
+```{r}
+#simulation runs for 3 years since that is when threshold is hit
+
+M <- runManyYears(world.R1, Parameters = parameters, n.years = 6, 0.99)
+plotYearList(M, world.R1, tau = tau)
+
+computeCohesiveness(M[[3]], world.R1)["SC.mean"]
+computeMigratoriness(M[[3]], world.R1)$overlap
+computeEfficiency(M[[3]], world.R1$resource, world.R1)
+computeIndices(M[[3]], world.R1$resource, world.R1)
+
+```
+
+# Discussion
+
+1. The model seems to - approximately - work for exploring this dynamic.
+2. It is - however - difficult to make it really repeat previous behavior strongly. I was hoping for a "knob" that perfectly replicates past behavior, but the diffusion-taxis formulation makes that somehow hard.  I haven't programmed longer time scaled memories (> 1 year) but that would probably be helpful / interesting. 
+3. The memory bit does demand iteratively feeding a year's cycle back into it rather than having some analytical function, which slows the whole thing down a bit. That said, with deepthought a lot of runs could be fitted simultaneously - and I tend to be very picky about "slow" - it actually only takes about 6 seconds to run a 6 year hybrid model on a 100 x 100 spatio-temporal grid.  But sometimes, the results are more numerically stable on a finer grid. 
+4. We need a metric of success!  And also - somehow - a metric of "migratoriness". 
+5. What questions do we wnat to explore?  I think a big one is adaptability of the model under different kinds of resource perturbations, e.g. if the timing shifts, or location shifts.
+
+
+
+# References
