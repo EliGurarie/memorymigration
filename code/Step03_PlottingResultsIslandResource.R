@@ -59,6 +59,7 @@ r.sinusoidal <- results
 
 r.pooled <- rbind(r.gaussian, r.sinusoidal)
 
+
 # Results: Island - Gaussian (naive)
 require(ggplot2)
 
