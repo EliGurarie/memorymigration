@@ -20,7 +20,7 @@ ForagingMemoryModel <- function(t, pop, parms, pop_lag, resource,
   tran.1D(C = pop, D = parms["epsilon"], 
           flux.up = 0, flux.down = 0, 
           v = parms["alpha"] * diff(resource)/dx + 
-            parms["beta0"] * diff(pop)/dx + 
+            parms["beta0"] * diff(c(0,pop,0))/dx + 
             parms["beta1"] * diff(pop_lag)/dx, 
           dx = dx)
 }

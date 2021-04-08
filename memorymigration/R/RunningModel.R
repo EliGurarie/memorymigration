@@ -19,19 +19,21 @@
 runNextYear <- function(World, Parameters){
   pop1 <- World$pop
   pop2 <- pop1*0
-  #pop2[1,] <- pop1[nrow(pop1),]
   
   Time <- World$time
   Resource <- World$resource
-  p <- as.numeric(Parameters)
-  names(p) <- names(Parameters)
+  #p <- as.numeric(Parameters)
+  #names(p) <- names(Parameters)
   
   for(t in Time){
     pop_lastyear <- c(0,pop1[t,],0) 
-    if(t == 1) pop_now <- pop1[nrow(pop1),] else pop_now <- pop2[t-1,]
+    
+    if(t == 1) pop_now <- pop1[nrow(pop1),] else 
+      pop_now <- pop2[t-1,]
+    
     pop2[t,] <- ode(y = pop_now, 
                     times = 0:1, 
-                    parms = p,
+                    parms = Parameters,
                     func = ForagingMemoryModel, 
                     resource = c(0,Resource[t,],0),
                     pop_lag = pop_lastyear,
