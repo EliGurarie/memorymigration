@@ -16,19 +16,19 @@
 #' @seealso \link{getSinePop}, \link{runManyYears}
 #' @export
 #' 
-runNextYear <- function(World, Parameters){
-  pop1 <- World$pop
-  pop2 <- pop1*0
+runNextYear <- function(World, Parameters, Pop_lastyear, Year){
+  pop0 <- World$pop
+  pop2 <- pop0*0
   
   Time <- World$time
   Resource <- World$resource
-  #p <- as.numeric(Parameters)
-  #names(p) <- names(Parameters)
+  
+  w0 <- Parameters["gamma"]^(Year-1)
+  memory <- w0 * pop0 + (1-w0) * Pop_lastyear
   
   for(t in Time){
-    pop_lastyear <- c(0,pop1[t,],0) 
     
-    if(t == 1) pop_now <- pop1[nrow(pop1),] else 
+    if(t == 1) pop_now <- Pop_lastyear[nrow(Pop_lastyear),] else 
       pop_now <- pop2[t-1,]
     
     pop2[t,] <- ode(y = pop_now, 
@@ -36,11 +36,38 @@ runNextYear <- function(World, Parameters){
                     parms = Parameters,
                     func = ForagingMemoryModel, 
                     resource = c(0,Resource[t,],0),
-                    pop_lag = pop_lastyear,
+                    memory = c(0, memory[t,], 0),
                     dx = World$dx)[2,1:ncol(pop2)+1]
   }
   pop2
 }
+
+runNextYear_v0 <- function(World, Parameters, Pop_lastyear, Year){
+  pop0 <- World$pop
+  pop2 <- pop0*0
+  
+  Time <- World$time
+  Resource <- World$resource
+  
+  w0 <- Parameters["gamma"]^(Year-1)
+  memory <- w0 * pop0 + (1-w0) * Pop_lastyear
+  
+  for(t in Time){
+    
+    if(t == 1) pop_now <- Pop_lastyear[nrow(Pop_lastyear),] else 
+      pop_now <- pop2[t-1,]
+    
+    pop2[t,] <- ode(y = pop_now, 
+                    times = 0:1, 
+                    parms = Parameters,
+                    func = ForagingMemoryModel, 
+                    resource = c(0,Resource[t,],0),
+                    memory = c(0, memory[t,], 0),
+                    dx = World$dx)[2,1:ncol(pop2)+1]
+  }
+  pop2
+}
+
 
 #' Run Many Years 
 #' 
@@ -66,30 +93,31 @@ runNextYear <- function(World, Parameters){
 #' 
 runManyYears <- function(World, parameters, n.years = 60, 
                          threshold= 0.995, verbose = FALSE){
+  
+  cat(paste(names(parameters), parameters, collapse = "\n"))
+  cat("\n")
+  
   pop.list <- list(Year1 = World$pop)
   i <- 1
   
-  if(verbose) cat(paste("running year ", i, "\n"))
-  World$pop <- pop.list[[i]]
-  pop.list[[i+1]] <- runNextYear(World, 
-                                 Parameters = parameters)
+  pop.list[[i+1]] <- runNextYear(World, Parameters = parameters, 
+                                 Pop_lastyear = World$pop, Year = 1)
   similarity <- computeEfficiency(pop.list[[i]], pop.list[[i+1]], World)
-  cat(paste("epsilon:", parameters[[1]], "\n"))
-  cat(paste("alpha:", parameters[[2]], "\n"))
-  cat(paste("beta0:", parameters[[3]], "\n"))
-  cat(paste("beta1:", parameters[[4]], "\n"))
+  
   
   while((similarity < threshold) & (i < n.years)){
+    if(verbose) cat(paste("running year ", i, "\n"))
     
     i <- i+1
-    cat(paste("running year ", i, "\n"))
-    World$pop <- pop.list[[i]]
     pop.list[[i+1]] <- runNextYear(World, 
-                                   Parameters = parameters)
+                                   Parameters = parameters, 
+                                   Pop_lastyear = pop.list[[i]], 
+                                   Year = i)
     similarity <- computeEfficiency(pop.list[[i]], pop.list[[i+1]], World)
   }
   names(pop.list) <- paste0("Year",0:(length(pop.list)-1))
-  pop.list
+  attr(pop.list, "parameters") <- parameters
+  return(pop.list)
 }
 
 

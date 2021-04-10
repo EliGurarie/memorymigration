@@ -4,7 +4,7 @@
 \alias{ForagingMemoryModel}
 \title{Foraging with memory model}
 \usage{
-ForagingMemoryModel(t, pop, parms, pop_lag, resource, dx = dx)
+ForagingMemoryModel(t, pop, parms, memory, resource, dx = dx)
 }
 \arguments{
 \item{t}{vector of times}
@@ -17,7 +17,7 @@ across the time period.}
 following coefficient; \code{beta0} - social cohesion coefficient; \code{beta1} - 
 memory coefficient}
 
-\item{pop_lag}{the T x X population distribution over time in the previous cycle (year)}
+\item{memory}{the memory score}
 
 \item{resource}{a T x X distribution of the (potentially) dynamic resource.}
 

@@ -5,49 +5,45 @@ data(resources_island)
 world_gaussian$resource <- resources_island[["R_t12_x3"]]
 image(world_gaussian$resource)
 
-plotSim <- function(sim, years = NULL, nrow = 1){
-  
- require(gplots)
-  
-  if(is.null(years)){
-    years <- 1:length(sim)
-    n <- length(years)
-    zmax <- max(sapply(sim, max))
-  } else{
-    zmax <- max(sapply(sim, max)[paste0("Year",c(0,years[-length(years)]))])
-    n <- length(years)
-  }
-  
-  par(mfrow = c(nrow,ceiling(n/nrow)), mar = c(0,0,3,0), oma = c(2,2,4,2), tck = 0.01)
-  for(i in years) 
-    image(1:100, 1:100, sim[[i]], 
-          breaks = seq(0, zmax, length = 100), col = rich.colors(99),
-          main = paste("year", i-1), yaxt = "n", xaxt = "n")
-}
+world_sinusoidal <- getSinePop(100, peak.max = 75, peak.min = 25, sd = 2, dx = 1)
+world_sinusoidal$resource <- resources_island[["R_t12_x3"]]
+
+
+eps <- 1
+
+sim.ResourceOnly <- runManyYears(world_sinusoidal, 
+                                 threshold = 1, n.years = 5,
+                                 parameters = c(epsilon = eps, alpha = 100, 
+                                                beta = 0.01, gamma = 0), verbose = TRUE) %T>%
+plotManyRuns(nrow = 1)
 
 
 world_sinusoidal$resource <- resources_island[["R_t12_x3"]]
-sim0 <- runManyYears(world_sinusoidal, 
-                     threshold = 1, n.years = 30,
-                     parameters = c(epsilon = .3, alpha = 5, 
-                                    beta0 = 0, beta1 = 0), verbose = TRUE)
+sim.MemOnly <- runManyYears(world_sinusoidal, 
+                     threshold = 1, n.years = 5,
+                     parameters = c(epsilon = eps, alpha = 0, 
+                                    beta = 40, gamma = 1), verbose = TRUE)
+plotManyRuns(sim.MemOnly, nrow = 1)
 
-plotSim(sim0, nrow = 3)
+
+sim.Combined <- runManyYears(world_sinusoidal, 
+                                 threshold = 1, n.years = 5,
+                                 parameters = c(epsilon = eps, alpha = 100, 
+                                                beta = 100, gamma = 1), verbose = TRUE)
+plotManyRuns(sim.Combined, nrow = 1)
+
+
 
 
 sim1 <- runManyYears(world_sinusoidal, 
                      threshold = 1, 
-                     n.years = 10,
-                     parameters = c(epsilon = .3, alpha = 5, 
-                                    beta0 = 5, beta1 = 0), verbose = TRUE)
-plotSim(sim1, nrow = 2)
+                     n.years = 8,
+                     parameters = c(epsilon = .5, alpha = 0, 
+                                    beta0 = 0, beta1 = 35), verbose = TRUE)
+plotSim(sim1, nrow = 1)
 
 
-world_sinusoidal <- getSinePop(100, peak.max = 75, peak.min = 25, sd = 3, dx = 1)
 
-image(world_sinusoidal$pop)
-
-world_sinusoidal$resource <- resources_island[["R_t12_x3"]]
 sim2 <- runManyYears(world_sinusoidal, 
                      threshold = 1, 
                      n.years = 11,

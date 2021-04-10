@@ -60,3 +60,30 @@ printParameters <- function(p) {
 #' This function...  
 mypersp <- function(x,y,z,...)
   persp(x,y,z, theta=45, phi=45, bor=NA, shade=TRUE, ylab = "x", xlab="time", zlab="population", ...)
+
+#' Plotting simulation results
+#' @export
+
+plotManyRuns <- function(sim, years = NULL, nrow = 1, outer = TRUE){
+  
+  require(gplots)
+  
+  if(is.null(years)){
+    years <- 1:length(sim)
+    n <- length(years)
+    zmax <- max(sapply(sim, max))
+  } else{
+    zmax <- max(sapply(sim, max)[paste0("Year",c(0,years[-length(years)]))])
+    n <- length(years)
+  }
+ 
+  parameters <- attributes(sim)$parameter
+   
+  par(mfrow = c(nrow,ceiling(n/nrow)), mar = c(0,0,3,0), oma = c(2,2,4,2), tck = 0.01)
+  for(i in years) 
+    image(1:100, 1:100, sim[[i]], 
+          breaks = seq(0, zmax, length = 100), col = rich.colors(99),
+          main = paste("year", i-1), yaxt = "n", xaxt = "n")
+  if(outer) 
+    title(outer = TRUE, paste(names(parameters),"=",parameters, collapse = "; "))
+}

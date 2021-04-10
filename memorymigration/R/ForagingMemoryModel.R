@@ -9,18 +9,28 @@
 #' \code{alpha} - resource 
 #' following coefficient; \code{beta0} - social cohesion coefficient; \code{beta1} - 
 #' memory coefficient
-#' @param pop_lag the T x X population distribution over time in the previous cycle (year)
+#' @param memory the memory score
 #' @param resource a T x X distribution of the (potentially) dynamic resource.
 #' @param dx time step
 #' @return Model setup; output of \code{\link{tran.1D}} function. 
 #' @export
 
-ForagingMemoryModel <- function(t, pop, parms, pop_lag, resource, 
+ForagingMemoryModel <- function(t, pop, parms, memory, resource, 
+                                dx = dx){
+  tran.1D(C = pop, D = parms["epsilon"], 
+          flux.up = 0, flux.down = 0, 
+          v = parms["alpha"] * diff(resource)/dx + 
+            parms["beta"] * diff(memory)/dx, 
+          dx = dx)
+}
+
+
+ForagingMemoryModel_v0 <- function(t, pop, parms, memory, resource, 
                                 dx = dx){
   tran.1D(C = pop, D = parms["epsilon"], 
           flux.up = 0, flux.down = 0, 
           v = parms["alpha"] * diff(resource)/dx + 
             parms["beta0"] * diff(c(0,pop,0))/dx + 
-            parms["beta1"] * diff(pop_lag)/dx, 
+            parms["beta1"] * diff(memory)/dx, 
           dx = dx)
 }

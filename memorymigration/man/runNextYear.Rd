@@ -4,7 +4,7 @@
 \alias{runNextYear}
 \title{Run Next Year}
 \usage{
-runNextYear(World, Parameters)
+runNextYear(World, Parameters, Pop_lastyear, Year)
 }
 \arguments{
 \item{World}{List of 5: a population distribution across the time period in a T x X matrix,
