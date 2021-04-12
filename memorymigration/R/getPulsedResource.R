@@ -59,6 +59,7 @@ getPulsedResource <- function(world, par){
   return(R)
 }
 
+#' @export
 getPulsedResource_v2 <- function(world, par){
   
   t <- 1:world$tau

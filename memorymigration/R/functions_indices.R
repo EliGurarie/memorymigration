@@ -50,6 +50,14 @@ computeCohesiveness <- function(pop, world){
 computeEfficiency <- function(pop, resource, world){
   dx <- world$dx
   tau <- world$tau
+  if(any(pop < 0)){
+    warning("Some of first distribution less than zero.")
+    pop[pop < 0] <- 0
+  }
+  if(any(resource < 0)){
+    warning("Some of second distribution less than zero.")
+    resource[resource < 0] <- 0
+  }
   sum(sqrt(pop*resource))*dx/tau
 }
 

@@ -64,7 +64,9 @@ mypersp <- function(x,y,z,...)
 #' Plotting simulation results
 #' @export
 
-plotManyRuns <- function(sim, years = NULL, nrow = 1, outer = TRUE){
+plotManyRuns <- function(sim, years = NULL, nrow = 1, outer = TRUE, 
+                         labelyears = FALSE, 
+                         par = NULL, ylab = "", ...){
   
   require(gplots)
   
@@ -78,12 +80,16 @@ plotManyRuns <- function(sim, years = NULL, nrow = 1, outer = TRUE){
   }
  
   parameters <- attributes(sim)$parameter
-   
-  par(mfrow = c(nrow,ceiling(n/nrow)), mar = c(0,0,3,0), oma = c(2,2,4,2), tck = 0.01)
-  for(i in years) 
+  if(is.null(par))
+    par(mfrow = c(nrow,ceiling(n/nrow)), mar = c(1,0,1,0), oma = c(2,2,4,2), tck = 0.01)
+  
+  for(i in years){
     image(1:100, 1:100, sim[[i]], 
           breaks = seq(0, zmax, length = 100), col = rich.colors(99),
-          main = paste("year", i-1), yaxt = "n", xaxt = "n")
+          yaxt = "n", xaxt = "n", ylab = "", xlab = "")
+    if(labelyears) title(paste("year", i), line = 0.5)
+    if(i == 1) mtext(side = 2, ylab, ...)
+  }
   if(outer) 
     title(outer = TRUE, paste(names(parameters),"=",parameters, collapse = "; "))
 }
