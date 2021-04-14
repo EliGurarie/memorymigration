@@ -7,18 +7,18 @@ ui <- pageWithSidebar(
   sidebarPanel(
     numericInput(inputId = "years", label = "Duration of simulation:", value = 5, step = 1),
     numericInput(inputId = "threshold", label = "Threshold of Similarity", value = 0.95, min = 0, max = 1, step = 0.01),
-    sliderInput(inputId = "alpha",
+    numericInput(inputId = "alpha",
                 label = "Resource Following Parameter",
-                min = 0, max = 10, value = 0.1),
-    sliderInput(inputId = "beta",
+                value = 0, min = 0, step = 0.01),
+    numericInput(inputId = "beta",
                 label = "Memory Parameter",
-                min = 0, max = 10, value = 0.1),
-    sliderInput(inputId = "gamma",
+                value = 0, min = 0, step = 0.01),
+    numericInput(inputId = "gamma",
                 label = "Generation Memory Parameter",
-                min = 0, max = 10, value = 0.1),
-    sliderInput(inputId = "epsilon",
+                value = 0, min = 0, max = 1, step = 0.01),
+    numericInput(inputId = "epsilon",
                 label = "Diffusion Parameter",
-                min = 0, max = 10, value = 0.1),
+                value = 0, min = 0, step = 0.01),
     radioButtons(inputId = "x.sd",
                  label = "Resource Space Distribution",
                  choices = c("3" = "x3", "6" = "x6", "9" = "x9", "12" = "x12", "15" = "x15"), inline = TRUE),
@@ -40,7 +40,7 @@ ui <- pageWithSidebar(
 
 
 server <- function(input, output) {
-  pcks <- c("shiny", "ggplot2","magrittr","plyr", "gplots", "memorymigration")
+  pcks <- c("shiny","sf","ggplot2","magrittr","plyr", "gplots", "memorymigration")
   lapply(pcks, require, character = TRUE)
   simulationRun <- reactive({
     data(world)
