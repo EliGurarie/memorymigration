@@ -7,12 +7,12 @@ ui <- pageWithSidebar(
   sidebarPanel(
     numericInput(inputId = "years", label = "Duration of simulation:", value = 5, step = 1),
     numericInput(inputId = "threshold", label = "Threshold of Similarity", value = 0.95, min = 0, max = 1, step = 0.01),
-    numericInput(inputId = "alpha",
-                label = "Resource Following Parameter",
+    numericInput(inputId = "alphabeta",
+                label = "Total taxis",
                 value = 100, min = 0, step = 0.01),
-    numericInput(inputId = "beta",
-                label = "Memory Parameter",
-                value = 100, min = 0, step = 0.01),
+    sliderInput(inputId = "kappa",
+                 label = "Proportion resource following vs. memory",
+                 value = 50, min = 0, max = 1),
     sliderInput(inputId = "gamma",
                 label = "Proportion reference memory",
                 value = 1, min = 0, max = 1),
@@ -50,10 +50,14 @@ server <- function(input, output) {
     worldresource <- paste0("R_t",input$t.sd,"_x",input$x.sd)
     world$resource <- input$resource[[worldresource]]
     
-   runManyYears(World=get(input$world), parameters = c(epsilon = as.numeric(input$epsilon), 
-                                                       alpha = as.numeric(input$alpha), 
-                                                       beta = as.numeric(input$beta),
-                                                       gamma = as.numeric(input$gamma)), 
+    input.numeric <- lapply(input, as.numeric)
+    parameters <- with(input.numeric,list( 
+                       epsilon = epsilon, 
+                       alpha = alphabeta * kappa,
+                       beta = alphabeta * (1-kappa),
+                       gamma = gamma))
+      
+   runManyYears(World=get(input$world), parameters = parameters, 
                                   n.years = as.numeric(input$years), 
                 threshold = as.numeric(input$threshold), verbose=FALSE)
     
