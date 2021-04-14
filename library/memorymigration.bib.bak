@@ -24,7 +24,7 @@
   url      = {http://www.jstatsoft.org/v33/i09},
 }
 
-@Article{51,
+@Article{Fagan2019,
   author       = {WF Fagan and T Hoffman and D Dahiya and \textbf{E Gurarie} and RS Cantrell and C Cosner},
   journal      = {Theoretical Ecology},
   title        = {Improved foraging by switching between diffusion and advection: benefits from movement that depends on spatial context},
@@ -175,6 +175,37 @@
   doi       = {10.1890/02-0706},
   file      = {:Ovaskainen2004_DiffusionMarkRecapture.pdf:PDF},
   publisher = {Wiley Online Library},
+}
+
+@Article{Bischof2012,
+  author    = {Bischof, Richard and Loe, Leif Egil and Meisingset, Erling L and Zimmermann, Barbara and Van Moorter, Bram and Mysterud, Atle},
+  journal   = {The American Naturalist},
+  title     = {A migratory northern ungulate in the pursuit of spring: jumping or surfing the green wave?},
+  year      = {2012},
+  number    = {4},
+  pages     = {407--424},
+  volume    = {180},
+  publisher = {University of Chicago Press Chicago, IL},
+}
+
+@Article{Kolzsch2015,
+  author    = {K{\"o}lzsch, Andrea and Bauer, Silke and De Boer, Rob and Griffin, Larry and Cabot, David and Exo, Klaus-Michael and Van der Jeugd, Henk P and Nolet, Bart A},
+  journal   = {Journal of Animal Ecology},
+  title     = {{Forecasting spring from afar? Timing of migration and predictability of phenology along different migration routes of an avian herbivore}},
+  year      = {2015},
+  number    = {1},
+  pages     = {272--283},
+  volume    = {84},
+  publisher = {Wiley Online Library},
+}
+
+@Article{Bhattacharyya1943,
+  author  = {Bhattacharyya, Anil},
+  journal = {Bull. Calcutta Math. Soc.},
+  title   = {On a measure of divergence between two statistical populations defined by their probability distributions},
+  year    = {1943},
+  pages   = {99--109},
+  volume  = {35},
 }
 
 @Comment{jabref-meta: databaseType:bibtex;}

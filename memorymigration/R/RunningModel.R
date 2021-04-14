@@ -94,8 +94,9 @@ runNextYear_v0 <- function(World, Parameters, Pop_lastyear, Year){
 runManyYears <- function(World, parameters, n.years = 60, 
                          threshold= 0.995, verbose = FALSE){
   
-  cat(paste(names(parameters), parameters, collapse = "; "))
   cat("\n")
+  cat(paste(names(parameters), parameters, collapse = "; "))
+  
   
   pop.list <- list(Year1 = World$pop)
   i <- 1
@@ -106,7 +107,7 @@ runManyYears <- function(World, parameters, n.years = 60,
   
   
   while((similarity < threshold) & (i < n.years)){
-    if(verbose){cat("\n"); cat(paste("running year ", i, "\n"))}
+    if(verbose){cat("\n"); cat(paste("running year ", i))}
     
     i <- i+1
     pop.list[[i+1]] <- runNextYear(World, 

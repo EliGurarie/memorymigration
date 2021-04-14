@@ -4,7 +4,16 @@
 \alias{plotManyRuns}
 \title{Plotting simulation results}
 \usage{
-plotManyRuns(sim, years = NULL, nrow = 1, outer = TRUE, par = NULL)
+plotManyRuns(
+  sim,
+  years = NULL,
+  nrow = 1,
+  outer = TRUE,
+  labelyears = FALSE,
+  par = NULL,
+  ylab = "",
+  ...
+)
 }
 \description{
 Plotting simulation results
