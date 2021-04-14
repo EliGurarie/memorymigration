@@ -9,22 +9,22 @@ ui <- pageWithSidebar(
     numericInput(inputId = "threshold", label = "Threshold of Similarity", value = 0.95, min = 0, max = 1, step = 0.01),
     numericInput(inputId = "alpha",
                 label = "Resource Following Parameter",
-                value = 0, min = 0, step = 0.01),
+                value = 100, min = 0, step = 0.01),
     numericInput(inputId = "beta",
                 label = "Memory Parameter",
-                value = 0, min = 0, step = 0.01),
-    numericInput(inputId = "gamma",
-                label = "Generation Memory Parameter",
-                value = 0, min = 0, max = 1, step = 0.01),
+                value = 100, min = 0, step = 0.01),
+    sliderInput(inputId = "gamma",
+                label = "Proportion reference memory",
+                value = 1, min = 0, max = 1),
     numericInput(inputId = "epsilon",
                 label = "Diffusion Parameter",
-                value = 0, min = 0, step = 0.01),
+                value = 1, min = 0, step = 0.01),
     radioButtons(inputId = "x.sd",
                  label = "Resource Space Distribution",
-                 choices = c("3" = "x3", "6" = "x6", "9" = "x9", "12" = "x12", "15" = "x15"), inline = TRUE),
+                 choices = seq(3,15,3), inline = TRUE),
     radioButtons(inputId = "t.sd",
                  label = "Resource Time Distribution",
-                 choices = c("3" = "t3", "6" = "t6", "9" = "t9", "12" = "t12", "15" = "t15"), inline = TRUE),
+                 choices = seq(3,15,3), inline = TRUE),
     radioButtons(inputId = "resource",
                  label = "Type of resource", 
                  choices = c("Island" = "resources_island", "Drifting" = "resources_drifting"), inline = TRUE),
@@ -47,14 +47,15 @@ server <- function(input, output) {
     data("resources_drifting")
     data("resources_island")
     world <- get(input$world)
-    worldresource <- paste0("R_",input$t.sd,"_",input$x.sd)
-    world$resource <- get(input$resource)[[worldresource]]
+    worldresource <- paste0("R_t",input$t.sd,"_x",input$x.sd)
+    world$resource <- input$resource[[worldresource]]
     
    runManyYears(World=get(input$world), parameters = c(epsilon = as.numeric(input$epsilon), 
                                                        alpha = as.numeric(input$alpha), 
-                                                        beta = as.numeric(input$beta),
+                                                       beta = as.numeric(input$beta),
                                                        gamma = as.numeric(input$gamma)), 
-                                  n.years = as.numeric(input$years), threshold = as.numeric(input$threshold), verbose=FALSE)
+                                  n.years = as.numeric(input$years), 
+                threshold = as.numeric(input$threshold), verbose=FALSE)
     
   })
   output$Image <- renderPlot({
