@@ -21,6 +21,14 @@
 #' @example examples/WorldsandResources.R
 #' @export
 
+getCCpars <- function(mu_x0, mu_t0 = 0, beta_x, beta_t, sigma_x, sigma_t, n.years){
+  cbind(x.peak = mu_x0 - beta_x*1:n.years,
+        t.peak = mu_t0 + beta_t*1:n.years,
+        x.sd = rep(sigma_x, n.years),
+        t.sd = rep(sigma_t, n.years))
+}
+
+#' @export
 getPulsedResource <- function(world, par){
   
   t <- 1:world$tau

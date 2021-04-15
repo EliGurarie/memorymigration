@@ -256,3 +256,20 @@ png("text/figures/ScanningResourceMemoryRatios_part2.png", width = 2400, height 
 dev.off()
   
   
+
+data(world)
+data(resources_island)
+world_gaussian$resource <- resources_island[["R_t12_x3"]]
+image(world_gaussian$resource)
+
+world_sinusoidal <- getSinePop(100, peak.max = 80, peak.min = 20, sd = 3, dx = 1)
+world_sinusoidal$resource <- resources_island[["R_t12_x3"]]
+
+s <- runManyYears(world_sinusoidal, 
+             threshold = 1, n.years = 5,
+             parameters = c(epsilon = 1, 
+                            alpha = 200, 
+                            beta = 0, 
+                            gamma = 1))
+
+plotManyRuns(s)

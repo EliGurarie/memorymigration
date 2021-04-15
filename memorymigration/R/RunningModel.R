@@ -16,41 +16,20 @@
 #' @seealso \link{getSinePop}, \link{runManyYears}
 #' @export
 #' 
+#' 
+
 runNextYear <- function(World, Parameters, Pop_lastyear, Year){
   pop0 <- World$pop
   pop2 <- pop0*0
   
   Time <- World$time
-  Resource <- World$resource
-  
-  w0 <- Parameters["gamma"]^(Year-1)
-  memory <- w0 * pop0 + (1-w0) * Pop_lastyear
-  
-  for(t in Time){
-    
-    if(t == 1) pop_now <- Pop_lastyear[nrow(Pop_lastyear),] else 
-      pop_now <- pop2[t-1,]
-    
-    pop2[t,] <- ode(y = pop_now, 
-                    times = 0:1, 
-                    parms = Parameters,
-                    func = ForagingMemoryModel, 
-                    resource = c(0,Resource[t,],0),
-                    memory = c(0, memory[t,], 0),
-                    dx = World$dx)[2,1:ncol(pop2)+1]
-  }
-  pop2
-}
 
-runNextYear_v0 <- function(World, Parameters, Pop_lastyear, Year){
-  pop0 <- World$pop
-  pop2 <- pop0*0
-  
-  Time <- World$time
-  Resource <- World$resource
-  
   w0 <- Parameters["gamma"]^(Year-1)
   memory <- w0 * pop0 + (1-w0) * Pop_lastyear
+  
+  if(length(dim(World$resource)) == 3)
+    myresource <- World$resource[Year,,] else
+      myresource <- World$resource
   
   for(t in Time){
     
@@ -61,7 +40,7 @@ runNextYear_v0 <- function(World, Parameters, Pop_lastyear, Year){
                     times = 0:1, 
                     parms = Parameters,
                     func = ForagingMemoryModel, 
-                    resource = c(0,Resource[t,],0),
+                    resource = c(0,myresource[t,],0),
                     memory = c(0, memory[t,], 0),
                     dx = World$dx)[2,1:ncol(pop2)+1]
   }
