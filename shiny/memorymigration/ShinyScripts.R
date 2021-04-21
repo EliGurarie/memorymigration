@@ -1,6 +1,4 @@
-rm(list=ls())
 library(shiny)
-
 ui <- pageWithSidebar(
   
   headerPanel("Memory Migration model"),
@@ -90,4 +88,3 @@ server <- function(input, output) {
   }, res = 150)
 }
 
-shinyApp( ui=ui, server=server)
