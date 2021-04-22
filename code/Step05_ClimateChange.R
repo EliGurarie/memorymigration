@@ -25,13 +25,6 @@ sim <- runManyYears(world, parameters = c(epsilon = 1,
 
 plotManyRuns(sim)
 
-#total taxis = 200
-#population breaks down when resource following proportion is below 0.6 
-#epsilon 1; alpha 140; beta 60; gamma 0.8 = 200
-#epsilon 1; alpha 120; beta 80; gamma 0.8
-#epsilon 1; alpha 140; beta 60; gamma 0.8
-#epsilon 1; alpha 160; beta 40; gamma 0.8
-#epsilon 1; alpha 120; beta 80; gamma 0.9
-#epsilon 1; alpha 140; beta 60; gamma 0.7
+
 
 
