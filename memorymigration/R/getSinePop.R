@@ -27,3 +27,32 @@ getSinePop <- function(tau, X.min = 0, X.max = 100, dx,
   pop <- apply(pop, 1, function(x) x/sum(x)/dx) %>% t
   list(pop = pop, X = X, time = Time, dx = dx, tau = tau, X.max = X.max)
 }
+
+
+getOptimalPop <- function(tau, X.min = 0, X.max = 100, dx, 
+                          x.peak, t.peak, x.sd, t.sd){
+  Time <- 1:tau
+  
+  t1 <- t.peak - t.sd
+  t2 <- t.peak + t.sd
+  t3 <- tau - t.peak - t.sd
+  t4 <- tau - t.peak + t.sd
+  x1 <-  X.max - x.peak
+  x2 <-  x.peak
+  slope <-  (x2 - x1) / (t3-t2)
+  
+  getX.mean <- function(t){
+    ifelse(t > t1 & t < t2, x1, 
+                 ifelse(t > t3 & t < t4, x2, 
+                        ifelse(t >= t2 & t <= t3, x1 + (t-t2)*slope, 
+                               ifelse(t <= t1, X.max/2 - slope*t, 
+                                      x2 - (t - t4)*slope))))
+  }
+  
+  X.edge <- seq(X.min, X.max, dx)
+  X <- (X.edge[-1] + X.edge[-length(X.edge)])/2
+  
+  pop <- t(sapply(Time, function(t) dnorm(X, mean = getX.mean(t), sd = x.sd)))
+  pop <- t(apply(pop, 1, function(x) x/sum(x)/dx))
+  list(pop = pop, X = X, time = Time, dx = dx, tau = tau, X.max = X.max)
+}
