@@ -28,7 +28,18 @@ getSinePop <- function(tau, X.min = 0, X.max = 100, dx,
   list(pop = pop, X = X, time = Time, dx = dx, tau = tau, X.max = X.max)
 }
 
-
+#' Get Optimal Pop
+#' Initilaizes optimal initial population distribution based on resource
+#' 
+#' @param tau maximum time in days for migratory population in one year
+#' @param X.min minimum value of population distribution
+#' @param X.max maximum value of population distribution
+#' @param dx time step
+#' @param x.peak where the resource peak is in space
+#' @param t.peak where the resource peak is in time
+#' @param x.sd standard deviation of resource peak in space
+#' @param t.sd standard deviation of resource peak in time
+#' @export
 getOptimalPop <- function(tau, X.min = 0, X.max = 100, dx, 
                           x.peak, t.peak, x.sd, t.sd){
   Time <- 1:tau
@@ -37,8 +48,8 @@ getOptimalPop <- function(tau, X.min = 0, X.max = 100, dx,
   t2 <- t.peak + t.sd
   t3 <- tau - t.peak - t.sd
   t4 <- tau - t.peak + t.sd
-  x1 <-  X.max - x.peak
-  x2 <-  x.peak
+  x2 <-  X.max - x.peak
+  x1 <-  x.peak
   slope <-  (x2 - x1) / (t3-t2)
   
   getX.mean <- function(t){

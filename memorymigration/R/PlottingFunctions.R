@@ -87,7 +87,7 @@ plotManyRuns <- function(sim, years = NULL, nrow = 1, outer = TRUE,
     image(1:100, 1:100, sim[[i]], 
           breaks = seq(0, zmax, length = 100), col = rich.colors(99),
           yaxt = "n", xaxt = "n", ylab = "", xlab = "")
-    if(labelyears) title(paste("year", i), line = 0.5)
+    if(labelyears) title(paste("year", i-1), line = 0.3)
     if(i == 1) mtext(side = 2, ylab, ...)
   }
   if(outer) 

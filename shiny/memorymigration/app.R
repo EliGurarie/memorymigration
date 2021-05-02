@@ -1,9 +1,10 @@
-pcks <- c("shiny","sf","ggplot2","magrittr","plyr", "gplots", "memorymigration")
+pcks <- c("shiny","sf","ggplot2","magrittr","plyr", "gplots", "memorymigration", "DT")
 lapply(pcks, require, character = TRUE)
 
 data(world)
 data(resources_island)
 data(resources_drifting)
 
-source("ShinyScripts.R")
+source("shiny/memorymigration/ShinyScripts.R")
 shinyApp(ui, server)
+
