@@ -11,7 +11,7 @@
 
 <meta name="author" content="E. Gurarie, S. Potluri, B. Fagan, others" />
 
-<meta name="date" content="2021-04-14" />
+<meta name="date" content="2021-05-14" />
 
 <title>Modeling memory and taxis to analyze migrations</title>
 
@@ -265,7 +265,7 @@ div.tocify {
 
 <h1 class="title toc-ignore">Modeling memory and taxis to analyze migrations</h1>
 <h4 class="author">E. Gurarie, S. Potluri, B. Fagan, others</h4>
-<h4 class="date">2021-04-14</h4>
+<h4 class="date">2021-05-14</h4>
 
 </div>
 
@@ -275,8 +275,8 @@ div.tocify {
 <p>Diffusion-advection models have a long pedigree in animal movement modeling <span class="citation">(Skellam 1951, Turchin 1998, Okubo and Levin 2001)</span>. Essentially, these models are grounded in the general idea that animal movements - somewhat like movements of physical particles - might combine a random (diffusive) component with a directed (advective) component and that the two can be separated and modeled. While direct relationships between diffusion models and movement data are somewhat tenuous <span class="citation">(Gurarie and Ovaskainen 2011)</span>, as a theoretical tool for exploring processes they are invaluable for their versatility and the relative ease of numeric computation of the partial differential equations (PDEs) that are used to describe diffusion-advection models mathematically. Even as equations analytically intractable,</p>
 <p>Thus, much theoretical and some applied work has been done on refining the basic assumptions of diffusion models, e.g. by including heterogeneity in populations <span class="citation">(Skalski and Gilliam 2003, Gurarie et al. 2009)</span>, fat-tailed dispersal kernels <span class="citation">(Kot et al. 1996)</span>, non-linear or otherwise complex responses to resources and consepecifics (<strong>refs</strong>).</p>
 <p>However, perhaps the greatest difference between animals and the randomly moving passive particles that are best described by diffusion models is the cognitive abilities, including social behavior and memory. Refinements to diffusion-advection equations have revealed conditions under which non-local information gathering <span class="citation">(Fagan et al. 2017)</span> and behavioral switching may confer foraging advantages <span class="citation">(Fagan et al. 2019)</span>, in particular when resources are dynamic and patchy. The interacting role of memory and sociality have been comparatively little studied.</p>
-<p>Migration is a strategic behavior, typically involving a major trade-off between the costs of the migration against the benefits of accessing resources (whether food or predator refuge) that are highly seasonal and localized (<strong>refs</strong>). While some migrants - both terrestrial and avian - follow a “green wave” of spring vegetation as it flowers across altitudinal or latitudinal gradients <span class="citation">(Bischof et al. 2012, Kölzsch et al. 2015)</span>, many others “jump” the green wave, anticipating that critical resources will be available at the time of arrival (<strong>refs</strong>).</p>
-<p>We anticiapted that under many conditons a blending of <em>tactical</em> (i.e. direct response to resource availability or perception) and <em>strategic</em> (i.e. memory-driven and forward-thinking) behavior can help a forager navigate a dynamic and heterogeneous resource environment, with a particular emphasis on the aquisition and adaptabilty of <strong>migratory behavior</strong> in a dynamic, seasonal resource environment To explore the interaction of memory and resource following as an adaptive strategy in dynamic environments. Specifically, we explore a one-dimensional advection diffusion model with long-term and short-term memory, and run the model in a dynamic, seasonal environment.</p>
+<p>Migration is a strategic behavior, typically involving a major trade-off between the costs of migration against the benefits of accessing resources, whether food, suitable habitat for breeding, or predator refuge, that are highly seasonal and localized (<strong>refs</strong>). While some migrants - both terrestrial and avian - follow a “green wave” of spring vegetation as it flowers across altitudinal or latitudinal gradients <span class="citation">(Bischof et al. 2012, Kölzsch et al. 2015)</span>, many others “jump” the green wave, anticipating that critical resources will be available at the time of arrival (<strong>refs</strong>). This second strategy</p>
+<p>We anticiapte that under many conditons a blending of <em>tactical</em> (i.e. direct response to resource availability or perception) and <em>strategic</em> (i.e. memory-driven and forward-thinking) behavior can help a forager navigate a dynamic and heterogeneous resource environment, with a particular emphasis on the aquisition and adaptabilty of <em>migratory behavior</em> in a dynamic, seasonal resource environment. Our goal is to explore the interaction of memory and resource following as an adaptive strategy in a dynamic environments. To do this, we developed a one-dimensional advection diffusion model with long-term and short-term memory, and run the model in a dynamic, seasonal environment.</p>
 </div>
 <div id="methods" class="section level1">
 <h1>Methods</h1>

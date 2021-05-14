@@ -208,4 +208,28 @@
   volume  = {35},
 }
 
+@Article{Shaw2016,
+  author    = {Allison K. Shaw},
+  journal   = {Evolutionary Ecology},
+  title     = {Drivers of animal migration and implications in changing environments},
+  year      = {2016},
+  month     = {sep},
+  number    = {6},
+  pages     = {991--1007},
+  volume    = {30},
+  doi       = {10.1007/s10682-016-9860-5},
+  file      = {:Shaw2016_Article_DriversOfAnimalMigrationAndImp.pdf:PDF},
+  publisher = {Springer Science and Business Media {LLC}},
+}
+
+@Book{Dingle2014,
+  author    = {Dingle, Hugh},
+  publisher = {Oxford University Press, USA},
+  title     = {Migration: the biology of life on the move},
+  year      = {2014},
+}
+
+@Article{,
+}
+
 @Comment{jabref-meta: databaseType:bibtex;}
