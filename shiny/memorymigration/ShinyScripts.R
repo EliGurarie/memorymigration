@@ -5,6 +5,8 @@ ui <- fluidPage(
   fluidRow(
     column(3,
            h3("Migratory Population"),
+           actionButton(inputId = "run", 
+                        label = "Run Model"),
            radioButtons(inputId = "world",
                         label = "Initial distribution of population in year 0", 
                         choices = c("Optimal" = "world_optimal", "Gaussian" = "world_gaussian", "Sinusoidal" = "world_sinusoidal"), inline = TRUE),
@@ -25,8 +27,9 @@ ui <- fluidPage(
            ),
     column(9,
            h3("Migratory Population"),
-           plotOutput("Image", height = "800px"),
-           tableOutput("Indices")),
+           tableOutput("Indices"),
+           plotOutput("Image", height = "400px")
+           ),
     column(3,
            h3("Resource"),
            sliderInput(inputId = "x.sd",
@@ -43,13 +46,11 @@ ui <- fluidPage(
                         label = "Type of resource", 
                         choices = c("Island" = "resources_island", "Drifting" = "resources_drifting"), inline = TRUE),
            
-           actionButton(inputId = "run", 
-                        label = "Run Model")),
     column(9,
            h3("Resource"),
-           plotOutput("Resourceimage", height = "800px"))
+           plotOutput("Resourceimage", height = "400px"))
     
-))
+)))
 
 
 server <- function(input, output) {
@@ -107,7 +108,7 @@ server <- function(input, output) {
                                         world$resource[length(sim)-1,,], world), 
                           final_similarity = computeEfficiency(sim[[length(sim)-1]], 
                                                               sim[[length(sim)]], world))
-    indices <- format(indices, nsmall=4)
+    #indices <- format(indices, nsmall=3)
     newlist <- list(sim,indices)
     
   })
@@ -162,7 +163,7 @@ server <- function(input, output) {
   
  output$Indices <- renderTable({
    simulation()[[2]]
- })
+ }, digits = 3)
 }
 
 
