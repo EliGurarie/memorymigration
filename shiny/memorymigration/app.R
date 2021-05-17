@@ -1,4 +1,4 @@
-pcks <- c("shiny","sf","ggplot2","magrittr","plyr", "gplots", "memorymigration", "DT", "gridExtra", "grid")
+pcks <- c("shiny","sf","ggplot2","magrittr","plyr", "gplots", "memorymigration", "DT")
 lapply(pcks, require, character = TRUE)
 
 data(world)

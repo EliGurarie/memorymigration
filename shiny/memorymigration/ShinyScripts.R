@@ -108,8 +108,9 @@ server <- function(input, output) {
                                         world$resource[length(sim)-1,,], world), 
                           final_similarity = computeEfficiency(sim[[length(sim)-1]], 
                                                              sim[[length(sim)]], world))
+    parameters.df <- ldply (parameters, data.frame)
     indices <- format(indices, digits=4)
-    newlist <- list(sim,indices)
+    newlist <- list(sim,indices, t(parameters.df))
     
     
   })
@@ -168,14 +169,10 @@ server <- function(input, output) {
  }, digits = 3)
  
  output$downloadData <- downloadHandler(
-   filename = "simulationRun.pdf",
+   filename = "simulationRun.csv",
    content = function(file) {
      
-     pdf(file)
-     plotManyRuns(simulation()[[1]], nrow=ceiling(length(simulation()[[1]])/6), labelyears=TRUE)
-     grid.newpage()
-     grid.table(simulation()[[2]])
-     dev.off()
+     write.csv(merge(simulation()[[3]], simulation()[[2]]), file)
    }
  )
 }
