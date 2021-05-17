@@ -1,4 +1,4 @@
-pcks <- c("shiny","sf","ggplot2","magrittr","plyr", "gplots", "memorymigration", "DT")
+pcks <- c("shiny","sf","ggplot2","magrittr","plyr", "gplots", "memorymigration", "DT", "gridExtra", "grid")
 lapply(pcks, require, character = TRUE)
 
 data(world)
@@ -7,4 +7,5 @@ data(resources_drifting)
 
 source("shiny/memorymigration/ShinyScripts.R")
 shinyApp(ui, server)
+
 
