@@ -7,6 +7,8 @@ ui <- fluidPage(
            h3("Migratory Population"),
            actionButton(inputId = "run", 
                         label = "Run Model"),
+           downloadButton(outputId = "downloadData", 
+                          label = "Download Results"),
            radioButtons(inputId = "world",
                         label = "Initial distribution of population in year 0", 
                         choices = c("Optimal" = "world_optimal", "Gaussian" = "world_gaussian", "Sinusoidal" = "world_sinusoidal"), inline = TRUE),
@@ -25,10 +27,12 @@ ui <- fluidPage(
                         label = "Diffusion Parameter",
                         value = 1, min = 0, step = 0.01)
            ),
-    column(9,
+    column(6,
            h3("Migratory Population"),
            tableOutput("Indices"),
-           plotOutput("Image", height = "400px")
+           plotOutput("Image", height = "400px"),
+           h3("Resource"),
+           plotOutput("Resourceimage", height = "400px")
            ),
     column(3,
            h3("Resource"),
@@ -45,10 +49,6 @@ ui <- fluidPage(
            radioButtons(inputId = "resource",
                         label = "Type of resource", 
                         choices = c("Island" = "resources_island", "Drifting" = "resources_drifting"), inline = TRUE),
-           
-    column(9,
-           h3("Resource"),
-           plotOutput("Resourceimage", height = "400px"))
     
 )))
 
@@ -107,12 +107,15 @@ server <- function(input, output) {
     indices <- data.frame(computeIndices(sim[[length(sim)]], 
                                         world$resource[length(sim)-1,,], world), 
                           final_similarity = computeEfficiency(sim[[length(sim)-1]], 
-                                                              sim[[length(sim)]], world))
-    #indices <- format(indices, nsmall=3)
-    newlist <- list(sim,indices)
+                                                             sim[[length(sim)]], world))
+    parameters.df <- ldply (parameters, data.frame)
+    indices <- format(indices, digits=4)
+    newlist <- list(sim,indices, t(parameters.df))
+    
     
   })
 
+  
   resourceImage <- eventReactive(input$run,{
     if(input$world == "world_optimal"){
       world <- getOptimalPop(tau=100, X.min = 0, X.max = 100, dx=1, 
@@ -148,7 +151,7 @@ server <- function(input, output) {
       Resource.CC <- aaply(par0, 1, function(p) getPulsedResource(world, p))
     }
     
-    par(mfrow = c(ceiling(min(dim(Resource.CC))/5), 5), mar = c(0,0,3,0), oma = c(2,2,4,2), tck = 0.01)
+    par(mfrow = c(ceiling(min(dim(Resource.CC))/5), 5), mar = c(0,0,1,0), oma = c(2,2,0,2), tck = 0.01)
     for (i in 1:min(dim(Resource.CC))) image(1:100, 1:100, Resource.CC[i,,], main = paste("year", i-1), yaxt = "n", xaxt = "n")
     
   })
@@ -164,7 +167,17 @@ server <- function(input, output) {
  output$Indices <- renderTable({
    simulation()[[2]]
  }, digits = 3)
+ 
+ output$downloadData <- downloadHandler(
+   filename = "simulationRun.csv",
+   content = function(file) {
+     
+     write.csv(merge(simulation()[[3]], simulation()[[2]]), file)
+   }
+ )
 }
+
+
 
 
   
