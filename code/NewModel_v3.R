@@ -21,7 +21,7 @@ runManyYears <- function(world, parameters, n.years = 60,
   i <- 1
   pop.list[[i+1]] <- runNextYear(world, Parameters = parameters, 
                                  Pop_lastyear = world$pop, Year = 1)
-  similarity <- computeEfficiency(pop.list[[i]], pop.list[[i+1]], World)
+  similarity <- computeEfficiency(pop.list[[i]], pop.list[[i+1]], world)
   
   while((similarity < threshold) & (i < n.years)){
     if(verbose){cat("\n"); cat(paste("running year ", i))}
@@ -31,27 +31,12 @@ runManyYears <- function(world, parameters, n.years = 60,
                                    Parameters = parameters, 
                                    Pop_lastyear = pop.list[[i]], 
                                    Year = i)
-    similarity <- computeEfficiency(pop.list[[i]], pop.list[[i+1]], World)
+    similarity <- computeEfficiency(pop.list[[i]], pop.list[[i+1]], world)
   }
   names(pop.list) <- paste0("Year",0:(length(pop.list)-1))
   attr(pop.list, "parameters") <- parameters
   return(pop.list)
 }
-
-
-
-dm.adjust <- function(x, m.hat, dm, beta, lambda){
-  x0 <- ifelse(dm >= 0, 
-    m.hat + log(lambda/dm - 1)/beta,
-    m.hat - log(lambda/(-dm) - 1)/beta) 
-    
-  ifelse(dm >=0, 
-         lambda / (1 + exp(-beta*(x - x0))),
-         -lambda / (1 + exp(beta*(x - x0)))
-  )
-}
-
-lines(0:10, dm.adjust(0:10, m.hat = 5, dm = 0.2, beta = 1, lambda = 3), xlim = c(0,10))
 
 
 Parameters <- c(epsilon = 1, alpha = 100, beta=.01, kappa = 1, lambda = 10)
@@ -76,6 +61,7 @@ runNextYear <- function(World, Parameters, Pop_lastyear, Year){
   X.matrix <- matrix(rep(X.edge, times = World$tau), byrow = TRUE, nrow = World$tau)
   memory.matrix <- matrix(rep(memory, length(X.edge)), byrow = FALSE, nrow = World$tau)
   dmemory.matrix <- matrix(rep(dmemory, length(X.edge)), byrow = FALSE, nrow = World$tau)
+  
   dm.matrix <- dm.adjust(X.matrix, memory.matrix, dmemory.matrix,
                          Parameters["beta"], Parameters["lambda"])
 
@@ -96,6 +82,11 @@ runNextYear <- function(World, Parameters, Pop_lastyear, Year){
                     memory = dm.matrix[t,],
                     dx = World$dx)[2,1:ncol(pop2)+1]
   }
+  if(any(pop2 < 0)){
+    warning("Some negative population values will be coerced to 0.")
+  }
+  pop2[pop2 < 0] <- 0
+  pop2 <- apply(pop2, 1, function(x) x/sum(x)) %>% t
   pop2 
 }
 
@@ -106,37 +97,51 @@ ForagingMemoryModel <- function(t, pop, parms, memory, m_minus_X, dh, dx = dx){
           dx = dx)
 }
 
+
+dm.adjust <- function(x, m.hat, dm, beta, lambda){
+  x0 <- ifelse(dm > 0, 
+               m.hat - log(lambda/dm - 1)*beta,  ifelse(
+                 dm < 0, 
+                 m.hat + log(lambda/(-dm) - 1)*beta,
+                 0)) 
+  
+  ifelse(dm > 0, 
+         lambda / (1 + exp((x - x0)/beta)), ifelse(
+           dm < 0,
+           -lambda / (1 + exp(-(x - x0)/beta)),
+           0))
+}
+
+plotMemories <- function(sim){
+  memory.df <- ldply(sim, function(l)
+    data.frame(time = 1:nrow(l), 
+               memory = getMem(l, world = world)))
+  
+  ggplot(memory.df, aes(time, memory, col = .id)) + geom_path() + 
+    theme_few()
+}
+
+rm(list=ls())
+
+require(memorymigration)
 world <- getSinePop(tau = 100, X.min = 0, X.max = 200, dx=1, 
-                       peak.max = 140, peak.min = 60, sd = 10)
+                    peak.max = 140, peak.min = 60, sd = 10)
+
 world$resource <- getPulsedResource_v2(world, 
-                                       par = c(t.peak = 25, t.sd = 15, 
-                                               x.peak = 135, x.sd = 6))
+                                       par = c(t.peak = 25, t.sd = 12, 
+                                               x.peak = 120, x.sd = 6))
 
 M1 <- runManyYears(world, 
-                  c(epsilon = 2, alpha = 200, 
-                    beta=-.01, kappa = 0, lambda = 4), 
+                  c(epsilon = 1, alpha = 100, 
+                    beta= 100, kappa = 0, lambda = 20), 
                   n.years = 10, threshold = 1)
-plotManyRuns(M1, World)
+plotManyRuns(M1, world)
+plotMemories(M1) + ggtitle("all reference memory")
 
 
-
-M2 <- runManyYears(world.R1, 
-                  c(epsilon = 1, alpha = 300, beta=1, kappa = 1), 
-                  n.years = 10, 1) 
-plotManyRuns(M2, World)
-
-M3 <- runManyYears(world.R1, 
-                   c(epsilon = .5, alpha = 100, beta=1, kappa = 0), 
-                   n.years = 10, 1) 
-plotManyRuns(M3)
-
-dm0 <- getDMem(M1[[1]], world.R1)
-dm1 <- getDMem(M1[[length(M1)]], world.R1)
-dm2 <- getDMem(M2[[11]], world.R1)
-dm3 <- getDMem(M3[[11]], world.R1)
-
-par(mfrow = c(1,1))
-plot(dm0, type = "o", ylim = c(-2,2))
-lines(dm1, type = "o", col = 2)
-lines(dm2, type = "o", col = 3)
-lines(dm3, type = "o", col = 4)
+M2 <- runManyYears(world, 
+                   c(epsilon = 1, alpha = 100, 
+                     beta = 100, kappa = 1, lambda = 20), 
+                   n.years = 10, threshold = 1)
+plotManyRuns(M2, world)
+plotMemories(M2) + ggtitle("all reference memory")

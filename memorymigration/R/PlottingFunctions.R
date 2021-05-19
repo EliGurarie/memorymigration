@@ -93,3 +93,16 @@ plotManyRuns <- function(sim, world, years = NULL, nrow = 1, outer = TRUE,
   if(outer) 
     title(outer = TRUE, paste(names(parameters),"=",parameters, collapse = "; "))
 }
+
+
+#' Plot memories against years
+#
+#' @export
+plotMemories <- function(sim){
+  memory.df <- ldply(sim, function(l)
+    data.frame(time = 1:nrow(l), 
+               memory = getMem(l, world = world)))
+  
+  ggplot(memory.df, aes(time, memory, col = .id)) + geom_path() + 
+    theme_few()
+}

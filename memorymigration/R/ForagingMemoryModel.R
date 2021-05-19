@@ -15,22 +15,40 @@
 #' @return Model setup; output of \code{\link{tran.1D}} function. 
 #' @export
 
-ForagingMemoryModel <- function(t, pop, parms, memory, resource, 
-                                dx = dx){
+ForagingMemoryModel <- function(t, pop, parms, 
+                                memory, dh, dx = dx){
   tran.1D(C = pop, D = parms["epsilon"], 
           flux.up = 0, flux.down = 0, 
-          v = parms["alpha"] * diff(resource)/dx + 
-            parms["beta"] * diff(memory)/dx, 
+          v = parms["alpha"] * dh/dx + memory,
           dx = dx)
 }
 
-
-ForagingMemoryModel_v0 <- function(t, pop, parms, memory, resource, 
-                                dx = dx){
-  tran.1D(C = pop, D = parms["epsilon"], 
-          flux.up = 0, flux.down = 0, 
-          v = parms["alpha"] * diff(resource)/dx + 
-            parms["beta0"] * diff(c(0,pop,0))/dx + 
-            parms["beta1"] * diff(memory)/dx, 
-          dx = dx)
+#' @export
+dm.adjust <- function(x, m.hat, dm, beta, lambda){
+  x0 <- ifelse(dm > 0, 
+               m.hat - log(lambda/dm - 1)*beta,  ifelse(
+                 dm < 0, 
+                 m.hat + log(lambda/(-dm) - 1)*beta,
+                 0)) 
+  
+  ifelse(dm > 0, 
+         lambda / (1 + exp((x - x0)/beta)), ifelse(
+           dm < 0,
+           -lambda / (1 + exp(-(x - x0)/beta)),
+           0))
 }
+
+#' @export
+getMem <- function(pop, world){
+  apply(t(pop)*world$X, 2, sum) * world$dx
+}
+
+#' @export
+extend <- function(x){
+  x1 <- c(x[length(x)],x,x[1])
+  (x1[-1] + x1[-length(x1)])/2
+}
+
+#' @export
+ddx.edge <- function(x)
+  diff(c(x[1], x, x[length(x)])) 

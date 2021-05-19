@@ -1,53 +1,3 @@
-#' Run Next Year
-#' 
-#' Based on a migratory population's set up (the World) and the values \code{alpha},
-#'\code{beta0} and \code{beta1}, this function determines the population 
-#'distribution for the following year. 
-#' 
-#' @param World List of 5: a population distribution across the time period in a T x X matrix,
-#'  a vector with midpoint X-values, the time points for the population as integers 1:tau,
-#'  the dx value and the tau value. Can incorporate resource attribute into the world to make a list of 6.
-#'  Set up by the getSinePop function. 
-#' @param Parameters named vector of parameters. \code{epsilon} - diffusion coefficient; 
-#' \code{alpha} - resource 
-#' following coefficient; \code{beta0} - social cohesion coefficient; \code{beta1} - 
-#' memory coefficient
-#' @return a T x X matrix describing the population distribution for the next year
-#' @seealso \link{getSinePop}, \link{runManyYears}
-#' @export
-#' 
-#' 
-
-runNextYear <- function(World, Parameters, Pop_lastyear, Year){
-  pop0 <- World$pop
-  pop2 <- pop0*0
-  
-  Time <- World$time
-
-  w0 <- Parameters["gamma"]^(Year-1)
-  memory <- w0 * pop0 + (1-w0) * Pop_lastyear
-  
-  if(length(dim(World$resource)) == 3)
-    myresource <- World$resource[Year,,] else
-      myresource <- World$resource
-  
-  for(t in Time){
-    
-    if(t == 1) pop_now <- Pop_lastyear[nrow(Pop_lastyear),] else 
-      pop_now <- pop2[t-1,]
-    
-    pop2[t,] <- ode(y = pop_now, 
-                    times = 0:1, 
-                    parms = Parameters,
-                    func = ForagingMemoryModel, 
-                    resource = c(0,myresource[t,],0),
-                    memory = c(0, memory[t,], 0),
-                    dx = World$dx)[2,1:ncol(pop2)+1]
-  }
-  pop2
-}
-
-
 #' Run Many Years 
 #' 
 #' Based on a migratory population's set up (the World) and the values \code{alpha},
@@ -70,36 +20,31 @@ runNextYear <- function(World, Parameters, Pop_lastyear, Year){
 #' @seealso \link{getSinePop}, \link{runManyYears}
 #' @export
 #' 
-runManyYears <- function(World, parameters, n.years = 60, 
+runManyYears <- function(world, parameters, n.years = 60, 
                          threshold= 0.995, verbose = FALSE){
-  
   cat("\n")
   cat(paste(names(parameters), parameters, collapse = "; "))
   
-  
-  pop.list <- list(Year1 = World$pop)
+  pop.list <- list(Year1 = world$pop)
   i <- 1
-  
-  pop.list[[i+1]] <- runNextYear(World, Parameters = parameters, 
-                                 Pop_lastyear = World$pop, Year = 1)
-  similarity <- computeEfficiency(pop.list[[i]], pop.list[[i+1]], World)
-  
+  pop.list[[i+1]] <- runNextYear(world, Parameters = parameters, 
+                                 Pop_lastyear = world$pop, Year = 1)
+  similarity <- computeEfficiency(pop.list[[i]], pop.list[[i+1]], world)
   
   while((similarity < threshold) & (i < n.years)){
     if(verbose){cat("\n"); cat(paste("running year ", i))}
     
     i <- i+1
-    pop.list[[i+1]] <- runNextYear(World, 
+    pop.list[[i+1]] <- runNextYear(World = world, 
                                    Parameters = parameters, 
                                    Pop_lastyear = pop.list[[i]], 
                                    Year = i)
-    similarity <- computeEfficiency(pop.list[[i]], pop.list[[i+1]], World)
+    similarity <- computeEfficiency(pop.list[[i]], pop.list[[i+1]], world)
   }
   names(pop.list) <- paste0("Year",0:(length(pop.list)-1))
   attr(pop.list, "parameters") <- parameters
   return(pop.list)
 }
-
 
 #' Run Many Years for a set of parameters
 #' 
