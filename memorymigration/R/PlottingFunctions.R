@@ -64,7 +64,7 @@ mypersp <- function(x,y,z,...)
 #' Plotting simulation results
 #' @export
 
-plotManyRuns <- function(sim, years = NULL, nrow = 1, outer = TRUE, 
+plotManyRuns <- function(sim, world, years = NULL, nrow = 1, outer = TRUE, 
                          labelyears = FALSE, 
                          par = NULL, ylab = "", ...){
   
@@ -84,7 +84,7 @@ plotManyRuns <- function(sim, years = NULL, nrow = 1, outer = TRUE,
     par(mfrow = c(nrow,ceiling(n/nrow)), mar = c(1,0,1,0), oma = c(2,2,4,2), tck = 0.01)
   
   for(i in years){
-    image(1:100, 1:100, sim[[i]], 
+    image(1:world$tau, world$X, sim[[i]], 
           breaks = seq(0, zmax, length = 100), col = rich.colors(99),
           yaxt = "n", xaxt = "n", ylab = "", xlab = "")
     if(labelyears) title(paste("year", i-1), line = 0.3)

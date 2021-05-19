@@ -20,6 +20,7 @@
 #' @return A X x X matrix containing values of the resource distribution
 #' @example examples/WorldsandResources.R
 #' @export
+#' @aliases getPulsedResource
 
 getCCpars <- function(mu_x0, mu_t0 = 0, beta_x, beta_t, sigma_x, sigma_t, n.years){
   cbind(x.peak = mu_x0 - beta_x*1:n.years,
