@@ -35,7 +35,7 @@ runManyYears <- function(world, parameters, n.years = 60,
     if(verbose){cat("\n"); cat(paste("running year ", i))}
     
     i <- i+1
-    pop.list[[i+1]] <- runNextYear(World = world, 
+    pop.list[[i+1]] <- runNextYear(world = world, 
                                    Parameters = parameters, 
                                    Pop_lastyear = pop.list[[i]], 
                                    Year = i)

@@ -4,7 +4,7 @@
 \alias{ForagingMemoryModel}
 \title{Foraging with memory model}
 \usage{
-ForagingMemoryModel(t, pop, parms, memory, resource, dx = dx)
+ForagingMemoryModel(t, pop, parms, memory, dh, dx = dx)
 }
 \arguments{
 \item{t}{vector of times}
@@ -19,9 +19,9 @@ memory coefficient}
 
 \item{memory}{the memory score}
 
-\item{resource}{a T x X distribution of the (potentially) dynamic resource.}
-
 \item{dx}{time step}
+
+\item{resource}{a T x X distribution of the (potentially) dynamic resource.}
 }
 \value{
 Model setup; output of \code{\link{tran.1D}} function.

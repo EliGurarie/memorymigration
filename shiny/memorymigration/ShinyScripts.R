@@ -14,23 +14,27 @@ ui <- fluidPage(
                         choices = c("Optimal" = "world_optimal", "Gaussian" = "world_gaussian", "Sinusoidal" = "world_sinusoidal"), inline = TRUE),
            numericInput(inputId = "years", label = "Duration of simulation:", value = 5, step = 1),
            numericInput(inputId = "threshold", label = "Threshold of Similarity", value = 0.999, min = 0, max = 1, step = 0.01),
-           numericInput(inputId = "alphabeta",
-                        label = "Total taxis",
+           numericInput(inputId = "alpha",
+                        label = "Resource Following - Alpha",
+                        value = 100, min = 0, step = 0.01),
+           numericInput(inputId = "beta",
+                        label = "Beta",
                         value = 100, min = 0, step = 0.01),
            sliderInput(inputId = "kappa",
-                       label = "Proportion resource following vs. memory",
-                       value = .50, min = 0, max = 1),
-           sliderInput(inputId = "gamma",
-                       label = "Proportion reference memory",
+                       label = "Memory Following - Kappa",
                        value = 1, min = 0, max = 1),
+           numericInput(inputId = "lambda",
+                        label = "Lambda",
+                        value = 20, min = 0, step = 1),
            numericInput(inputId = "epsilon",
-                        label = "Diffusion Parameter",
+                        label = "Diffusion Parameter - Epsilon",
                         value = 1, min = 0, step = 0.01)
            ),
     column(6,
            h3("Migratory Population"),
            tableOutput("Indices"),
            plotOutput("Image", height = "400px"),
+           plotOutput("Memory", height = "400px"),
            h3("Resource"),
            plotOutput("Resourceimage", height = "400px")
            ),
@@ -48,9 +52,11 @@ ui <- fluidPage(
            numericInput(inputId = "beta.t", label = "Resource Change in Time ", value = 0, step = 1),
            radioButtons(inputId = "resource",
                         label = "Type of resource", 
-                        choices = c("Island" = "resources_island", "Drifting" = "resources_drifting"), inline = TRUE),
+                        choices = c("Island" = "resources_island", "Drifting" = "resources_drifting"), inline = TRUE)
+    ),
+           
     
-)))
+))
 
 
 server <- function(input, output) {
@@ -95,11 +101,12 @@ server <- function(input, output) {
       }
       
       parameters <- c(epsilon = as.numeric(input$epsilon), 
-                      alpha = as.numeric(input$alphabeta) * as.numeric(input$kappa),
-                      beta = as.numeric(input$alphabeta) * (1-as.numeric(input$kappa)),
-                      gamma = as.numeric(input$gamma))
+                      alpha = as.numeric(input$alpha),
+                      beta = as.numeric(input$beta),
+                      kappa = as.numeric(input$kappa),
+                      lambda = as.numeric(input$lambda))
       
-    sim <- runManyYears(World=world, parameters = parameters, 
+    sim <- runManyYears(world=world, parameters = parameters, 
                    n.years = as.numeric(input$years), 
                    threshold = as.numeric(input$threshold), verbose=FALSE)
     
@@ -110,7 +117,10 @@ server <- function(input, output) {
                                                              sim[[length(sim)]], world))
     parameters.df <- ldply (parameters, data.frame)
     indices <- format(indices, digits=4)
-    newlist <- list(sim,indices, t(parameters.df))
+    memory <- plotMemories(sim, world)
+    yearplot <- plotManyRuns(sim, world = world, nrow=ceiling(length(sim)/6), labelyears=TRUE)
+    #yearplot <-  plotManyRuns(sim, world = world, nrow=ceiling(length(sim)/6), labelyears=TRUE)
+    newlist <- list(sim,indices, t(parameters.df), memory, yearplot)
     
     
   })
@@ -157,7 +167,7 @@ server <- function(input, output) {
   })
   
   output$Image <- renderPlot({
-    plotManyRuns(simulation()[[1]], nrow=ceiling(length(simulation()[[1]])/6), labelyears=TRUE)
+   simulation()[[5]]
   }, res = 150)
   
   output$Resourceimage <- renderPlot({
@@ -167,6 +177,10 @@ server <- function(input, output) {
  output$Indices <- renderTable({
    simulation()[[2]]
  }, digits = 3)
+ 
+ output$Memory <- renderPlot({
+  simulation()[[4]]
+ }, res = 150)
  
  output$downloadData <- downloadHandler(
    filename = "simulationRun.csv",

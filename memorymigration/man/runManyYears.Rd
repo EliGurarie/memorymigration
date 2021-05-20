@@ -5,7 +5,7 @@
 \title{Run Many Years}
 \usage{
 runManyYears(
-  World,
+  world,
   parameters,
   n.years = 60,
   threshold = 0.995,
@@ -13,15 +13,15 @@ runManyYears(
 )
 }
 \arguments{
-\item{World}{World List of 5: a population distribution across the time period in a T x X matrix,
-a vector with midpoint X-values, the time points for the population as integers 1:tau,
-the dx value and the tau value. Can incorporate resource attribute into the world to make a list of 6.
-Set up by the getSinePop function.}
-
 \item{n.years}{number of years the population migrates}
 
 \item{threshold}{the threshold for the social cohesion between two population 
 distributions from two consecutive years. This is a number between 0 and 1.}
+
+\item{World}{World List of 5: a population distribution across the time period in a T x X matrix,
+a vector with midpoint X-values, the time points for the population as integers 1:tau,
+the dx value and the tau value. Can incorporate resource attribute into the world to make a list of 6.
+Set up by the getSinePop function.}
 
 \item{Parameters}{named vector of parameters. These are \code{epsilon} - diffusion coefficient; 
 \code{alpha} - resource 

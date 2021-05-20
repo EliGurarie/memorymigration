@@ -6,6 +6,7 @@
 \usage{
 plotManyRuns(
   sim,
+  world,
   years = NULL,
   nrow = 1,
   outer = TRUE,

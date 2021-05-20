@@ -16,12 +16,12 @@
 #' @example examples/plotting_examples.R
 #' @export
 #' 
-plotYearList <- function(yearlist, World, X.max = 100, tau = 360, log = FALSE, 
+plotYearList <- function(yearlist, world, X.max = 100, tau = 360, log = FALSE, 
                          persp = FALSE, ...){
   
   n.years <- length(yearlist)
   allyears <- do.call(rbind, yearlist)
-  tau <- World$tau
+  tau <- world$tau
   
   if(log) allyears <- log(allyears)
   
@@ -98,7 +98,7 @@ plotManyRuns <- function(sim, world, years = NULL, nrow = 1, outer = TRUE,
 #' Plot memories against years
 #
 #' @export
-plotMemories <- function(sim){
+plotMemories <- function(sim, world){
   memory.df <- ldply(sim, function(l)
     data.frame(time = 1:nrow(l), 
                memory = getMem(l, world = world)))

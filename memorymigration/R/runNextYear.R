@@ -18,26 +18,26 @@
 #' 
 #' 
 
-runNextYear <- function(World, Parameters, Pop_lastyear, Year){
-  pop0 <- World$pop
+runNextYear <- function(world, Parameters, Pop_lastyear, Year){
+  pop0 <- world$pop
   pop1 <- Pop_lastyear
   pop2 <- pop0*0
-  Time <- World$time
-  memory <- Parameters["kappa"] * getMem(pop0, World) + 
-    (1 - Parameters["kappa"]) * getMem(pop1, World)
+  Time <- world$time
+  memory <- Parameters["kappa"] * getMem(pop0, world) + 
+    (1 - Parameters["kappa"]) * getMem(pop1, world)
   dmemory <- diff(extend(memory))
   
-  X.edge <- seq(0,World$X.max, World$dx)
-  X.matrix <- matrix(rep(X.edge, times = World$tau), byrow = TRUE, nrow = World$tau)
-  memory.matrix <- matrix(rep(memory, length(X.edge)), byrow = FALSE, nrow = World$tau)
-  dmemory.matrix <- matrix(rep(dmemory, length(X.edge)), byrow = FALSE, nrow = World$tau)
+  X.edge <- seq(0,world$X.max, world$dx)
+  X.matrix <- matrix(rep(X.edge, times = world$tau), byrow = TRUE, nrow = world$tau)
+  memory.matrix <- matrix(rep(memory, length(X.edge)), byrow = FALSE, nrow = world$tau)
+  dmemory.matrix <- matrix(rep(dmemory, length(X.edge)), byrow = FALSE, nrow = world$tau)
   
   dm.matrix <- dm.adjust(X.matrix, memory.matrix, dmemory.matrix,
                          Parameters["beta"], Parameters["lambda"])
   
-  if(length(dim(World$resource)) == 3)
-    resource <- World$resource[Year,,] else
-      resource <- World$resource
+  if(length(dim(world$resource)) == 3)
+    resource <- world$resource[Year,,] else
+      resource <- world$resource
   
   dresource <- apply(resource, 1, ddx.edge) %>% t
   for(t in Time){
@@ -50,7 +50,7 @@ runNextYear <- function(World, Parameters, Pop_lastyear, Year){
                       func = ForagingMemoryModel, 
                       dh = dresource[t,],
                       memory = dm.matrix[t,],
-                      dx = World$dx)[2,1:ncol(pop2)+1]
+                      dx = world$dx)[2,1:ncol(pop2)+1]
   }
   if(any(pop2 < 0)){
     warning("Some negative population values will be coerced to 0.")

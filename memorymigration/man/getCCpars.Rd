@@ -2,6 +2,7 @@
 % Please edit documentation in R/getPulsedResource.R
 \name{getCCpars}
 \alias{getCCpars}
+\alias{getPulsedResource}
 \title{Get Pulsed Resource}
 \usage{
 getCCpars(mu_x0, mu_t0 = 0, beta_x, beta_t, sigma_x, sigma_t, n.years)

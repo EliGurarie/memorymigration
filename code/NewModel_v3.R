@@ -112,7 +112,7 @@ dm.adjust <- function(x, m.hat, dm, beta, lambda){
            0))
 }
 
-plotMemories <- function(sim){
+plotMemories <- function(sim, world){
   memory.df <- ldply(sim, function(l)
     data.frame(time = 1:nrow(l), 
                memory = getMem(l, world = world)))
