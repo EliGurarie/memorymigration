@@ -5,14 +5,25 @@
 \alias{getPulsedResource}
 \title{Get Pulsed Resource}
 \usage{
-getCCpars(mu_x0, mu_t0 = 0, beta_x, beta_t, sigma_x, sigma_t, n.years)
+getCCpars(
+  mu_x0,
+  mu_t0 = 0,
+  beta_x,
+  beta_t,
+  sigma_x,
+  sigma_t,
+  n.years,
+  psi_x = 0,
+  psi_t = 0
+)
 }
 \arguments{
 \item{world}{object (e.g. from getSinePop) containing at minimum tau, X and X.max}
 
 \item{par}{vector with four values: t.peak (which is the maximum peak of t), 
 t.sd (which is the standard deviation of t), x.peak (which is the maximum peak of x),
-and x.sd (which is the standard deviation of x)}
+and x.sd (which is the standard deviation of x), psi_x (psochasticity in spatial peak), 
+psi_t (psochasticity in temporal peak).}
 }
 \value{
 A X x X matrix containing values of the resource distribution
@@ -34,11 +45,14 @@ sinusoidally in such a way as to fulfill the criteria above.
 }
 \examples{
 ## Worlds
-  world_gaussian <- getSinePop(tau = 100, X.min = 0, X.max = 100, dx=1, 
+  world_gaussian <- getSinePop(tau = 100, X.min = 0, X.max = 100, dx=.5, 
                                peak.max = 50, peak.min = 50, sd = 10)
-  world_sinusoidal <- getSinePop(tau = 100, X.min = 0, X.max = 100, dx=1, 
+  world_sinusoidal <- getSinePop(tau = 100, X.min = 0, X.max = 100, dx=.5, 
                                  peak.max = 80, peak.min = 20, sd = 3)
-  save(world_gaussian, world_sinusoidal, file = "memorymigration/data/world.rda")
+  #world_optimal <- getOptimalPop(tau = 100, X.min = 0, X.max = 100, dx=.5, 
+                                 peak.max = 80, peak.min = 20, sd = 3)
+  
+  # save(world_gaussian, world_sinusoidal, file = "memorymigration/data/world.rda")
   
 
 ## Fixed (bimodal) resource example
@@ -61,7 +75,7 @@ sinusoidally in such a way as to fulfill the criteria above.
   resources_drifting <- dlply(tx.sds, "combination",
                               function(df) getPulsedResource(world, par = c(t.peak = 25, t.sd = df$t.sd, 
                                                                             x.peak = 75, x.sd = df$x.sd)))
-  save(resources_drifting, file = "memorymigration/data/resources_drifting.rda")
+  #save(resources_drifting, file = "memorymigration/data/resources_drifting.rda")
   
   par(mfrow = c(2,2))
   with(resources_drifting, {
@@ -79,9 +93,12 @@ sinusoidally in such a way as to fulfill the criteria above.
   require(plyr)
   tx.sds<- expand.grid(t.sds, x.sds) \%>\% plyr::rename(c(Var1 = "t.sd", Var2 = "x.sd")) \%>\% 
     mutate(combination = paste0("R_t",t.sd,"_x",x.sd))
-  resources_island <- dlply(tx.sds, "combination",
-                            function(df) getPulsedResource_v2(world_gaussian, par = c(t.peak = 25, t.sd = df$t.sd, 
-                                                                             x.peak = 75, x.sd = df$x.sd)))
+ # resources_island <- dlply(tx.sds, "combination",
+  #                          function(df) getPulsedResource_v2(world_gaussian, par = c(t.peak = 25, t.sd = df$t.sd, 
+   #                                                                          x.peak = 75, x.sd = df$x.sd)))
+  
+  a <- getPulsedResource_v2(world_gaussian, par = c(t.peak = 25, t.sd = 12, x.peak = 75, x.sd = 5))
+
   save(resources_island, file = "memorymigration/data/resources_island.rda")
   
   par(mfrow = c(2,2))

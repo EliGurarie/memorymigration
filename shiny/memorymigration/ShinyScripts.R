@@ -65,7 +65,7 @@ server <- function(input, output) {
   
   simulation <- eventReactive(input$run, {
       if(input$world == "world_optimal"){
-        world <- getOptimalPop(tau=100, X.min = 0, X.max = 100, dx=1, 
+        world <- getOptimalPop(tau=100, X.min = 0, X.max = 100, dx=.5, 
                                x.peak=as.numeric(input$mu.x0), t.peak=as.numeric(input$mu.t0), 
                                x.sd=as.numeric(input$x.sd), t.sd=as.numeric(input$t.sd))
       }
@@ -128,7 +128,7 @@ server <- function(input, output) {
   
   resourceImage <- eventReactive(input$run,{
     if(input$world == "world_optimal"){
-      world <- getOptimalPop(tau=100, X.min = 0, X.max = 100, dx=1, 
+      world <- getOptimalPop(tau=100, X.min = 0, X.max = 100, dx=.5, 
                              x.peak=as.numeric(input$mu.x0), t.peak=as.numeric(input$mu.t0), 
                              x.sd=as.numeric(input$x.sd), t.sd=as.numeric(input$t.sd))
     }
@@ -162,7 +162,7 @@ server <- function(input, output) {
     }
     
     par(mfrow = c(ceiling(min(dim(Resource.CC))/5), 5), mar = c(0,0,1,0), oma = c(2,2,0,2), tck = 0.01)
-    for (i in 1:min(dim(Resource.CC))) image(1:100, 1:100, Resource.CC[i,,], main = paste("year", i-1), yaxt = "n", xaxt = "n")
+    for (i in 1:min(dim(Resource.CC))) image(Resource.CC[i,,], main = paste("year", i-1), yaxt = "n", xaxt = "n")
     
   })
   

@@ -16,15 +16,17 @@
 #' @param world object (e.g. from getSinePop) containing at minimum tau, X and X.max
 #' @param par vector with four values: t.peak (which is the maximum peak of t), 
 #' t.sd (which is the standard deviation of t), x.peak (which is the maximum peak of x),
-#' and x.sd (which is the standard deviation of x)
+#' and x.sd (which is the standard deviation of x), psi_x (psochasticity in spatial peak), 
+#' psi_t (psochasticity in temporal peak). 
 #' @return A X x X matrix containing values of the resource distribution
 #' @example examples/WorldsandResources.R
 #' @export
 #' @aliases getPulsedResource
 
-getCCpars <- function(mu_x0, mu_t0 = 0, beta_x, beta_t, sigma_x, sigma_t, n.years){
-  cbind(x.peak = mu_x0 - beta_x*1:n.years,
-        t.peak = mu_t0 + beta_t*1:n.years,
+getCCpars <- function(mu_x0, mu_t0 = 0, beta_x, beta_t, sigma_x, sigma_t, n.years, 
+                      psi_x = 0, psi_t = 0){
+  cbind(x.peak = mu_x0 - beta_x*1:n.years + rnorm(1,sd = psi_x),
+        t.peak = mu_t0 + beta_t*1:n.years + rnorm(1,sd = psi_t),
         x.sd = rep(sigma_x, n.years),
         t.sd = rep(sigma_t, n.years))
 }
