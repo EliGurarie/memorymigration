@@ -6,7 +6,7 @@
 \usage{
 plotYearList(
   yearlist,
-  World,
+  world,
   X.max = 100,
   tau = 360,
   log = FALSE,
@@ -18,11 +18,6 @@ plotYearList(
 \item{yearlist}{a list of T x X matrices describing the population 
 distribution for each year after initial population; produced by the runManyYear function}
 
-\item{World}{List of 5: a population distribution across the time period in a T x X matrix,
-a vector with midpoint X-values, the time points for the population as integers 1:tau,
-the dx value and the tau value. Can incorporate resource attribute into the world to make a list of 6.
-Set up by the getSinePop function.}
-
 \item{X.max}{maximum value of X-axis}
 
 \item{tau}{maximum value of time T}
@@ -30,6 +25,11 @@ Set up by the getSinePop function.}
 \item{log}{logical;}
 
 \item{persp}{whether to plot an image / contour or perspective plot}
+
+\item{World}{List of 5: a population distribution across the time period in a T x X matrix,
+a vector with midpoint X-values, the time points for the population as integers 1:tau,
+the dx value and the tau value. Can incorporate resource attribute into the world to make a list of 6.
+Set up by the getSinePop function.}
 }
 \description{
 This function plots the migratoriness population distribution over a time period.
