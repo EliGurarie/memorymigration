@@ -20,8 +20,8 @@
 #' @seealso \link{getSinePop}, \link{runManyYears}
 #' @export
 #' 
-runManyYears <- function(world, parameters, n.years = 60, 
-                         threshold= 0.995, verbose = FALSE){
+runManyYears <- function(world, parameters, n.years = 20, 
+                         threshold= 0.9999, verbose = FALSE){
   cat("\n")
   cat(paste(names(parameters), parameters, collapse = "; "))
   
@@ -63,23 +63,38 @@ runManyYears <- function(world, parameters, n.years = 60,
 #' @param results.dir string containing directory of where results from the R scripts will be stored
 #' @export
 #' 
-runManyRuns <- function (parameters.df, world, filename = NULL, results.dir = NULL, ...) 
+runManyRuns <- function (parameters.df, resource_param, world, filename = NULL, results.dir = NULL, ...) 
 {
   newresults <- data.frame()
   for (i in 1:nrow(parameters.df)) {
-    M <- try(runManyYears(world, parameters = parameters.df[i,], n.years = 60, threshold = 0.995))
-    if(!inherits(M, "try-error")){
-      myR <- data.frame(parameters.df[i, ], computeIndices(M[[length(M)]], 
-                                                           world$resource, world), 
-                        n.runs = length(M) - 1,
-                        final_similarity = computeEfficiency(M[[length(M)-1]], 
-                                                             M[[length(M)]], world))
-      newresults <- rbind(newresults, c(myR))
+    for(j in 1:nrow(resource_param)){
+      par0 <- getCCpars(mu_x0 = resource_param[j,1], 
+                        mu_t0 = resource_param[j,2],
+                        beta_x = resource_param[j,3],
+                        beta_t = resource_param[j,4],
+                        n.years = resource_param[j,5],
+                        sigma_x = resource_param[j,6],
+                        sigma_t = resource_param[j,7])
+      
+      Resource.CC <- aaply(par0, 1, function(p) getPulsedResource(world, p))
+      world$resource <- Resource.CC
+      M <- try(runManyYears(world, parameters <- c(epsilon = parameters.df[i,1], 
+                                                   alpha = parameters.df[i,2],
+                                                   beta = parameters.df[i,3],
+                                                   kappa = parameters.df[i,4],
+                                                   lambda = parameters.df[i,5]), 
+                            n.years = 20, threshold = 0.9999))
+      if(!inherits(M, "try-error")){
+        myR <- data.frame(parameters.df[i, ], computeIndices(M[[length(M)]], 
+                                                             world$resource[length(M)-1,,], world), 
+                          n.runs = length(M) - 1,
+                          final_similarity = computeEfficiency(M[[length(M)-1]], 
+                                                               M[[length(M)]], world), resource_param)
+        newresults <- rbind(newresults, c(myR))
     }
     if(!is.null(results.dir) & (i %% 10 == 0 | i == max(i)))  
-      save(newresults, file =paste0("~/Rprojects/memorymigration/",results.dir,"/",filename, "_",
-                                    parameters.df[1,2], ".rda"))
-  }
+      save(newresults, file =paste0("~/Rprojects/memorymigration/",results.dir,"/",filename,".rda"))
+  }}
   return(newresults)
 }
 

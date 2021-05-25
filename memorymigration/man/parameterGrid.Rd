@@ -4,18 +4,18 @@
 \alias{parameterGrid}
 \title{Parameter Grid}
 \usage{
-parameterGrid(epsilons, alphas, beta0s, beta1s, existing = NULL)
+parameterGrid(epsilons, alphas, betas, kappas, lambdas, existing = NULL)
 }
 \arguments{
 \item{epsilons}{values of epsilon parameter}
 
 \item{alphas}{values value of alpha parameter}
 
+\item{existing}{a data frame with existing values already tested}
+
 \item{beta0s}{values value of beta0 parameter}
 
 \item{beta1s}{values value of beta1 parameter}
-
-\item{existing}{a data frame with existing values already tested}
 }
 \value{
 list of data frames

@@ -7,8 +7,8 @@
 runManyYears(
   world,
   parameters,
-  n.years = 60,
-  threshold = 0.995,
+  n.years = 20,
+  threshold = 0.9999,
   verbose = FALSE
 )
 }

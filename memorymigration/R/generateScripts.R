@@ -133,9 +133,8 @@ createFinalShellScript <- function(shell.dir, runname){
 #' @examples
 #' parameterGrid(c(1,2,3), c(2,3), seq(1,4), 4)
 
-parameterGrid <- function(epsilons, alphas, beta0s, beta1s, existing=NULL){
-  params.df <- expand.grid(epsilon = epsilons, alpha = alphas, beta0 = beta0s, beta1 = beta1s)
-  params.df <-  split(params.df, params.df$alpha)
+parameterGrid <- function(epsilons, alphas, betas, kappas, lambdas, existing=NULL){
+  params.df <- expand.grid(epsilon = epsilons, alpha = alphas, beta = betas, kappa = kappas, lambda = lambdas)
   
   if(!is.null(existing))
     params.df <- setdiff(params.df, existing)

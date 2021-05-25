@@ -4,7 +4,14 @@
 \alias{runManyRuns}
 \title{Run Many Years for a set of parameters}
 \usage{
-runManyRuns(parameters.df, world, filename = NULL, results.dir = NULL, ...)
+runManyRuns(
+  parameters.df,
+  resource_param,
+  world,
+  filename = NULL,
+  results.dir = NULL,
+  ...
+)
 }
 \arguments{
 \item{parameters.df}{list of data frames with values of \code{epsilon}, \code{alpha},
