@@ -8,6 +8,7 @@ runManyRuns(
   parameters.df,
   resource_param,
   world,
+  resource,
   filename = NULL,
   results.dir = NULL,
   ...
