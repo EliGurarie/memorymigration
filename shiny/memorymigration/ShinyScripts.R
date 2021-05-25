@@ -40,6 +40,8 @@ ui <- fluidPage(
            ),
     column(3,
            h3("Resource"),
+           actionButton(inputId = "viewresource", 
+                        label = "View Resource"),
            sliderInput(inputId = "x.sd",
                        label = "Resource Space Distribution",
                        value = 3, min = 0, max = 15),
@@ -100,33 +102,54 @@ server <- function(input, output) {
         world$resource <- Resource.CC
       }
       
+    resource_param <- data.frame(mu_x0 = as.numeric(input$mu.x0), 
+                                 mu_t0 = as.numeric(input$mu.t0),
+                                 beta_x = as.numeric(input$beta.x),
+                                 beta_t = as.numeric(input$beta.t),
+                                 n.years = as.numeric(input$years),
+                                 sigma_x = as.numeric(input$x.sd),
+                                 sigma_t = as.numeric(input$t.sd),
+                                 world = input$world,
+                                 resource = input$resource) 
+    
       parameters <- c(epsilon = as.numeric(input$epsilon), 
                       alpha = as.numeric(input$alpha),
                       beta = as.numeric(input$beta),
                       kappa = as.numeric(input$kappa),
                       lambda = as.numeric(input$lambda))
       
+      param.df <- data.frame(
+        epsilon = as.numeric(input$epsilon), 
+        alpha = as.numeric(input$alpha),
+        beta = as.numeric(input$beta),
+        kappa = as.numeric(input$kappa),
+        lambda = as.numeric(input$lambda)
+      )
+      
     sim <- runManyYears(world=world, parameters = parameters, 
                    n.years = as.numeric(input$years), 
                    threshold = as.numeric(input$threshold), verbose=FALSE)
-    
+  
     
     indices <- data.frame(computeIndices(sim[[length(sim)]], 
                                         world$resource[length(sim)-1,,], world), 
+                          n.runs = length(sim) - 1,
                           final_similarity = computeEfficiency(sim[[length(sim)-1]], 
-                                                             sim[[length(sim)]], world))
-    parameters.df <- ldply (parameters, data.frame)
+                                                             sim[[length(sim)]], world), 
+                          resource_param, param.df)
+    
+    #parameters.df <- ldply (parameters, data.frame)
     indices <- format(indices, digits=4)
     memory <- plotMemories(sim, world)
     yearplot <- plotManyRuns(sim, world = world, nrow=ceiling(length(sim)/6), labelyears=TRUE)
-    #yearplot <-  plotManyRuns(sim, world = world, nrow=ceiling(length(sim)/6), labelyears=TRUE)
-    newlist <- list(sim,indices, t(parameters.df), memory, yearplot)
+   
+    newlist <- list(sim,indices, memory, yearplot)
     
     
   })
 
   
-  resourceImage <- eventReactive(input$run,{
+  resourceImage <- eventReactive(input$run | input$viewresource,{
     if(input$world == "world_optimal"){
       world <- getOptimalPop(tau=100, X.min = 0, X.max = 100, dx=.5, 
                              x.peak=as.numeric(input$mu.x0), t.peak=as.numeric(input$mu.t0), 
@@ -167,7 +190,7 @@ server <- function(input, output) {
   })
   
   output$Image <- renderPlot({
-   simulation()[[5]]
+   simulation()[[4]]
   }, res = 150)
   
   output$Resourceimage <- renderPlot({
@@ -175,18 +198,18 @@ server <- function(input, output) {
   }, res = 150)
   
  output$Indices <- renderTable({
-   simulation()[[2]]
+   simulation()[[2]][,1:5]
  }, digits = 3)
  
  output$Memory <- renderPlot({
-  simulation()[[4]]
+  simulation()[[3]]
  }, res = 150)
  
  output$downloadData <- downloadHandler(
    filename = "simulationRun.csv",
    content = function(file) {
      
-     write.csv(merge(simulation()[[3]], simulation()[[2]]), file)
+     write.csv(simulation()[[2]], file)
    }
  )
 }
