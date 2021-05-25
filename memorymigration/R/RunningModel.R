@@ -124,7 +124,8 @@ runManyRuns <- function (parameters.df, resource_param, world, resource, filenam
                                                                world$resource[length(M)-1,,], world), 
                             n.runs = length(M) - 1,
                             final_similarity = computeEfficiency(M[[length(M)-1]], 
-                                                                 M[[length(M)]], world), resource_param)
+                                                                 M[[length(M)]], world), resource_param,
+                            resource = resource)
           newresults <- rbind(newresults, c(myR))
         }
         if(!is.null(results.dir) & (i %% 10 == 0 | i == max(i)))  
