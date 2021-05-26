@@ -7,7 +7,7 @@
 \usage{
 getCCpars(
   mu_x0,
-  mu_t0 = 0,
+  mu_t0,
   beta_x,
   beta_t,
   sigma_x,
