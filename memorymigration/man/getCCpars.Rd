@@ -8,11 +8,11 @@
 getCCpars(
   mu_x0,
   mu_t0,
-  beta_x,
-  beta_t,
   sigma_x,
   sigma_t,
   n.years,
+  beta_x = 0,
+  beta_t = 0,
   psi_x = 0,
   psi_t = 0
 )

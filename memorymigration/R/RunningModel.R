@@ -103,7 +103,8 @@ runManyRuns <- function (parameters.df, resource_param, world, resource,
                                                              world$resource[length(M)-1,,], world), 
                           n.runs = length(M) - 1,
                           final_similarity = computeEfficiency(M[[length(M)-1]], 
-                                                               M[[length(M)]], world), resource_param,
+                                                               M[[length(M)]], world), 
+                          resource_param[j,],
                           resource = resource)
         newresults <- rbind(newresults, c(myR))
       }
