@@ -52,6 +52,8 @@ ui <- fluidPage(
            numericInput(inputId = "mu.t0", label = "Initial Resource Position in Time", value = 25, step = 1),
            numericInput(inputId = "beta.x", label = "Resource Change in Space", value = 0, step = 1),
            numericInput(inputId = "beta.t", label = "Resource Change in Time ", value = 0, step = 1),
+           numericInput(inputId = "psi_x", label = "Stochasticity in Space", value = 0, step = 1),
+           numericInput(inputId = "psi_t", label = "Stochasticity in Time ", value = 0, step = 1),
            radioButtons(inputId = "resource",
                         label = "Type of resource", 
                         choices = c("Island" = "resources_island", "Drifting" = "resources_drifting"), inline = TRUE)
@@ -83,7 +85,9 @@ server <- function(input, output) {
                           beta_t = as.numeric(input$beta.t),
                           n.years = as.numeric(input$years),
                           sigma_x = as.numeric(input$x.sd),
-                          sigma_t = as.numeric(input$t.sd))
+                          sigma_t = as.numeric(input$t.sd),
+                          psi_x = as.numeric(input$psi_x), 
+                          psi_t = as.numeric(input$psi_t))
         
         Resource.CC <- aaply(par0, 1, function(p) getPulsedResource_v2(world, p))
         world$resource <- Resource.CC
@@ -96,7 +100,9 @@ server <- function(input, output) {
                           beta_t = as.numeric(input$beta.t),
                           n.years = as.numeric(input$years),
                           sigma_x = as.numeric(input$x.sd),
-                          sigma_t = as.numeric(input$t.sd))
+                          sigma_t = as.numeric(input$t.sd),
+                          psi_x = as.numeric(input$psi_x), 
+                          psi_t = as.numeric(input$psi_t))
         
         Resource.CC <- aaply(par0, 1, function(p) getPulsedResource(world, p))
         world$resource <- Resource.CC
@@ -109,6 +115,8 @@ server <- function(input, output) {
                                  n.years = as.numeric(input$years),
                                  sigma_x = as.numeric(input$x.sd),
                                  sigma_t = as.numeric(input$t.sd),
+                                 psi_x = as.numeric(input$psi_x), 
+                                 psi_t = as.numeric(input$psi_t),
                                  world = input$world,
                                  resource = input$resource) 
     
@@ -167,7 +175,9 @@ server <- function(input, output) {
                         beta_t = as.numeric(input$beta.t),
                         n.years = as.numeric(input$years),
                         sigma_x = as.numeric(input$x.sd),
-                        sigma_t = as.numeric(input$t.sd))
+                        sigma_t = as.numeric(input$t.sd),
+                        psi_x = as.numeric(input$psi_x), 
+                        psi_t = as.numeric(input$psi_t))
       
       Resource.CC <- aaply(par0, 1, function(p) getPulsedResource_v2(world, p))
     }
@@ -179,7 +189,9 @@ server <- function(input, output) {
                         beta_t = as.numeric(input$beta.t),
                         n.years = as.numeric(input$years),
                         sigma_x = as.numeric(input$x.sd),
-                        sigma_t = as.numeric(input$t.sd))
+                        sigma_t = as.numeric(input$t.sd),
+                        psi_x = as.numeric(input$psi_x), 
+                        psi_t = as.numeric(input$psi_t))
       
       Resource.CC <- aaply(par0, 1, function(p) getPulsedResource(world, p))
     }

@@ -76,7 +76,9 @@ runManyRuns <- function (parameters.df, resource_param, world, resource, filenam
                         beta_t = resource_param[j,4],
                         n.years = resource_param[j,5],
                         sigma_x = resource_param[j,6],
-                        sigma_t = resource_param[j,7])
+                        sigma_t = resource_param[j,7],
+                        psi_x = resource_param[j,8], 
+                        psi_t = resource_param[j,9])
       
       Resource.CC <- aaply(par0, 1, function(p) getPulsedResource(world, p))
       world$resource <- Resource.CC
@@ -109,7 +111,9 @@ runManyRuns <- function (parameters.df, resource_param, world, resource, filenam
                           beta_t = resource_param[j,4],
                           n.years = resource_param[j,5],
                           sigma_x = resource_param[j,6],
-                          sigma_t = resource_param[j,7])
+                          sigma_t = resource_param[j,7],
+                          psi_x = resource_param[j,8], 
+                          psi_t = resource_param[j,9])
         
         Resource.CC <- aaply(par0, 1, function(p) getPulsedResource_v2(world, p))
         world$resource <- Resource.CC

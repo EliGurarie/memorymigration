@@ -23,7 +23,7 @@
 #' @export
 #' @aliases getPulsedResource
 
-getCCpars <- function(mu_x0, mu_t0 = 0, beta_x, beta_t, sigma_x, sigma_t, n.years, 
+getCCpars <- function(mu_x0, mu_t0, beta_x, beta_t, sigma_x, sigma_t, n.years, 
                       psi_x = 0, psi_t = 0){
   cbind(x.peak = mu_x0 - beta_x*1:n.years + rnorm(1,sd = psi_x),
         t.peak = mu_t0 + beta_t*1:n.years + rnorm(1,sd = psi_t),
