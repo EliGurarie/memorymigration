@@ -26,21 +26,20 @@ distribution.
 }
 \examples{
 # Initialize world
-
+require(memorymigration)
 dx <- 1
 
-parameters <- c(epsilon = 5, alpha = 300, beta0=100, beta1 = 300)
-world.R1 <- getSinePop(tau = 100, X.min = 0, X.max = 100, dx=.5, 
-                    peak.max = 80, peak.min = 20, sd = 10)
-world.R1$resource <- getPulsedResource(world.R1, 
-                                       c(t.peak = 25, t.sd = 9, x.peak = 80, x.sd = 9))
+
+world.R1 <- getSinePop(tau = 100, peak.max = 40, peak.min = -40, sd = 10)
+world.R1$resource <- getResource_island(world.R1, 
+                                       c(t.peak = 25, t.sd = 12, x.peak = 35, x.sd = 5))
 
 #run simulation for 12 years 
-M <- runManyYears(world.R1, Parameters = parameters, n.years = 6, 1)
 
-world.R2 <- world.R1 \%>\% list_modify(pop = M$Year6)
-M2 <- runManyYears(world.R2, Parameters = parameters, n.years = 6, 1)
-plotYearList(M2, world.R2, tau = tau)
+parameters <- c(epsilon = 5, alpha = 100, beta=50, kappa = 1, lambda = 20)
+
+M <- runManyYears(world.R1, parameters = parameters, n.years = 3, 1)
+plotManyRuns(M, world.R1)
 
 #simulation runs for 3 years since that is when threshold is hit
 

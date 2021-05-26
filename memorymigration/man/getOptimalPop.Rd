@@ -5,7 +5,17 @@
 \title{Get Optimal Pop
 Initilaizes optimal initial population distribution based on resource}
 \usage{
-getOptimalPop(tau, X.min = 0, X.max = 100, dx, x.peak, t.peak, x.sd, t.sd)
+getOptimalPop(
+  tau,
+  X.min = -100,
+  X.max = 100,
+  dx = 1,
+  x1,
+  x2,
+  t.peak,
+  x.sd,
+  t.sd
+)
 }
 \arguments{
 \item{tau}{maximum time in days for migratory population in one year}
@@ -16,13 +26,13 @@ getOptimalPop(tau, X.min = 0, X.max = 100, dx, x.peak, t.peak, x.sd, t.sd)
 
 \item{dx}{time step}
 
-\item{x.peak}{where the resource peak is in space}
-
 \item{t.peak}{where the resource peak is in time}
 
 \item{x.sd}{standard deviation of resource peak in space}
 
 \item{t.sd}{standard deviation of resource peak in time}
+
+\item{x.peak}{where the resource peak is in space}
 }
 \description{
 Get Optimal Pop

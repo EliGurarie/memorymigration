@@ -34,20 +34,23 @@ getCCpars <- function(mu_x0, mu_t0, sigma_x, sigma_t,
 }
 
 #' @export
-getPulsedResource <- function(world, par){
+getResource_drifting <- function(world, par){
   
   t <- 1:world$tau
   x <- world$X
   x.max <- world$X.max
+  x.min <- world$X.min
+  x.range <- x.max - x.min
   
   t.peak <- par["t.peak"] 
   t.sd <- par["t.sd"] 
+  
   x.peak <- par["x.peak"]
   x.sd <- par["x.sd"]
   
-  x.scaled <- x/x.max
-  x.peak <- x.peak/x.max
-  x.sd <- x.sd/x.max
+  x.scaled <- (x - x.min)/x.range
+  x.peak <- (x.peak - x.min)/x.range
+  x.sd <- x.sd/x.range
   
   t1 <- t[1:(length(t)/2)]
   
@@ -72,17 +75,22 @@ getPulsedResource <- function(world, par){
   return(R)
 }
 
+
 #' @export
-getPulsedResource_v2 <- function(world, par){
+getResource_island <- function(world, par){
   
-  t <- 1:world$tau
+  # par <- c(t.peak = 25, x.peak = 40, x.sd = 5, t.sd = 12)
+  
+  t <- world$time
   x <- world$X
-  x.max <- world$X.max
+  x.range <- world$X.max - world$X.min
   
   t.peak <- par["t.peak"] 
   t.sd <- par["t.sd"] 
   x.peak <- par["x.peak"]
   x.sd <- par["x.sd"]
+  
+  #x.peak.scaled <- (x.peak-world$X.min)/x.range
   
   season2 <- season1 <- sapply(t, function(t1){
                    dmvnorm(cbind(t1,x), 
@@ -94,7 +102,7 @@ getPulsedResource_v2 <- function(world, par){
   R <- season1 + season2
   colnames(R) <- x
   rownames(R) <- t
-  R <- R/sum(R) * 100
+  R <- R/sum(R) * world$tau
   
   return(R)
 }

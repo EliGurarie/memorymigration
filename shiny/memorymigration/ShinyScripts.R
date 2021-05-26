@@ -48,7 +48,7 @@ ui <- fluidPage(
            sliderInput(inputId = "t.sd",
                        label = "Resource Time Distribution",
                        value = 12, min = 0, max = 15),
-           numericInput(inputId = "mu.x0", label = "Initial Resource Position in Space", value = 80, step = 1),
+           numericInput(inputId = "mu.x0", label = "Initial Resource Position in Space", value = 40, step = 1),
            numericInput(inputId = "mu.t0", label = "Initial Resource Position in Time", value = 25, step = 1),
            numericInput(inputId = "beta.x", label = "Resource Change in Space", value = 0, step = 1),
            numericInput(inputId = "beta.t", label = "Resource Change in Time ", value = 0, step = 1),
@@ -69,9 +69,12 @@ server <- function(input, output) {
   
   simulation <- eventReactive(input$run, {
       if(input$world == "world_optimal"){
-        world <- getOptimalPop(tau=100, X.min = 0, X.max = 100, dx=.5, 
-                               x.peak=as.numeric(input$mu.x0), t.peak=as.numeric(input$mu.t0), 
-                               x.sd=as.numeric(input$x.sd), t.sd=as.numeric(input$t.sd))
+        world <- getOptimalPop(tau=100, X.min = -100, X.max = 100, dx=1, 
+                               x1 =as.numeric(input$mu.x0), 
+                               x2 = -as.numeric(input$mu.x0),
+                               t.peak=as.numeric(input$mu.t0), 
+                               x.sd=as.numeric(input$x.sd), 
+                               t.sd=as.numeric(input$t.sd))
       }
       else{
         data(world)
@@ -89,7 +92,7 @@ server <- function(input, output) {
                           psi_x = as.numeric(input$psi_x), 
                           psi_t = as.numeric(input$psi_t))
         
-        Resource.CC <- aaply(par0, 1, function(p) getPulsedResource_v2(world, p))
+        Resource.CC <- aaply(par0, 1, function(p) getResource_island(world, p))
         world$resource <- Resource.CC
       }
       
@@ -104,7 +107,7 @@ server <- function(input, output) {
                           psi_x = as.numeric(input$psi_x), 
                           psi_t = as.numeric(input$psi_t))
         
-        Resource.CC <- aaply(par0, 1, function(p) getPulsedResource(world, p))
+        Resource.CC <- aaply(par0, 1, function(p) getResource_drifting(world, p))
         world$resource <- Resource.CC
       }
       
@@ -160,8 +163,11 @@ server <- function(input, output) {
   resourceImage <- eventReactive(input$run | input$viewresource,{
     if(input$world == "world_optimal"){
       world <- getOptimalPop(tau=100, X.min = 0, X.max = 100, dx=.5, 
-                             x.peak=as.numeric(input$mu.x0), t.peak=as.numeric(input$mu.t0), 
-                             x.sd=as.numeric(input$x.sd), t.sd=as.numeric(input$t.sd))
+                             x1=as.numeric(input$mu.x0), 
+                             x2=-as.numeric(input$mu.x0), 
+                             t.peak=as.numeric(input$mu.t0), 
+                             x.sd=as.numeric(input$x.sd), 
+                             t.sd=as.numeric(input$t.sd))
     }
     else{
       data(world)
@@ -179,7 +185,7 @@ server <- function(input, output) {
                         psi_x = as.numeric(input$psi_x), 
                         psi_t = as.numeric(input$psi_t))
       
-      Resource.CC <- aaply(par0, 1, function(p) getPulsedResource_v2(world, p))
+      Resource.CC <- aaply(par0, 1, function(p) getResource_island(world, p))
     }
     
     if(input$resource == "resources_drifting"){
@@ -193,7 +199,7 @@ server <- function(input, output) {
                         psi_x = as.numeric(input$psi_x), 
                         psi_t = as.numeric(input$psi_t))
       
-      Resource.CC <- aaply(par0, 1, function(p) getPulsedResource(world, p))
+      Resource.CC <- aaply(par0, 1, function(p) getResource_drifting(world, p))
     }
     
     par(mfrow = c(ceiling(min(dim(Resource.CC))/5), 5), mar = c(0,0,1,0), oma = c(2,2,0,2), tck = 0.01)

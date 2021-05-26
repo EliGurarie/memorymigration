@@ -17,23 +17,23 @@
 #' @export
 #' 
 #' 
+#' 
+#' 
 
 runNextYear <- function(world, Parameters, Pop_lastyear, Year){
   pop0 <- world$pop
   pop1 <- Pop_lastyear
   pop2 <- pop0*0
   Time <- world$time
-  memory <- Parameters["kappa"] * getMem(pop0, world) + 
-    (1 - Parameters["kappa"]) * getMem(pop1, world)
+  
+  memory <- Parameters["kappa"]^Year * getMem(pop0, world) + 
+    (1 - Parameters["kappa"]^Year) * getMem(pop1, world)
   dmemory <- diff(extend(memory))
   
-  X.edge <- seq(0,world$X.max, world$dx)
-  X.matrix <- matrix(rep(X.edge, times = world$tau), byrow = TRUE, nrow = world$tau)
-  memory.matrix <- matrix(rep(memory, length(X.edge)), byrow = FALSE, nrow = world$tau)
-  dmemory.matrix <- matrix(rep(dmemory, length(X.edge)), byrow = FALSE, nrow = world$tau)
-  
-  dm.matrix <- dm.adjust(X.matrix, memory.matrix, dmemory.matrix,
-                         Parameters["beta"], Parameters["lambda"])
+  X.edge <- seq(world$X.min, world$X.max, world$dx)
+  memory_velocity <- sapply(1:100, 
+                           function(t) getMemoryVelocity(X.edge, memory[t], dmemory[t], 
+                                                         Parameters["beta"], Parameters["lambda"])) %>% t
   
   if(length(dim(world$resource)) == 3)
     resource <- world$resource[Year,,] else
@@ -49,7 +49,7 @@ runNextYear <- function(world, Parameters, Pop_lastyear, Year){
                       parms = Parameters,
                       func = ForagingMemoryModel, 
                       dh = dresource[t,],
-                      memory = dm.matrix[t,],
+                      memory = memory_velocity[t,],
                       dx = world$dx)[2,1:ncol(pop2)+1]
   }
   if(any(pop2 < 0)){

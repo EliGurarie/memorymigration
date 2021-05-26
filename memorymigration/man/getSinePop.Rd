@@ -4,7 +4,7 @@
 \alias{getSinePop}
 \title{Get Sine Pop}
 \usage{
-getSinePop(tau, X.min = 0, X.max = 100, dx, peak.max, peak.min, sd)
+getSinePop(tau, X.min = -100, X.max = 100, dx = 1, peak.max, peak.min, sd)
 }
 \arguments{
 \item{tau}{maximum time in days for migratory population in one year}

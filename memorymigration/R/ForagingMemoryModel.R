@@ -23,20 +23,20 @@ ForagingMemoryModel <- function(t, pop, parms,
           dx = dx)
 }
 
+
 #' @export
-dm.adjust <- function(x, m.hat, dm, beta, lambda){
-  x0 <- ifelse(dm > 0, 
-               m.hat - log(lambda/dm - 1)*beta,  ifelse(
-                 dm < 0, 
-                 m.hat + log(lambda/(-dm) - 1)*beta,
-                 0)) 
-  
-  ifelse(dm > 0, 
-         lambda / (1 + exp((x - x0)/beta)), ifelse(
-           dm < 0,
-           -lambda / (1 + exp(-(x - x0)/beta)),
-           0))
+getMemoryVelocity <- function(x, m.hat, dm, beta, lambda){
+  if(dm > 0){
+    x0 <- m.hat - log(lambda/dm - 1)*beta  
+    v <- lambda / (1 + exp((x - x0)/beta))
+  } else
+    if(dm < 0){
+      x0 <- m.hat + log(lambda/(-dm) - 1)*beta 
+      v <- -lambda / (1 + exp(-(x - x0)/beta))
+    } else 
+      v <- rep(0, length(x))
 }
+
 
 #' @export
 getMem <- function(pop, world){
