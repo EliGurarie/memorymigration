@@ -6,6 +6,34 @@
 \usage{
 plotMemories(sim, world)
 }
+\arguments{
+\item{sim}{A simulation run from runManyYears}
+
+\item{world}{world object; list of 7: a population distribution across the time period in a T x X matrix,
+a vector with midpoint X-values, the time points for the population as integers 1:tau, the minimum value of population distribution
+(X.min), the maximum value of population distribution (X.max),
+the dx value and the tau value. Can incorporate resource attribute into the world to make a list of 8.
+Set up by the getSinePop/getOptimal function.
+@seealso \link{PlotYearList}; \link{getSinePop}; \link{getOptimalPop}; \link{runManyYears}}
+}
 \description{
-Plot memories against years
+This function plots the memory of the population over a time period for each year of the population.
+}
+\examples{
+world.R1 <- getOptimalPop(tau = 100, t.peak = 25, 
+                          x1 = 40, x2 = -40, x.sd = 5, t.sd = 12)
+world.R1$resource <- getResource_island(world.R1, 
+                                        c(t.peak = 25, t.sd = 12, x.peak = 35, x.sd = 5))
+
+#run simulation for 12 years 
+
+parameters <- c(epsilon = 5, alpha = 100, beta=50, kappa = 1, lambda = 20)
+
+M <- runManyYears(world.R1, parameters = parameters, n.years = 12, threshold = 0.9999)
+
+#simulation runs for 3 years since that is when threshold is hit so only 3 years are plotted
+plotManyRuns(M, world.R1)
+plotYearList(M, world.R1, tau = tau)
+plotMemories(M, world.R1)
+
 }
