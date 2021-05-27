@@ -42,14 +42,18 @@ plotYearList <- function(yearlist, world, X.max = 100, tau = 360, log = FALSE,
 #' This function prints the parameters of the diffusion-advection equation used 
 #' on the model on the plot of the population distribution set up by the plotYearList function.
 #' 
-#'  @param p List of 5 a population distribution across the time period in a T x X matrix,
-#'  a vector with midpoint X-values, the time points for the population as integers 1:tau,
-#'  the dx value and the tau value. Set up by the getSinePop function. 
+#'  @param p world object; list of 7: a population distribution across the time period in a T x X matrix,
+#'  a vector with midpoint X-values, the time points for the population as integers 1:tau, the minimum value of population distribution
+#'  (X.min), the maximum value of population distribution (X.max),
+#'  the dx value and the tau value. Can incorporate resource attribute into the world to make a list of 8.
+#'  Set up by the getSinePop/getOptimal function. 
 #'  @return displays the values of the parameters on the plot which are:
-#'   \code{epsilon} - diffusion coefficient; \code{alpha} - resource 
-#' following coefficient; \code{beta0} - social cohesion coefficient; \code{beta1} - 
-#' memory coefficient
-#'  @seealso \link{PlotYearList}; \link{getSinePop}
+#'   \code{epsilon} - diffusion coefficient; 
+#' \code{alpha} - resource following coefficient; \code{beta} - spatial scale of sociality; \code{kappa} - 
+#' memory following coefficient; \code{lambda} - maximum speed
+#'  @seealso \link{plotMemories}; \link{getSinePop}; \link{getOptimalPop}
+#'  @example examples/plotting_examples.R
+#'  @export
 #'  
 printParameters <- function(p) {
   parse(text = paste0("list(",paste(names(p), p, sep = "==", collapse = ", "),")"))
@@ -96,7 +100,17 @@ plotManyRuns <- function(sim, world, years = NULL, nrow = 1, outer = TRUE,
 
 
 #' Plot memories against years
-#
+#' 
+#' This function plots the memory of the population over a time period for each year of the population.
+#' 
+#' @param sim A simulation run from runManyYears
+#' @param world world object; list of 7: a population distribution across the time period in a T x X matrix,
+#'  a vector with midpoint X-values, the time points for the population as integers 1:tau, the minimum value of population distribution
+#'  (X.min), the maximum value of population distribution (X.max),
+#'  the dx value and the tau value. Can incorporate resource attribute into the world to make a list of 8.
+#'  Set up by the getSinePop/getOptimal function.
+#'  @seealso \link{PlotYearList}; \link{getSinePop}; \link{getOptimalPop}; \link{runManyYears}
+#' @example examples/plotting_examples.R
 #' @export
 plotMemories <- function(sim, world){
   memory.df <- ldply(sim, function(l)

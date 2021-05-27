@@ -11,7 +11,7 @@ ui <- fluidPage(
                           label = "Download Results"),
            radioButtons(inputId = "world",
                         label = "Initial distribution of population in year 0", 
-                        choices = c("Optimal" = "world_optimal", "Gaussian" = "world_gaussian", "Sinusoidal" = "world_sinusoidal"), inline = TRUE),
+                        choices = c("Optimal" = "world_optimal", "Non-Migratory" = "world_nonmigratory", "Sinusoidal" = "world_sinusoidal"), inline = TRUE),
            numericInput(inputId = "years", label = "Duration of simulation:", value = 5, step = 1),
            numericInput(inputId = "threshold", label = "Threshold of Similarity", value = 0.999, min = 0, max = 1, step = 0.01),
            numericInput(inputId = "alpha",
@@ -76,10 +76,13 @@ server <- function(input, output) {
                                x.sd=as.numeric(input$x.sd), 
                                t.sd=as.numeric(input$t.sd))
       }
-      else{
-        data(world)
-        world <- get(input$world)
-      } 
+    
+    if(input$world == "world_nonmigratory"){
+      world <- getSinePop(tau = 100, peak.max = 0, peak.min = 0, sd = 10)
+    }
+    if(input$world == "world_sinusoidal"){
+      world <- getSinePop(tau = 100, peak.max = 40, peak.min = -40, sd = 10)
+    }
       
       if(input$resource == "resources_island"){
         par0 <- getCCpars(mu_x0 = as.numeric(input$mu.x0), 
@@ -162,17 +165,20 @@ server <- function(input, output) {
   
   resourceImage <- eventReactive(input$run | input$viewresource,{
     if(input$world == "world_optimal"){
-      world <- getOptimalPop(tau=100, X.min = 0, X.max = 100, dx=.5, 
-                             x1=as.numeric(input$mu.x0), 
-                             x2=-as.numeric(input$mu.x0), 
+      world <- getOptimalPop(tau=100, X.min = -100, X.max = 100, dx=1, 
+                             x1 =as.numeric(input$mu.x0), 
+                             x2 = -as.numeric(input$mu.x0),
                              t.peak=as.numeric(input$mu.t0), 
                              x.sd=as.numeric(input$x.sd), 
                              t.sd=as.numeric(input$t.sd))
     }
-    else{
-      data(world)
-      world <- get(input$world)
-    } 
+    
+    if(input$world == "world_nonmigratory"){
+      world <- getSinePop(tau = 100, peak.max = 0, peak.min = 0, sd = 10)
+    }
+    if(input$world == "world_sinusoidal"){
+      world <- getSinePop(tau = 100, peak.max = 40, peak.min = -40, sd = 10)
+    }
     
     if(input$resource == "resources_island"){
       par0 <- getCCpars(mu_x0 = as.numeric(input$mu.x0), 

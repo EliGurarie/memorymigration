@@ -46,7 +46,7 @@ sinusoidally in such a way as to fulfill the criteria above.
 \examples{
 ## Worlds
   world_nonmigratory <- getSinePop(tau = 100, peak.max = 0, peak.min = 0, sd = 10)
-  world_sinusoidal <- getSinePop(tau = 100, peak.max = 40, peak.min = -40, sd = 5)
+  world_sinusoidal <- getSinePop(tau = 100, peak.max = 40, peak.min = -40, sd = 10)
   world_optimal <- getOptimalPop(tau = 100, t.peak = 25, 
                                  x1 = 40, x2 = -40, x.sd = 5, t.sd = 12)
   

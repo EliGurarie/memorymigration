@@ -6,11 +6,10 @@
 #' @param pop a T x X matrix describing the population distribution 
 #' across the time period.
 #' @param parms named vector of parameters. These are \code{epsilon} - diffusion coefficient; 
-#' \code{alpha} - resource 
-#' following coefficient; \code{beta0} - social cohesion coefficient; \code{beta1} - 
-#' memory coefficient
+#' \code{alpha} - resource following coefficient; \code{beta} - spatial scale of sociality; \code{kappa} - 
+#' memory following coefficient; \code{lambda} - maximum speed
 #' @param memory the memory score
-#' @param resource a T x X distribution of the (potentially) dynamic resource.
+#' @param dh a row of a resource matrix (a T x X distribution of the (potentially) dynamic resource.)
 #' @param dx time step
 #' @return Model setup; output of \code{\link{tran.1D}} function. 
 #' @export

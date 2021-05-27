@@ -1,21 +1,20 @@
 #' Run Next Year
 #' 
-#' Based on a migratory population's set up (the World) and the values \code{alpha},
-#'\code{beta0} and \code{beta1}, this function determines the population 
+#' Based on a migratory population's set up (the World) and the values \code{epsilon}, 
+#' \code{alpha}, \code{beta}, \code{kappa} and \code{lambda}, this function determines the population 
 #'distribution for the following year. 
 #' 
-#' @param World List of 5: a population distribution across the time period in a T x X matrix,
-#'  a vector with midpoint X-values, the time points for the population as integers 1:tau,
-#'  the dx value and the tau value. Can incorporate resource attribute into the world to make a list of 6.
-#'  Set up by the getSinePop function. 
-#' @param Parameters named vector of parameters. \code{epsilon} - diffusion coefficient; 
-#' \code{alpha} - resource 
-#' following coefficient; \code{beta0} - social cohesion coefficient; \code{beta1} - 
-#' memory coefficient
+#' @param World world object; list of 7: a population distribution across the time period in a T x X matrix,
+#'  a vector with midpoint X-values, the time points for the population as integers 1:tau, the minimum value of population distribution
+#'  (X.min), the maximum value of population distribution (X.max),
+#'  the dx value and the tau value. Can incorporate resource attribute into the world to make a list of 8.
+#'  Set up by the getSinePop/getOptimal function. 
+#' @param Parameters named vector of parameters. These are \code{epsilon} - diffusion coefficient; 
+#' \code{alpha} - resource following coefficient; \code{beta} - spatial scale of sociality; \code{kappa} - 
+#' memory following coefficient; \code{lambda} - maximum speed
 #' @return a T x X matrix describing the population distribution for the next year
-#' @seealso \link{getSinePop}, \link{runManyYears}
+#' @seealso \link{getSinePop}, \link{getOptimalPop}, \link{runManyYears}
 #' @export
-#' 
 #' 
 #' 
 #' 
