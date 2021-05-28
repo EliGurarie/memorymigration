@@ -4,10 +4,11 @@
 #'\code{beta0} and \code{beta1}, this function determines the population 
 #'distribution after several years. 
 #'
-#' @param World World List of 5: a population distribution across the time period in a T x X matrix,
-#'  a vector with midpoint X-values, the time points for the population as integers 1:tau,
-#'  the dx value and the tau value. Can incorporate resource attribute into the world to make a list of 6.
-#'  Set up by the getSinePop function.  
+#' @param World world object; list of 7: a population distribution across the time period in a T x X matrix,
+#'  a vector with midpoint X-values, the time points for the population as integers 1:tau, the minimum value of population distribution
+#'  (X.min), the maximum value of population distribution (X.max),
+#'  the dx value and the tau value. Can incorporate resource attribute into the world to make a list of 8.
+#'  Set up by the getSinePop/getOptimal function. 
 #' @param Parameters named vector of parameters. These are \code{epsilon} - diffusion coefficient; 
 #' \code{alpha} - resource 
 #' following coefficient; \code{beta0} - social cohesion coefficient; \code{beta1} - 
@@ -17,7 +18,8 @@
 #' distributions from two consecutive years. This is a number between 0 and 1. 
 #' @return a list of n.years containing T x X matrices describing the population 
 #' distribution for each year after initial population
-#' @seealso \link{getSinePop}, \link{runManyYears}
+#' @seealso \link{getSinePop},\link{getOptimalPop}, \link{runNextYear}
+#'  @example examples/indices_examples.R
 #' @export
 #' 
 runManyYears <- function(world, parameters, n.years = 20, 
@@ -46,19 +48,21 @@ runManyYears <- function(world, parameters, n.years = 20,
   return(pop.list)
 }
 
-#' Run Many Years for a set of parameters
+#' Run Many Runs for a set of parameters
 #' 
-#' Based on a migratory population's set up (the World) and the values \code{epsilon}, \code{alpha},
+#' Based on a migratory population's set up (the World) and the values \code{alpha},
 #'\code{beta0} and \code{beta1}, this function determines the population 
-#'distribution after several years. 
+#'distribution after several years for many runs of the population and the resource.
 #'
 #'
-#'@param parameters.df list of data frames with values of \code{epsilon}, \code{alpha},
-#'\code{beta0} and \code{beta1} to test
-#'@param world World List of 5: a population distribution across the time period in a T x X matrix,
-#'  a vector with midpoint X-values, the time points for the population as integers 1:tau,
-#'  the dx value and the tau value. Can incorporate resource attribute into the world to make a list of 6.
-#'  Set up by the getSinePop function.  
+#'@param parameters.df list of data frames with values of parameters. These are \code{epsilon} - diffusion coefficient; 
+#' \code{alpha} - resource following coefficient; \code{beta} - spatial scale of sociality; \code{kappa} - 
+#' memory following coefficient; \code{lambda} - maximum speed
+#'@param world world object; list of 7: a population distribution across the time period in a T x X matrix,
+#'  a vector with midpoint X-values, the time points for the population as integers 1:tau, the minimum value of population distribution
+#'  (X.min), the maximum value of population distribution (X.max),
+#'  the dx value and the tau value. Can incorporate resource attribute into the world to make a list of 8.
+#'  Set up by the getSinePop/getOptimal function.  
 #' @param filename string containing base name of the file to be created 
 #' @param results.dir string containing directory of where results from the R scripts will be stored
 #' @export
@@ -81,9 +85,9 @@ runManyRuns <- function (parameters.df, resource_param, world, resource,
                              psi_t = psi_t[j]))
       
       if(resource == "drifting")
-      Resource.CC <- aaply(par0, 1, function(p) getPulsedResource(world, p)) 
+      Resource.CC <- aaply(par0, 1, function(p) getResource_drifting(world, p)) 
       if(resource == "island")
-      Resource.CC <- aaply(par0, 1, function(p) getPulsedResource_v2(world, p)) 
+      Resource.CC <- aaply(par0, 1, function(p) getResource_island(world, p)) 
       
       
       world$resource <- Resource.CC
@@ -101,6 +105,7 @@ runManyRuns <- function (parameters.df, resource_param, world, resource,
       if(!inherits(M, "try-error")){
         myR <- data.frame(parameters.df[i, ], computeIndices(M[[length(M)]], 
                                                              world$resource[length(M)-1,,], world), 
+                          avgFE = computeAvgEfficiency(M, world$resource, world),
                           n.runs = length(M) - 1,
                           final_similarity = computeEfficiency(M[[length(M)-1]], 
                                                                M[[length(M)]], world), 

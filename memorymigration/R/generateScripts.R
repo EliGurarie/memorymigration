@@ -122,16 +122,17 @@ createFinalShellScript <- function(shell.dir, runname){
 #' 
 #' Generates a data frame splitting up all of the combinations of parameters
 #' 
-#' @param epsilons values of epsilon parameter
-#' @param alphas values value of alpha parameter
-#' @param beta0s values value of beta0 parameter
-#' @param beta1s values value of beta1 parameter
+#' @param epsilons values of epsilon parameter in a vector
+#' @param alphas values of alpha parameter in a vector
+#' @param betas values of beta parameter in a vector
+#' @param kappas values of kappa parameter in a vector
+#' @param lambdas values of lambda parameter in a vector
 #' @param existing a data frame with existing values already tested
 #' @return list of data frames 
 #' @seealso \link{createShellScript}, \link{createSource}, \link{createFinalShellScript}
 #' @export
 #' @examples
-#' parameterGrid(c(1,2,3), c(2,3), seq(1,4), 4)
+#' parameterGrid(c(1,2,3), c(2,3), seq(1,4), 4, 20)
 
 parameterGrid <- function(epsilons, alphas, betas, kappas, lambdas, existing=NULL){
   params.df <- expand.grid(epsilon = epsilons, alpha = alphas, beta = betas, kappa = kappas, lambda = lambdas)

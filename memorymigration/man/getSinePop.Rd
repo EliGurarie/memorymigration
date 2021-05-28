@@ -25,6 +25,7 @@ getSinePop(tau, X.min = -100, X.max = 100, dx = 1, peak.max, peak.min, sd)
 list of 5 which includes a population distribution across the time period in a T x X matrix,
  a vector with midpoint X-values, the time points for the population as integers 1:tau,
  the dx value and the tau value.
+ @example examples/WorldsandResources.R
 }
 \description{
 Initializes sinusoidal year 0 of a migratory population distribution 

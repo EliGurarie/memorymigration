@@ -13,15 +13,14 @@ ForagingMemoryModel(t, pop, parms, memory, dh, dx = dx)
 across the time period.}
 
 \item{parms}{named vector of parameters. These are \code{epsilon} - diffusion coefficient; 
-\code{alpha} - resource 
-following coefficient; \code{beta0} - social cohesion coefficient; \code{beta1} - 
-memory coefficient}
+\code{alpha} - resource following coefficient; \code{beta} - spatial scale of sociality; \code{kappa} - 
+memory following coefficient; \code{lambda} - maximum speed}
 
 \item{memory}{the memory score}
 
-\item{dx}{time step}
+\item{dh}{a row of a resource matrix (a T x X distribution of the (potentially) dynamic resource.)}
 
-\item{resource}{a T x X distribution of the (potentially) dynamic resource.}
+\item{dx}{time step}
 }
 \value{
 Model setup; output of \code{\link{tran.1D}} function.

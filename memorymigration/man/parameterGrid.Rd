@@ -7,15 +7,17 @@
 parameterGrid(epsilons, alphas, betas, kappas, lambdas, existing = NULL)
 }
 \arguments{
-\item{epsilons}{values of epsilon parameter}
+\item{epsilons}{values of epsilon parameter in a vector}
 
-\item{alphas}{values value of alpha parameter}
+\item{alphas}{values of alpha parameter in a vector}
+
+\item{betas}{values of beta parameter in a vector}
+
+\item{kappas}{values of kappa parameter in a vector}
+
+\item{lambdas}{values of lambda parameter in a vector}
 
 \item{existing}{a data frame with existing values already tested}
-
-\item{beta0s}{values value of beta0 parameter}
-
-\item{beta1s}{values value of beta1 parameter}
 }
 \value{
 list of data frames
@@ -24,7 +26,7 @@ list of data frames
 Generates a data frame splitting up all of the combinations of parameters
 }
 \examples{
-parameterGrid(c(1,2,3), c(2,3), seq(1,4), 4)
+parameterGrid(c(1,2,3), c(2,3), seq(1,4), 4, 20)
 }
 \seealso{
 \link{createShellScript}, \link{createSource}, \link{createFinalShellScript}

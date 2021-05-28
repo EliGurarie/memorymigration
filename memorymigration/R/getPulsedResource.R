@@ -17,11 +17,11 @@
 #' @param par vector with four values: t.peak (which is the maximum peak of t), 
 #' t.sd (which is the standard deviation of t), x.peak (which is the maximum peak of x),
 #' and x.sd (which is the standard deviation of x), psi_x (psochasticity in spatial peak), 
-#' psi_t (psochasticity in temporal peak). 
+#' psi_t (psochasticity in temporal peak). can be created by getCCpars for multiple years
 #' @return A X x X matrix containing values of the resource distribution
 #' @example examples/WorldsandResources.R
 #' @export
-#' @aliases getPulsedResource
+#' @seealso \link{getResource_island}, \link{getResource_drifting}
 
 getCCpars <- function(mu_x0, mu_t0, sigma_x, sigma_t, 
                       n.years, 
@@ -33,7 +33,34 @@ getCCpars <- function(mu_x0, mu_t0, sigma_x, sigma_t,
         t.sd = rep(sigma_t, n.years))
 }
 
+
+#' Get Resource Drifting 
+#' 
+#' This function generates a seasonal resource function with the following properties:
+#' 1. The total amount of resource across space is constant throughout the year.
+#' 2. At the beginning, middle, and end of the year the resource is uniformly distributed. 
+#' 3. At some peak time $t_r < tau/2$, the resource concentrates at a location $x_r < chi/2$
+#'  with a spatial deviation $sigma_x$ and a temporal deviation $sigma_t$ (where $tau$ 
+#'  is the length of the year and $chi$ is the extent of the spatial domain).
+#' 4. The resource peaks exactly symmetrically at time $tau - t_r$ and location 
+#' $chi - x_r$ with the same variance $sigma_r$.
+#' 
+#' To generate a resource with these properties, we distributing the resource in 
+#' space as a beta distribution, where the two shape and scale parameters vary 
+#' sinusoidally in such a way as to fulfill the criteria above. 
+#' 
+#' @param world world object (e.g. from getSinePop/getOptimalPop); list of 7: a population distribution across the time period in a T x X matrix,
+#'  a vector with midpoint X-values, the time points for the population as integers 1:tau, the minimum value of population distribution
+#'  (X.min), the maximum value of population distribution (X.max),
+#'  the dx value and the tau value. Can incorporate resource attribute into the world to make a list of 8.
+#' @param par vector with four values: t.peak (which is the maximum peak of t), 
+#' t.sd (which is the standard deviation of t), x.peak (which is the maximum peak of x),
+#' and x.sd (which is the standard deviation of x).
+#' @return A X x X matrix containing values of the resource distribution
+#' @example examples/WorldsandResources.R
 #' @export
+#' @seealso \link{getResource_island}, \link{getCCpars}
+#' 
 getResource_drifting <- function(world, par){
   
   t <- 1:world$tau
@@ -76,7 +103,24 @@ getResource_drifting <- function(world, par){
 }
 
 
+#'
+#'  #' Get Island
+#' 
+#' This function generates a seasonal pulsed resource function.
+#' 
+#' 
+#' @param world world object (e.g. from getSinePop/getOptimalPop); list of 7: a population distribution across the time period in a T x X matrix,
+#'  a vector with midpoint X-values, the time points for the population as integers 1:tau, the minimum value of population distribution
+#'  (X.min), the maximum value of population distribution (X.max),
+#'  the dx value and the tau value. Can incorporate resource attribute into the world to make a list of 8.
+#' @param par vector with four values: t.peak (which is the maximum peak of t), 
+#' t.sd (which is the standard deviation of t), x.peak (which is the maximum peak of x),
+#' and x.sd (which is the standard deviation of x). can be created by getCCpars for multiple years
+#' @return A X x X matrix containing values of the resource distribution
+#' @example examples/WorldsandResources.R
 #' @export
+#' @seealso \link{getResource_drifting}, \link{getCCpars}
+#' 
 getResource_island <- function(world, par){
   
   # par <- c(t.peak = 25, x.peak = 40, x.sd = 5, t.sd = 12)

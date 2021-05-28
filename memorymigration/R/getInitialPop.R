@@ -13,6 +13,7 @@
 #' @return list of 5 which includes a population distribution across the time period in a T x X matrix,
 #'  a vector with midpoint X-values, the time points for the population as integers 1:tau,
 #'  the dx value and the tau value.
+#'  @example examples/WorldsandResources.R
 #' @export
 #' 
 getSinePop <- function(tau, X.min = -100, X.max = 100, dx = 1, 
@@ -35,10 +36,12 @@ getSinePop <- function(tau, X.min = -100, X.max = 100, dx = 1,
 #' @param X.min minimum value of population distribution
 #' @param X.max maximum value of population distribution
 #' @param dx time step
-#' @param x.peak where the resource peak is in space
+#' @param x1 where one of the resource peaks is in space
+#' @param x2 x1 where the second resource peak is in space
 #' @param t.peak where the resource peak is in time
 #' @param x.sd standard deviation of resource peak in space
 #' @param t.sd standard deviation of resource peak in time
+#' @example examples/WorldsandResources.R
 #' @export
 getOptimalPop <- function(tau, X.min = -100, X.max = 100, dx = 1, 
                           x1, x2, t.peak, x.sd, t.sd){

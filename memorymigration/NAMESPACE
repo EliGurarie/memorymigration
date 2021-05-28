@@ -2,9 +2,11 @@
 
 export()
 export(ForagingMemoryModel)
+export(computeAvgEfficiency)
 export(computeCohesiveness)
 export(computeEfficiency)
 export(computeIndices)
+export(computeMigratoriness)
 export(createFinalShellScript)
 export(createShellScripts)
 export(createSource)

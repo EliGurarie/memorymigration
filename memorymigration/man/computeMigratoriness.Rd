@@ -9,10 +9,11 @@ computeMigratoriness(pop, world)
 \arguments{
 \item{pop}{One cycle of population process}
 
-\item{world}{world object; list of 5: a population distribution across the time period in a T x X matrix,
-a vector with midpoint X-values, the time points for the population as integers 1:tau,
-the dx value and the tau value. Can incorporate resource attribute into the world to make a list of 6.
-Set up by the getSinePop function.}
+\item{world}{world object; list of 7: a population distribution across the time period in a T x X matrix,
+a vector with midpoint X-values, the time points for the population as integers 1:tau, the minimum value of population distribution
+(X.min), the maximum value of population distribution (X.max),
+the dx value and the tau value. Can incorporate resource attribute into the world to make a list of 8.
+Set up by the getSinePop/getOptimal function.}
 }
 \value{
 a list with the time of the minimal overlap and the Migratoriness 
@@ -30,26 +31,35 @@ require(memorymigration)
 dx <- 1
 
 
-world.R1 <- getSinePop(tau = 100, peak.max = 40, peak.min = -40, sd = 10)
-world.R1$resource <- getResource_island(world.R1, 
-                                       c(t.peak = 25, t.sd = 12, x.peak = 35, x.sd = 5))
+world <- getOptimalPop(tau = 100, t.peak = 25, 
+                               x1 = 40, x2 = -40, x.sd = 5, t.sd = 12)
+par0 <- getCCpars(mu_x0 = 40, 
+                  mu_t0 = 25,
+                  beta_x = 2,
+                  beta_t = 0,
+                  n.years = 12,
+                  sigma_x = 5,
+                  sigma_t = 12,
+                  psi_x = 0, 
+                  psi_t = 0) 
+world$resource <- aaply(par0, 1, function(p) getResource_island(world, p))
 
 #run simulation for 12 years 
 
-parameters <- c(epsilon = 5, alpha = 100, beta=50, kappa = 1, lambda = 20)
+parameters <- c(epsilon = 5, alpha = 100, beta=50, kappa = 0, lambda = 20)
 
-M <- runManyYears(world.R1, parameters = parameters, n.years = 3, 1)
-plotManyRuns(M, world.R1)
+sim <- runManyYears(world, parameters = parameters, n.years = 5, threshold = 0.9999)
 
-#simulation runs for 3 years since that is when threshold is hit
+#simulation runs for 3 years since that is when threshold is hit so only 3 years are plotted
+plotManyRuns(sim, world)
+plotYearList(sim, world, tau = tau)
 
-M <- runManyYears(world.R1, Parameters = parameters, n.years = 12, 0.998)
-plotYearList(M, world.R1, tau = tau)
-
-computeCohesiveness(M[[6]], world.R1)["SC.mean"]
-computeMigratoriness(M[[6]], world.R1)$overlap
-computeEfficiency(M[[6]], world.R1$resource, world.R1)
-computeIndices(M[[6]], world.R1$resource, world.R1)
+# computing indices
+computeCohesiveness(sim[[3]], world)["SC.mean"]
+computeMigratoriness(sim[[3]], world)$overlap
+computeEfficiency(sim[[3]], world$resource[3,,], world)
+computeAvgEfficiency(sim, world$resource, world)
+computeIndices(sim[[3]], world$resource[2,,], world)
 }
 \seealso{
 \link{computeEfficiency}, \link{computeCohesiveness}, \link{computeIndices}

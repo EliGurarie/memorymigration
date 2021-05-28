@@ -11,12 +11,16 @@ This function prints the parameters of the diffusion-advection equation used
 on the model on the plot of the population distribution set up by the plotYearList function.
 }
 \details{
-@param p List of 5 a population distribution across the time period in a T x X matrix,
- a vector with midpoint X-values, the time points for the population as integers 1:tau,
- the dx value and the tau value. Set up by the getSinePop function. 
+@param p world object; list of 7: a population distribution across the time period in a T x X matrix,
+ a vector with midpoint X-values, the time points for the population as integers 1:tau, the minimum value of population distribution
+ (X.min), the maximum value of population distribution (X.max),
+ the dx value and the tau value. Can incorporate resource attribute into the world to make a list of 8.
+ Set up by the getSinePop/getOptimal function. 
  @return displays the values of the parameters on the plot which are:
-  \code{epsilon} - diffusion coefficient; \code{alpha} - resource 
-following coefficient; \code{beta0} - social cohesion coefficient; \code{beta1} - 
-memory coefficient
- @seealso \link{PlotYearList}; \link{getSinePop}
+  \code{epsilon} - diffusion coefficient; 
+\code{alpha} - resource following coefficient; \code{beta} - spatial scale of sociality; \code{kappa} - 
+memory following coefficient; \code{lambda} - maximum speed
+ @seealso \link{plotMemories}; \link{getSinePop}; \link{getOptimalPop}
+ @example examples/plotting_examples.R
+ @export
 }
