@@ -39,19 +39,48 @@ We anticipate that under many conditions a blending of *tactical* (i.e. direct r
 
 ## Memory movement model
 
-Our model is an advection diffusion with two advective terms corresponding to a direct response to the environment and to memory. The *tactical* process is positive response to a resource gradient, while the *collective memory* corresponds to a tendency of the organisms to repeat the behavior of the population in previous years.  Thus: 
+In designing our study, our goal was to develop a minimal heuristic in which the following processes were explicitly modeled: (1) Random or exploratory movement, (2) attraction to resources, (3) a long-term (or *reference*) memory of large-scale movement behavior, (4) a short-term (or *working*) memory that updates movement behavior based on recent experience, (5) some social aspect to the learned behavior.  
+
+A diffusion-advection equation provided a computationally efficient and versatile framework for examining just such a system.  We consider a population moving in one dimension in a constrained domain ${\cal D}$ and distributing itself according to the following equation: 
 
 $${\frac{\partial u(x,t)}{\partial t}} = -\varepsilon {\frac{\partial^2 u(x,t)}{\partial x^2}} + 
-\alpha \frac{\partial}{\partial x}\left(u(x,t) \frac{\partial h(x,t)}{\partial x}\right) + 
-\beta  \frac{\partial}{\partial x}\left(u(x,t) \frac{\partial m(x,t)}{\partial x}\right) \,\,\,\,(1)$$
+\alpha \frac{\partial}{\partial x}\left(u(x,t) \frac{\partial h(x,t)}{\partial x}\right) + v_m(x, t,y)
+$$
 
-where the variables $u(x,t)$ represents a population distributed in time and space, $h(x,t)$ is the distribution of the resource, $m(x,t,y)$ is the memory component in space and time at (discrete) year $y$, $\varepsilon$ is a rate of randomness (diffusion), $\alpha$ is the strength of advection in the direction of the resource $h(x,t)$ gradient), and $\beta$ is the strength of advection up the memory gradient.  The memory component we model as a mixture of a reference (long-term) memory, modified by more recent experiences as follows:
-$$m(x,t) = \kappa^y \, u(x, t - y\tau) + \left(1-\kappa^y\right)\,u(x, t-\tau)\,\,\,\,(2)$$
-Here, $y \in \{0,1,2,...\}$ represents the count of a given year, i.e. $y = \lfloor t/\tau \rfloor$. Thus, $u(x, t - y\tau)$ is the initial (year 0) "learned" collective behavior, $u(x, t-\tau)$ is the preceding year's collective behavior and $\kappa \in (0,1)$ is the relative contribution of the long-term (reference) memory.   When $\kappa = 1$, all of the memory is reference memory, and the system essentially responds to it's initial learned behavior as if it were a resource. If $\kappa = 0$, the memory is entirely short-term, and the process responds only to the behavior from the previous year.  With $0 < \kappa < 1$, the reference memory fades with time.  The model is confined to a one-dimensional bounded domain $[0,\chi]$, with no flux outside of the boundaries i.e. ${\frac{\partial u(0,t)}{\partial t}} = {\frac{\partial u(\chi,t)}{\partial t}} =0$,  Thus the total population is fixed at all times and found within the domain. 
+where  $u(x,t)$ represents the population distributed in time and space, $h(x,t)$ is the distribution of the resource, which in dynamic and patchy as detailed below, $\varepsilon$ is the diffusion rate and$\alpha$ is the strength of advection in the direction of the resource $h(x,t)$ gradient), $\beta$ is the strength of advection up the memory gradient.  Finally, there is a  memory based speed term $v_m(x,t,y)$, described below.  
 
+The population has a "social memory" of the mean location and speed at which the population moved exactly one year prior, i.e. $\widehat{u}(t-\tau)$, where $\tau$ is the duration of a single year and the $\hat{\,}$ operator signifies the expected value of the population distribution. This working memory is combined with a baseline reference memory, $\widehat{u_o}(t)$ via:
+
+$$\widehat{u_m}(t) = \kappa^y \, \widehat{u_o}(t - y\tau) + \left(1-\kappa^y\right)\,\widehat{u}(t-\tau)\,\,\,\,(2)$$
+
+Here, $y \in \{0,1,2,...\}$ represents the count of a given year, i.e. $y = \lfloor t/\tau \rfloor$ and $\kappa \in (0,1)$ is the relative contribution of the long-term (reference) memory. When $\kappa = 0$, all of the actionable memory is from the preceding year, when $\kappa = 1$, the actionable memory is entirely the reference memory.  Importantly, the individuals remember the movement rate of their mean location:  $d\widehat{u_m}(t)/dt$.  
+
+The overarching behavior of the population is to attempt to follow the memory.  Thus the speed of the population at $x = \widehat{u_m}(t)$ is $du_m(t)/dt$; if $du_m/dt > 0$ and $x < \widehat{u_m}(t)$, i.e. for those animals that are lagging behind the optimal remembered location, the population's speed is greater than $du_m(t)/dt$, and if $x > \widehat{u_m}(t)$ the speed is somewhat lower, to allow the remainder of the population to catch up. 
+
+The specific relationship is essentially a logistic curve: 
+
+$$v_m(t) =  \begin{cases}
+\frac{\lambda}{1 + \exp((x - x_+)/\beta)}  &  \frac{d\widehat{u_m}}{dt} > 0\\
+\frac{\lambda}{1 - \exp(-(x - x_-)/\beta)} & \frac{d\widehat{u_m}}{dt} < 0
+\end{cases}$$
+
+where $x_+$ and $x_-$ are fixed such that the value of $v_m(x,t) = d{u_m}/dt$ at $x = \widehat{u_m}$. 
+
+$$
+x_+ = \widehat{u_m} - \log\left(\lambda / \frac{d\widehat{u_m}}{dt} - 1\right) \beta \\
+x_- = \widehat{u_m} + \log\left(-\lambda / \frac{d\widehat{u_m}}{dt} - 1\right) \beta
+$$
+
+
+The model is confined to a one-dimensional bounded domain $[0,\chi]$, with no flux outside of the boundaries i.e. ${\frac{\partial u(0,t)}{\partial t}} = {\frac{\partial u(\chi,t)}{\partial t}} =0$,  Thus the total population is fixed at all times and found within the domain. 
+
+Note, this model does not contain any explicit birth or death processes, the population is fixed, and the parameters remain constant throughout time.  Our interest is entirely in the ability of a fixed set of memory and movement parameters to ``navigate'' a dynamic environment. 
+
+<!--
 A few special cases of this model have been studied in the past. @Shigesada1979 (section 3) thoroughly analyzed the resource following diffusion model with no memory and a static resource (i.e.~$\beta = 0$ and $h(x,t) = h(x)$), showing that at equilibrium, the log of the population density is proportional to $h(x)/\alpha$.  @Shi2019 consider a single period memory model ($\kappa = 0$) in detail, with the addition of an independent birth-death process. Importantly, the authors prove the wellposedness (existence, uniqueness, and positivity) of this model, with arguments that are equally valid for our model. @Fagan2017 numerically explored an extension of this model with no memory but a dynamic resource and the addition of non-local information, i.e.~a model where the resource $h(x,t)$ is "perceived" via a convolution with a detection function. @Fagan2019 added a behavioral switching behavior to the non-local information model.  This study 
+--> 
 
-Note, this model does not contain any explicit birth or death processes, the population is fixed, and the parameters remain constant throughout time.  Our interest is entirely in the ability of a fixed set of memory and movement parameters to ``navigate'' a dynamic environment.  
+ 
 
 
 ## Environment and seasonal resource
