@@ -2,6 +2,7 @@
 
 export()
 export(ForagingMemoryModel)
+export(computeAvgEfficiency)
 export(computeCohesiveness)
 export(computeEfficiency)
 export(computeIndices)

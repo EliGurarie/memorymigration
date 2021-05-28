@@ -105,6 +105,7 @@ runManyRuns <- function (parameters.df, resource_param, world, resource,
       if(!inherits(M, "try-error")){
         myR <- data.frame(parameters.df[i, ], computeIndices(M[[length(M)]], 
                                                              world$resource[length(M)-1,,], world), 
+                          avgFE = computeAvgEfficiency(M, world$resource, world),
                           n.runs = length(M) - 1,
                           final_similarity = computeEfficiency(M[[length(M)-1]], 
                                                                M[[length(M)]], world), 
