@@ -1,0 +1,61 @@
+---
+title: "Appendix"
+author: "Elie"
+date: "5/28/2021"
+output: html_document
+---
+
+
+# 1. Drifting resource
+
+
+The drifting resource function has the following properties
+
+1. The total amount of resource across space is constant throughout the year.
+2. At the beginning, middle, and end of the year the resource is uniformly distributed. 
+3. At some peak time $\mu_t < \tau/2$, the resource concentrates at a location $\mu_x < \chi$ with a spatial deviation $\sigma_x$ and a temporal deviation $\sigma_t$ (where $\tau$ is the length of the year and $\chi$ is the extent of the spatial domain).
+4. The resource peaks exactly symmetrically at time $\tau - \mu_t$ and location $-\mu_x$ with the same variances.
+
+To generate a resource with these properties, we distributing the resource in space as a beta distribution, where the two shape and scale parameters vary sinusoidally in such a way as to fulfill the criteria above.  Thus:
+
+$$h(x,t, \theta) = \chi B(x/\chi, a(t, \theta), b(t, \theta))$$
+
+where $\chi$ is the maximum value (domain) of $x$, $B(x, a, b)$ is the beta distribution, $\theta$ represents the set of parameters $t_r, x_r, \sigma_t, \sigma_x$, and the two shape parameters are given by:
+
+$$a(t) = \frac{m}{s^2}( s^2 + m - m^2)$$
+$$b(t, x', \sigma') = (m-1)\left(1 + \frac{m}{s}(m-1)\right) $$
+
+where $m(t)$ and $s(t)$ describe the dynamic mean and variance of the resource peak.  These equations are solutions to the mean and variance of the beta distribution, $\mu = \alpha/(\alpha + \beta)$, $\sigma^2 = \frac{\alpha\beta}{(\alpha+\beta)^2(\alpha+\beta+1)}$.
+
+The means and variances themselves are Gaussian pulses, with the mean peaking at $\mu_x$ at time $\mu_t$ with standard deviation $\sigma_t$ and at $-\mu_x$ at time $\tau - \mu_t$ and the standard deviation pulsing from $2 \chi/\sqrt{12}$ (corresponding to a uniform distribution over the domain $-\chi$ to $\chi$) at times 0, $\tau/2$ and $\tau$ down to $\sigma_x$ at $t_r$ and $\tau - t_r$, with standard deviation (in time) $\sigma_t$. 
+
+Examples of the drifting resource are below. 
+
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+require(memorymigration)
+```
+
+
+```{r exampleResourcePlots, fig.width = 10, fig.height = 6, echo = FALSE}
+world <- getSinePop(tau = 100, peak.max = 0, peak.min = 0, sd = 10)
+
+R1 <- getResource_drifting(world, par = c(t.peak = 25, t.sd = 12, x.peak = 80, x.sd = 9))
+R2 <- getResource_drifting(world, par = c(t.peak = 25, t.sd = 12, x.peak = 80, x.sd = 5))
+R3 <- getResource_drifting(world, par = c(t.peak = 25, t.sd = 5, x.peak = 80, x.sd = 9))
+R4 <- getResource_drifting(world, par =  c(t.peak = 25, t.sd = 5, x.peak = 80, x.sd = 5))
+
+par(mfrow = c(2,2), mar = c(3,3,3,1), mgp = c(2,.25,0), las = 1, tck = 0.01)
+with(world,{
+  image(time,X,R1, main = "Broad, long peak")
+  contour(time,X,R1, add = TRUE)})
+with(world,{
+  image(time,X,R2, main = "Narrow, long peak")
+  contour(time,X,R2, add = TRUE)})
+with(world,{
+  image(time,X,R3, main = "Broad, short peak")
+  contour(time,X,R3, add = TRUE)})
+with(world,{
+  image(time,X,R4, main = "Narrow, short peak")
+  contour(time,X,R4, add = TRUE)})
+```

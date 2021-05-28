@@ -46,7 +46,7 @@ world$resource <- aaply(par0, 1, function(p) getResource_island(world, p))
 
 #run simulation for 12 years 
 
-parameters <- c(epsilon = 5, alpha = 100, beta=50, kappa = 0, lambda = 20)
+parameters <- c(epsilon = 5, alpha = 100, beta=50, kappa = 1, lambda = 20)
 
 sim <- runManyYears(world, parameters = parameters, n.years = 5, threshold = 0.9999)
 
