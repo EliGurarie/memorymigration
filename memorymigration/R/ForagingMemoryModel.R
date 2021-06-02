@@ -18,7 +18,8 @@ ForagingMemoryModel <- function(t, pop, parms,
                                 memory, dh, dx = dx){
   tran.1D(C = pop, D = parms["epsilon"], 
           flux.up = 0, flux.down = 0, 
-          v = parms["alpha"] * dh/dx + memory,
+          v = parms["alpha"] * dh/dx + 
+            parms["gamma"] * memory,
           dx = dx)
 }
 

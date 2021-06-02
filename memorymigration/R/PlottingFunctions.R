@@ -6,8 +6,8 @@
 #' distribution for each year after initial population; produced by the runManyYear function
 #' @param World List of 5: a population distribution across the time period in a T x X matrix,
 #'  a vector with midpoint X-values, the time points for the population as integers 1:tau,
-#'  the dx value and the tau value. Can incorporate resource attribute into the world to make a list of 6.
-#'  Set up by the getSinePop function. 
+#'  the dx value and the tau value. Can incorporate resource attribute into the world to make 
+#'  a list of 6.  Set up by the getSinePop function. 
 #' @param X.max maximum value of X-axis
 #' @param tau maximum value of time T
 #' @param log logical;
@@ -42,11 +42,11 @@ plotYearList <- function(yearlist, world, X.max = 100, tau = 360, log = FALSE,
 #' This function prints the parameters of the diffusion-advection equation used 
 #' on the model on the plot of the population distribution set up by the plotYearList function.
 #' 
-#'  @param p world object; list of 7: a population distribution across the time period in a T x X matrix,
-#'  a vector with midpoint X-values, the time points for the population as integers 1:tau, the minimum value of population distribution
-#'  (X.min), the maximum value of population distribution (X.max),
-#'  the dx value and the tau value. Can incorporate resource attribute into the world to make a list of 8.
-#'  Set up by the getSinePop/getOptimal function. 
+#'  @param p world object; list of 7: a population distribution across the time period in a 
+#'  T x X matrix, a vector with midpoint X-values, the time points for the population as integers 
+#'  1:tau, the minimum value of population distribution (X.min), the maximum value of population 
+#'  distribution (X.max), the dx value and the tau value. Can incorporate resource attribute into 
+#'  the world to make a list of 8.  Set up by the getSinePop/getOptimal function. 
 #'  @return displays the values of the parameters on the plot which are:
 #'   \code{epsilon} - diffusion coefficient; 
 #' \code{alpha} - resource following coefficient; \code{beta} - spatial scale of sociality; \code{kappa} - 

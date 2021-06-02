@@ -23,13 +23,14 @@
 #' @export
 #' 
 runManyYears <- function(world, parameters, n.years = 20, 
-                         threshold= 0.9999, verbose = FALSE){
+                         threshold= 0.9999, verbose = FALSE, 
+                         FUN = runNextYear){
   cat("\n")
   cat(paste(names(parameters), parameters, collapse = "; "))
   
   pop.list <- list(Year1 = world$pop)
   i <- 1
-  pop.list[[i+1]] <- runNextYear(world, Parameters = parameters, 
+  pop.list[[i+1]] <- FUN(world, Parameters = parameters, 
                                  Pop_lastyear = world$pop, Year = 1)
   similarity <- computeEfficiency(pop.list[[i]], pop.list[[i+1]], world)
   
@@ -37,7 +38,7 @@ runManyYears <- function(world, parameters, n.years = 20,
     if(verbose){cat("\n"); cat(paste("running year ", i))}
     
     i <- i+1
-    pop.list[[i+1]] <- runNextYear(world = world, 
+    pop.list[[i+1]] <- FUN(world = world, 
                                    Parameters = parameters, 
                                    Pop_lastyear = pop.list[[i]], 
                                    Year = i)
@@ -119,3 +120,13 @@ runManyRuns <- function (parameters.df, resource_param, world, resource,
   return(newresults) 
 }
 
+
+#' @export
+buildOnRuns <- function(M, world, ...){
+  world$pop <- M[[length(M)]]
+  M2 <- runManyYears(world, threshold = 1, ...)
+  M2[[1]] <- NULL
+  M3 <- c(M, M2)
+  names(M3) <- paste0("Year",1:length(M3))
+  M3
+}
