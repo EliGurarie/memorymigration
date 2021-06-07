@@ -27,6 +27,8 @@ runManyYears <- function(world, parameters, n.years = 20,
 
 
 runNextYear_v2 <- function(world, Parameters, pop.lastyear, Year){
+# Idea: constrain TOTAL advection such that alpha max(dh) + du/dt < lambda
+  
   pop.ref <- world$pop
   Time <- world$time
   
@@ -75,8 +77,8 @@ runNextYear_v2 <- function(world, Parameters, pop.lastyear, Year){
 }
 
 
-
 transformToMemoryFrame <- function(m, X.t, memory, world){
+  X <- world$X
   m.t <- matrix(0, ncol = length(X.t), nrow = length(world$time))
   for(t in world$time){
     f <- splinefun(X, m[t,])
@@ -96,7 +98,7 @@ transformToRealFrame <- function(m.t, X.t, memory, world){
 }
 
 ForagingMemoryModel <- function(t, pop, parms, 
-                                memory, dh, dp, dx = dx){
+                                dm, dh, dp, dx = dx){
   tran.1D(C = pop, D = parms["epsilon"], 
           flux.up = 0, flux.down = 0, 
           v = parms["alpha"] * dh/dx + 
@@ -123,34 +125,6 @@ getMem <- function(pop, world){
   #apply(pop, 1, function(p) weighted.median(world$X, w = p)) 
   #apply(pop, 1, function(p) world$X[which.max(p)]) 
   mem
-}
-
-
-plotMemory <- function(M, add = FALSE){
-  require(plyr)
-  memory.df <- ldply(M, function(l)
-    data.frame(time = 1:nrow(l), 
-               memory = getMem(l, world = world)),.id = "year")
-  
-  if(!add) with(memory.df, plot(time, memory, type= "n"))
-  n.years <- length(unique(memory.df$year))
-  palette(rich.colors(n.years))
-  ddply(memory.df, "year", function(df)
-    with(df, lines(time, memory, col = as.integer(year))))
-  #legend("topright", legend = 1:n.years, col = 1:n.years, 
-  #       lty = 1, ncol = 2, title = "year", bty = "n")
-}
-
-doublePlot <- function(M, world){
-  par(mfrow = c(1,2), mar = c(2,2,1,1), 
-      tck = 0.01, mgp = c(1.5,.25,0), 
-      bty = "l", cex.lab = 1.25, las = 1, xpd = NA)
-  with(world, image(time, X, resource, col = grey.colors(100)))
-  plotMemory(M, add = TRUE)
-  FE1 <- ldply(M, computeEfficiency, 
-               resource = world$resource, world = world,
-               .id = "year") %>% mutate(year = 1:length(year))
-  plot(FE1, type = "o")
 }
 
 

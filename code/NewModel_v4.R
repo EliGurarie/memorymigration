@@ -37,11 +37,13 @@
   world$resource <- getResource_island(world, 
                                        c(t.peak = 25, t.sd = 9, 
                                          x.peak = 20, x.sd = 5))
-  p0 <- c(epsilon = 5, alpha = 100, beta = 10,
-          kappa = 0, lambda = 5, gamma = 0.5)
+  p0 <- c(epsilon = 1, alpha = 200, beta = 100,
+          kappa = 0, lambda = 30, gamma = 1)
+  
   M0 <- runManyYears(world, parameters = p0, n.years = 10, 1, verbose = TRUE)
   #M0 <- buildOnRuns(M0, world, parameters = p0, n.years = 10)
   plotManyRuns(M0, world, nrow = 2, outer = FALSE, labelyears = TRUE)
+  doublePlot(M0, world)
   
   {
     par(mfrow = c(1,2), mar = c(2,2,1,1), 
