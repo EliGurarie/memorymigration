@@ -66,12 +66,12 @@ plotMigrationHat(M1$m.hat, 50, 25)
 
 
 p2 <- c(epsilon = 5, alpha = 1000, kappa = 0, beta = 100, lambda = 100)
-M2 <- runManyYears(world, parameters = p2, n.years = 20, 1, FUN = runNextYear, verbose = TRUE)
+M2 <- runManyYears(world, parameters = p2, n.years = 2, 1, FUN = runNextYear, verbose = TRUE)
 M2 <- buildOnRuns(M2, world, parameters = p2, n.years = 20, verbose = TRUE, FUN = runNextYear)
 
 plotManyRuns(M2$pop, world, nrow = 2)
 doublePlot(M2$pop, world)
 
 m.hat <- ldply(M2$m.hat, .id = "year") %>% mutate(year = 1:length(M2$m.hat) - 1)
-plotMigrationHat(m.hat, 50, 25)
+plotMigrationHat(M3$m.hat, 50, 25)
 

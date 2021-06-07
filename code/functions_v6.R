@@ -62,7 +62,7 @@ runManyYears <- function(world, parameters, n.years = 20,
   attr(pop.list, "parameters") <- parameters
   
   m.hat <- ldply(migration.list, .id = "year") %>% mutate(year = 1:length(pop.list) - 1)
-  return(list(pop = pop.list, m.hat = migration.list))
+  return(list(pop = pop.list, m.hat = m.hat))
 }
 
 eval <- FALSE
