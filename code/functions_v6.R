@@ -25,7 +25,7 @@ buildOnRuns <- function(M, world, ...){
   M2$pop[[1]] <- NULL
   M3 <- list()
   M3$pop <- c(M$pop, M2$pop)
-  M3$mhat <- c(M$mhat, M2$mhat)
+  M3$m.hat <- c(M$m.hat, M2$m.hat)
   names(M3$pop) <- paste0("Year",1:length(M3$pop))
   M3
 }
@@ -60,6 +60,8 @@ runManyYears <- function(world, parameters, n.years = 20,
   }
   names(pop.list) <- paste0("Year",0:(length(pop.list)-1))
   attr(pop.list, "parameters") <- parameters
+  
+  m.hat <- ldply(migration.list, .id = "year") %>% mutate(year = 1:length(pop.list) - 1)
   return(list(pop = pop.list, m.hat = migration.list))
 }
 

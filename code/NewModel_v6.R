@@ -4,6 +4,8 @@ require(memorymigration)
 source("code/functions_v6.R")
 source("code/functions_discretemigration.R")
 source("code/functions_plottingresults.R")
+require(minpack.lm); require(fields); require(scales)
+
 
 world <- getSinePop(tau = 100, peak.max = 70, peak.min = -70, sd = 10)
 world$m0 <- fitMigration(t = world$time, x = getMem(world$pop, world))
@@ -20,25 +22,56 @@ doublePlot(M0$pop, world)
 plotManyRuns(M0$pop, world, nrow = 3)
 
 
-mhat <- ldply(M0$m.hat) %>% mutate(year = 1:length(M0$pop) - 1)
-plotMigrationHat(mhat)
+plotMigrationHat(M0$mhat)
 
 
 
 
-world <- getSinePop(tau = 100, peak.max = 80, peak.min = -80, sd = 10)
+world <- getOptimalPop(tau = 100, x1 = 50, x2 = -50, t.peak = 25, t.sd = 12, x.sd = 12)
 world$resource <- getResource_drifting(world, 
-                                     c(t.peak = 25, t.sd = 5, 
+                                     c(t.peak = 25, t.sd = 12, 
                                        x.peak = 50, x.sd = 12))
 world$m0 <- fitMigration(t = world$time, x = getMem(world$pop, world))
-with(world, image.plot(time, X, resource))
 
-p1 <- c(epsilon = 1, alpha = 1000, kappa = 0, beta = 100, lambda = 30)
-M1 <- runManyYears(world, parameters = p1, n.years = 14, 1, FUN = runNextYear, verbose = TRUE)
-M1 <- buildOnRuns(M1, world, parameters = p1, n.years = 30, verbose = TRUE, FUN = runNextYear)
+par(mfrow = c(1,2))
+with(world, {
+ image.plot(time, X, pop)
+ abline(v = c(m0["t1"] + c(0, m0["dt1"]), m0["t2"] + c(0, m0["dt2"])), lwd = 2)
+ abline(h = c(m0["x1"], m0["x2"]), lwd = 2)
+ image.plot(time, X, resource)
+}) 
+
+
+
+with(world, {
+  par(mfrow = c(1,2))
+  image.plot(time, X, pop)
+  abline(v = c(m0["t1"] + c(0, m0["dt1"]), m0["t2"] + c(0, m0["dt2"])), lwd = 2)
+  abline(h = c(m0["x1"], m0["x2"]), lwd = 2)
+  
+  image.plot(time, X, y1)
+  m1 <- getMigrationParameters(m0, y1, p1["kappa"], 2, world)
+  abline(v = c(m1["t1"] + c(0, m1["dt1"]), m1["t2"] + c(0, m1["dt2"])), lwd = 2)
+  abline(h = c(m1["x1"], m1["x2"]), lwd = 2)
+}) 
+
+
+p1 <- c(epsilon = 5, alpha = 1000, kappa = 0, beta = 100, lambda = 30)
+M1 <- runManyYears(world, parameters = p1, n.years = 30, 1, FUN = runNextYear, verbose = TRUE)
+
 plotManyRuns(M1$pop, world, nrow = 2)
 doublePlot(M1$pop, world)
+plotMigrationHat(M1$m.hat, 50, 25)
 
-mhat <- ldply(M1$m.hat) %>% mutate(year = 1:length(M1$pop) - 1)
 
-plotMigrationHat(mhat)
+
+p2 <- c(epsilon = 5, alpha = 1000, kappa = 0, beta = 100, lambda = 100)
+M2 <- runManyYears(world, parameters = p2, n.years = 20, 1, FUN = runNextYear, verbose = TRUE)
+M2 <- buildOnRuns(M2, world, parameters = p2, n.years = 20, verbose = TRUE, FUN = runNextYear)
+
+plotManyRuns(M2$pop, world, nrow = 2)
+doublePlot(M2$pop, world)
+
+m.hat <- ldply(M2$m.hat, .id = "year") %>% mutate(year = 1:length(M2$m.hat) - 1)
+plotMigrationHat(m.hat, 50, 25)
+
