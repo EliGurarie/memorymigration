@@ -42,7 +42,7 @@ runManyYears <- function(world, parameters, n.years = 20,
                                    Parameters = parameters, 
                                    Pop_lastyear = pop.list[[i]], 
                                    Year = i)
-    similarity <- computeEfficiency(pop.list[[i]], pop.list[[i+1]], world)
+    similarity <- computeEfficiency(pop.list$pop[[i]], pop.list$pop[[i+1]], world)
   }
   names(pop.list) <- paste0("Year",0:(length(pop.list)-1))
   attr(pop.list, "parameters") <- parameters

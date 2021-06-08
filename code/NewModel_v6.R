@@ -15,14 +15,14 @@ world$resource <- getResource_island(world,
 
 image(world$resource)
 
-p0 <- c(epsilon = 1, alpha = 100, kappa = 0, beta = 100, lambda = 30)
-M0 <- runManyYears(world, parameters = p0, n.years = 40, 1, FUN = runNextYear, verbose = TRUE)
+p0 <- c(epsilon = 1, alpha = 100, kappa = 1, beta = 100, lambda = 20)
+M0 <- runManyYears(world, parameters = p0, n.years = 10, 1, FUN = runNextYear, verbose = TRUE)
 #M0 <- buildOnRuns(M0$pop, world, parameters = p0, n.years = 20, verbose = TRUE, FUN = runNextYear)
 doublePlot(M0$pop, world)
 plotManyRuns(M0$pop, world, nrow = 3)
 
 
-plotMigrationHat(M0$mhat)
+plotMigrationHat(M0$m.hat, 50, 25)
 
 
 
@@ -57,7 +57,7 @@ with(world, {
 
 
 p1 <- c(epsilon = 5, alpha = 1000, kappa = 0, beta = 100, lambda = 30)
-M1 <- runManyYears(world, parameters = p1, n.years = 30, 1, FUN = runNextYear, verbose = TRUE)
+M1 <- runManyYears(world, parameters = p1, n.years = 5, 1, FUN = runNextYear, verbose = TRUE)
 
 plotManyRuns(M1$pop, world, nrow = 2)
 doublePlot(M1$pop, world)
@@ -74,4 +74,22 @@ doublePlot(M2$pop, world)
 
 m.hat <- ldply(M2$m.hat, .id = "year") %>% mutate(year = 1:length(M2$m.hat) - 1)
 plotMigrationHat(M3$m.hat, 50, 25)
+
+
+world <- getSinePop(tau = 100, peak.max = 1, peak.min = -1, sd = 10)
+world$m0 <- fitMigration(t = world$time, x = getMem(world$pop, world))
+world$resource <- getResource_drifting(world, 
+                                     c(t.peak = 25, t.sd = 12, 
+                                       x.peak = 30, x.sd = 12))
+
+image(world$resource)
+
+p0 <- c(epsilon = 1, alpha = 100, kappa = 1, beta = 100, lambda = 20)
+M0 <- runManyYears(world, parameters = p0, n.years = 10, 1, FUN = runNextYear, verbose = TRUE)
+#M0 <- buildOnRuns(M0$pop, world, parameters = p0, n.years = 20, verbose = TRUE, FUN = runNextYear)
+doublePlot(M0$pop, world)
+plotManyRuns(M0$pop, world, nrow = 3)
+
+
+plotMigrationHat(M0$m.hat, 50, 25)
 

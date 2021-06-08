@@ -39,7 +39,7 @@ runManyYears <- function(world, parameters, n.years = 20,
   
   migration.list <- list(Year1 = world$m0)
   pop.list <- list(Year1 = world$pop)
-  
+
   similarity <- 0
   i <- 1 
   while((similarity < threshold) & (i < n.years)){
@@ -52,17 +52,20 @@ runManyYears <- function(world, parameters, n.years = 20,
                    pop.lastyear = pop.list[[length(pop.list)]], 
                    Year = i)
     pop.list[[i]] <-  pop.new
+
     migration.list[[i]] <- getMigrationParameters(world$m0, pop.new, 
                                     parameters["kappa"], 
                                     year = i, 
                                     world)
     similarity <- computeEfficiency(pop.list[[i-1]], pop.list[[i]], world)
+
   }
   names(pop.list) <- paste0("Year",0:(length(pop.list)-1))
   attr(pop.list, "parameters") <- parameters
   
-  m.hat <- ldply(migration.list, .id = "year") %>% mutate(year = 1:length(pop.list) - 1)
-  return(list(pop = pop.list, m.hat = m.hat))
+  m.hat <- ldply(migration.list, .id = "year") %>% mutate(year = 1:length(pop.list)-1)
+  final <- list(pop = pop.list, m.hat = m.hat)
+  final
 }
 
 eval <- FALSE
