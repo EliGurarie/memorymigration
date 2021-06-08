@@ -36,9 +36,10 @@ ui <- fluidPage(
     column(6,
            h3("Migratory Population"),
            tableOutput("Indices"),
-           plotOutput("Image", height = "400px"),
-           plotOutput("Memory", height = "400px"),
-          plotOutput("DoublePlot", height = "400px"),
+          plotOutput("Image", height = "400px"),
+          h3("Memory"),
+          plotOutput("Memory", height = "400px"),
+         plotOutput("MigrationHat", height = "400px"),
            h3("Resource"),
            plotOutput("Resourceimage", height = "400px")
            ),
@@ -86,7 +87,7 @@ server <- function(input, output) {
       world <- getSinePop(tau = 100, peak.max = 1, peak.min = -1, sd = 10)
     }
     if(input$world == "world_sinusoidal"){
-      world <- getSinePop(tau = 100, peak.max = 40, peak.min = -40, sd = 10)
+      world <- getSinePop(tau = 100, peak.max = as.numeric(input$mu.x0), peak.min = -as.numeric(input$mu.x0), sd = 10)
     }
     world$m0 <- fitMigration(t = world$time, x = getMem(world$pop, world))
 
@@ -151,16 +152,13 @@ server <- function(input, output) {
     #parameters.df <- ldply (parameters, data.frame)
     indices <- format(indices, digits=4)
 
- # memory <- doublePlot(sim$pop, world)
-
-   yearplot <- plotManyRuns(sim$pop, world = world, nrow=ceiling(length(sim$pop)/6), labelyears=TRUE)
-
    
- # doubleplot <- plotMigrationHat(sim$m.hat, input$x.peak, input$t.peak, 
-  #                                cols = c("darkorange", "darkblue"))
+migrationhat <- plotMigrationHat(sim$m.hat, 
+                                 as.numeric(input$x.peak), as.numeric(input$t.peak), cols = c("darkorange", "darkblue"))
 
-   # newlist <- list(sim,indices, memory, yearplot, doubleplot)
-    newlist <- list(sim,indices, yearplot, world)
+  # newlist <- list(sim,indices, yearplot, memory)
+  newlist <- list(sim,indices, world, migrationhat)
+   # newlist <- list(sim,indices, yearplot, world)
     
   })
 
@@ -179,7 +177,7 @@ server <- function(input, output) {
       world <- getSinePop(tau = 100, peak.max = 1, peak.min = -1, sd = 10)
     }
     if(input$world == "world_sinusoidal"){
-      world <- getSinePop(tau = 100, peak.max = 40, peak.min = -40, sd = 10)
+      world <- getSinePop(tau = 100, peak.max = as.numeric(input$mu.x0), peak.min = -as.numeric(input$mu.x0), sd = 10)
     }
     world$m0 <- fitMigration(t = world$time, x = getMem(world$pop, world))
     par0 <- getCCpars(mu_x0 = as.numeric(input$mu.x0), 
@@ -206,7 +204,7 @@ server <- function(input, output) {
   })
   
  output$Image <- renderPlot({
-   simulation()[[3]]
+   plotManyRuns(simulation()[[1]]$pop, world = simulation()[[3]], nrow=ceiling(length(simulation()[[1]]$pop)/6), labelyears=TRUE)
   }, res = 150)
   
   output$Resourceimage <- renderPlot({
@@ -215,15 +213,16 @@ server <- function(input, output) {
   
  output$Indices <- renderTable({
    simulation()[[2]][,1:6]
+
  }, digits = 3)
  
 output$Memory <- renderPlot({
- doublePlot(simulation()[[1]]$pop,simulation()[[4]])
+  doublePlot(simulation()[[1]]$pop, simulation()[[3]])
  }, res = 150)
  
-#output$DoublePlot <- renderPlot({
- #  simulation()[[]]
-#}, res = 150)
+output$MigrationHat <- renderPlot({
+   simulation()[[4]]
+}, res = 150)
  
  output$downloadData <- downloadHandler(
    filename = "simulationRun.csv",
