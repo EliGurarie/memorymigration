@@ -25,8 +25,9 @@ buildOnRuns <- function(M, world, ...){
   M2$pop[[1]] <- NULL
   M3 <- list()
   M3$pop <- c(M$pop, M2$pop)
-  M3$m.hat <- c(M$m.hat, M2$m.hat)
-  names(M3$pop) <- paste0("Year",1:length(M3$pop))
+  M3$m.hat <- rbind(M$m.hat, M2$m.hat)
+  M3$m.hat$year = 1:nrow(M3$m.hat) - 1
+  names(M3$pop) <- paste0("Year",1:length(M3$pop)-1)
   M3
 }
 

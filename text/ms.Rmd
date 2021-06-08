@@ -73,51 +73,21 @@ s_{21} &; &  t > t_2+dt_2 & \text{or} & t \leq t_1\\
 \end{cases}
 $$
 
-where the migration speeds $s_{12}$ and $s_{21}$ from the respective ranges are set such that they arrive at $x_1$ at $t_1$, leave at $t = t_1 + dt_1$, arrive at $x_2$ at $t = t_2$.  Thus, $s_{12} = \frac{x_2-x_1}{t_2 - (t_1 + dt_1)}$ and $s_{21} =  \frac{x_1-x_2}{t_1 - (t_2 - \tau + dt_2)}$.  We consider these six parameters to be the known or remembered determinants of the migratory behavior, with an initial set $\theta_0$ determining the reference migration behavior, which is updated each year by the experience of the population.  To perform this updating, we estimate a new set of parameters $\widehat{\theta_y}$ after each year, and combine these new parameters with the reference parameters according to the following weighted mean:
+  where the migration speeds $s_{12}$ and $s_{21}$ from the respective ranges are set such that they arrive at $x_1$ at $t_1$, leave at $t = t_1 + dt_1$, arrive at $x_2$ at $t = t_2$, i.e. $s_{12} = \frac{x_2-x_1}{t_2 - (t_1 + dt_1)}$ and $s_{21} =  \frac{x_1-x_2}{t_1 - (t_2 - \tau + dt_2)}$.  This  step-like migration function is a one-dimensional version of the migration parameters estimated individually [@Gurarie2017] and for populations [@Gurarie2019] in empirical studies. 
+
+We consider these six parameters to be the known or remembered determinants of the migratory behavior, with an initial set $\theta_0$ determining the reference migration behavior. This reference migration is updated each year by the experience of the population. To perform this updating, we estimate a new set of parameters $\widehat{\theta_y}$ after each year, and combine these new parameters with the reference parameters according to the following weighted mean:
 
 $$\theta_{y+1} = \kappa^y \, \theta_o + \left(1-\kappa^y\right)\,\widehat{\theta_y}$$
-where each of the six parameters is updated identically. The estimates $\widehat{\theta_y}$ are obtained via a least-squares minimazation of the migration track ($m(t,\theta) = \int_0^t v_m(t',\theta_y) \, dt'$) against the spatial mean of the population process in year $y$ (i.e. $\widehat{u}(t) = \int_X u_y(t, x) dx$).  The parameter $\kappa \in (0,1)$ captures the reliance on that long-term memory. When $\kappa = 0$, all of the actionable memory is from the preceding year.  When $\kappa = 1$, the actionable memory is entirely the reference memory.  
-
-The overarching behavior of the population is to attempt to echo that social memory.  Thus the memory speed of the population at $x = \widehat{u_m}(t)$ is $du_m(t)/dt$; if $du_m/dt > 0$ and $x < \widehat{u_m}(t)$, i.e. for those animals that are lagging behind the optimal remembered location, the memory speed is greater than $du_m(t)/dt$, and if $x > \widehat{u_m}(t)$ the speed is somewhat lower, to allow the remainder of the population to catch up. 
+where each of the six parameters is updated identically. The estimates $\widehat{\theta_y}$ are obtained via a least-squares minimization of the migration track ($m(t,\theta) = \int_0^t v_m(t',\theta_y) \, dt'$) against the spatial mean of the population process in year $y$ (i.e. $\widehat{u}(t) = \int_X u_y(t, x) dx$).  The parameter $\kappa \in (0,1)$ captures the reliance on that long-term memory. When $\kappa = 0$, all of the actionable memory is from the preceding year.  When $\kappa = 1$, the actionable memory is entirely the reference memory.  
 
 The model is confined to a one-dimensional bounded domain $[-\chi,\chi]$, with no flux outside of the boundaries i.e. ${\frac{\partial u(-\chi,t)}{\partial t}} = {\frac{\partial u(\chi,t)}{\partial t}} =0$.  As there are no birth or death processes, the total population remains fixed and constant, for convenience integrating to 1.  Furthermore, the parameters remain constant throughout time, with no adaptation or mutation-selection process.  Our interest is entirely in the ability of a fixed set of memory and movement parameters to ``navigate'' an intra- and interannually dynamic, seasonal environment. 
 
 <!-- A few special cases of this model have been studied in the past. @Shigesada1979 (section 3) thoroughly analyzed the resource following diffusion model with no memory and a static resource (i.e.~$\beta = 0$ and $h(x,t) = h(x)$), showing that at equilibrium, the log of the population density is proportional to $h(x)/\alpha$.  @Shi2019 consider a single period memory model ($\kappa = 0$) in detail, with the addition of an independent birth-death process. Importantly, the authors prove the well-posedness (existence, uniqueness, and positivity) of this model, with arguments that are equally valid for our model. @Fagan2017 numerically explored an extension of this model with no memory but a dynamic resource and the addition of non-local information, i.e.~a model where the resource $h(x,t)$ is "perceived" via a convolution with a detection function. @Fagan2019 added a behavioral switching behavior to the non-local information model.  The essential innovation of our study is the inclusion of an explicit, slowly-varying migratory advection term.
+
+**Figure 1.** *Illustration of memory-based velocity term as a logistic function of space (x-axis), mean memory ($\widehat{u_m}(t)$ - vertical dashed line) and mean movement rate ($d\widehat{u_m}/dt$ - horizontal dashed line). Various values of the social spatial scale parameter $\beta$ reflects the maximum slope of the logistic curve such that at small values of the spatial scale, there is a steep difference in the speed around the mean location (blue curve), and at large values of the spatial scale, there as a weak response of the speed to the mean location.  In all cases, at locations beyond the mean, the speed is lower than at locations lagging behind the mean.*
 -->
 
-```{r, eval = FALSE}
-require(memorymigration)
 
-x <- -100:100
-m.hat <- 40
-dm <- 5
-beta <- 20
-lambda <- 40
-
-v1 <- getMemoryVelocity(x, m.hat, dm, beta = 20, lambda = 40)
-v2 <- getMemoryVelocity(x, m.hat, dm, beta = 100, lambda = 40)
-v3 <- getMemoryVelocity(x, m.hat, dm, beta = 5, lambda = 40)
-
-png("figures/MemoryVelocity.png", width = 1600, height = 1000, res = 300)
-par(mar = c(3,3,1,1), tck = 0.01, mgp = c(1.5,.25,0), bty = "l", 
-    cex.lab = 1.25)
-plot(x, v1, typ = "l", lwd = 2, ylab= "memory velocity v(t)", 
-     col = "darkred", xlab = "spatial domain (x)", ylim = c(0,45))
-lines(x, v2, col = "darkgreen", lwd = 2)
-lines(x, v3, col = "darkblue", lwd = 2)
-segments(-100,dm,100,dm, col = "darkgrey", lty = 3, lwd = 2)
-abline(v = m.hat, col = "darkgrey", lty = 3, lwd = 2)
-points(m.hat, dm, bg = "darkgrey", pch= 21, cex = 1.5)
-legend("topright", col = c("darkblue", "darkred", "darkgreen"),
-       title = expression(beta), lwd = 2, legend = c(5,20,100))
-text(-85, dm, expression(d~widehat(u[m])/dt), pos = 3, col = grey(.3))
-text(m.hat, lambda, expression(widehat(u[m])(t)), pos = 2, col = grey(.3), xpd = NA)
-dev.off()
-```
-![](figures/MemoryVelocity.png)
-**Figure 1.** *Illustration of memory-based velocity term as a logistic function of space (x-axis), mean memory ($\widehat{u_m}(t)$ - vertical dashed line) and mean movement rate ($d\widehat{u_m}/dt$ - horizontal dashed line). Various values of the social spatial scale parameter $\beta$ reflects the maximum slope of the logistic curve such that at small values of the spatial scale, there is a steep difference in the speed around the mean location (blue curve), and at large values of the spatial scale, there as a weak response of the speed to the mean location.  In all cases, at locations beyond the mean, the speed is lower than at locations lagging behind the mean.*
-
- 
 ## Seasonal resource
 
 We ran our numerical experiments on a spatial domain $x \in [-100,100]$, and a periodicity $\tau = 100$ (i.e.~100 day years).  We were interested in an approximately periodic resource dynamic, i.e. one in which $h(x,t \approx h(x, t-\tau))$. We generated two types of resource distributions. A "non-surfable" resource (*island resource*), and weakly surfable resource (*drifting resource*).  Both are characterized by a peak in time and space centered at $M_x$ at $m_t$, and $-m_x$ at $\tau - m_t$ (for example, locations 40 and -40 at times 25 and 75, respectively). These pulses have a shared time scale of duration $s_t$ and a spatial scale of extent $s_x$, the standard deviation in the time and space dimension respectively.  The island resource is simply two uncorrelated bivariate normal distributions $$h(x,t) = K\,(\Phi(m_x, m_t, s_x, s_t) + \Phi(-m_x, \tau - m_t, s_x, s_t))$$
@@ -125,7 +95,7 @@ where $\Phi$ is the bivariate Gaussian distribution function, and the normalizin
 
 The drifting resource differs from the island resource in that the total amount of resource at any given time point is 1 ($\int_X h(x,t) dx = 1$).  This property is attained by distributing the resource as a re-scaled beta distribution, where the shape and scale parameters vary sinusoidally in such a way as to make the standard deviations and means match the desired values of $m_x, m_t, s_x, s_t$ (see appendix for details). 
 
-Within a given year, the resource is entirely symmetric: $h_y(x,t) = h_y(-x, \tau-t)$.  However, in scenarios exploring climate change we allow the peaks to vary with drift and stochasticity according to:  $m_x(y) \sim {\cal N}(\mu_x + \beta_x\,y, \sigma_x)$ and $m_t(y) \sim {\cal N}(\mu_t + \beta_t\,y, \sigma_t)$, where the $\mu$, $\beta$ and $\sigma$ terms are the mean, slope and variance, respectively, for the location and time duration of the pulse.  Thus, if $\beta=0$ and $\sigma=0$, the conditions are constant across years, if $\beta_x > 0$ there is a drift of the resource towards extremes, if $\beta_t < 0$ there is a shift towards earlier resource pulses.  These trends mirror the pole-ward shift of peak resources and the earlier spring phenology occurring with a warming global climate.  The spatial scales ($s_x$ and $s_t$) remain constant.  
+Within a given year, the resource is entirely symmetric: $h_y(x,t) = h_y(-x, \tau-t)$.  However, in scenarios exploring climate change we allow the peaks to vary with drift and stochasticity according to:  $m_x(y) \sim {\cal N}(\mu_x + \beta_x\,y, \sigma_x)$ and $m_t(y) \sim {\cal N}(\mu_t + \beta_t\,y, \sigma_t)$, where the $\mu$, $\beta$ and $\sigma$ terms are the mean, slope and variance, respectively, for the location and time duration of the pulse.  Thus, if $\beta=0$ and $\sigma=0$, the conditions are constant across years, if $\beta_x > 0$ there is a drift of the resource towards extremes, if $\beta_t < 0$ there is a shift towards earlier resource pulses.  These trends mirror the pole-ward shift of peak resources and the earlier spring phenology occurring with a warming global climate.  The spatial scales ($s_x$ and $s_t$) remain constant in all of our simulations.  
 
 ## Metrics
 
@@ -137,19 +107,25 @@ where the spatial integral is taken over the domain.  This metric is constrained
 
 For simulations with a constant resource, we run those until a quasi-equilibrium state is achieved, i.e. where the Bhattacharya index of the population distribution across subsequent years reaches a value of 0.9999.  Once that state is attained, we compute the mirgatoriness and foraging efficiency metrics, and additionally collect the number of years that were required to reach stationarity.  
 
-For numerical runs with climate change, we run the simulation for 30 years, since equilibrium is never achieved) and retain the foraging efficiency for the final 10 years, reflecting something like the dynamic long-term average of the system's ability to keep track of climate change.  We also record the migration memory $\widehat{u_m}$ for each year. 
+For numerical runs with climate change, we run the simulation for 30 years, since equilibrium is never achieved) and retain the foraging efficiency for the final 10 years, reflecting something like the dynamic long-term average of the system's ability to keep track of climate change.  We also record the migration parameters $\widehat{\theta_y}$ for each year. 
 
 
 ## Simulation studies
 
-We numerically solve this model using numerical differencing of a system of ordinary differential equations (ODE's) approximating the PDE in equation (2) with the Runge-Kutte algorithm using the `deSolve` [@Soetaert2010] and `ReacTran` [@Soetaert2012] packages in R.  The complete code is available as an R package (`memorymigration`) available on GitHub at https://github.com/EliGurarie/memorymigration and as an interactive Shiny application at https://url.to.be.determined. 
+We explored this model using numerical differencing of a system of ordinary differential equations (ODE's) approximating the PDE in equation (2) with the Runge-Kutte algorithm using the `deSolve` [@Soetaert2010] and `ReacTran` [@Soetaert2012] packages in R.  We additionally used the `nlsLM` function in package `minpack.LM` [@minpack.lm] for robust and fast annual estimation of the migration parameters.  The complete code is available as an R package (`memorymigration`) available on GitHub at https://github.com/EliGurarie/memorymigration and as an interactive Shiny application at https://url.to.be.determined. 
 
 
 We assessed a wide range of parameter values and resource geometries and dynamics with the goal of answering the three main questions. 
 
 # Results
 
-![](figures/ScanningResourceMemoryRatios_part1.png)
+
+```{r}
+require(memorymigration)
+source("../code/")
+```
+
+![](figures/example1_adaptation.png)
 
 ![](figures/FinalMigratoryFollowing.png){width=50%}
 

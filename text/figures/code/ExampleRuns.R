@@ -1,0 +1,85 @@
+#rm(list=ls())
+require(memorymigration)
+source("code/functions_v6.R")
+source("code/functions_discretemigration.R")
+source("code/functions_plottingresults.R")
+require(minpack.lm); require(fields); require(scales)
+
+#############################
+# Example 1: Adaptation
+#############################
+
+
+eval <- FALSE
+if(eval)
+{
+  world <- getOptimalPop(tau = 100, x1 = 50, x2 = -50, 
+                         t.peak = 25, t.sd = 12, x.sd = 5)
+  world$m0 <- fitMigration(t = world$time, x = getMem(world$pop, world))
+  world$resource <- getResource_island(world, 
+                                       c(t.peak = 25, t.sd = 5, 
+                                         x.peak = 30, x.sd = 10))
+  
+  p0 <- c(epsilon = 1, alpha = 100, kappa = 0, beta = 100, lambda = 40)
+  M0 <- runManyYears(world, parameters = p0, n.years = 40, 1, 
+                     FUN = runNextYear, verbose = TRUE)
+# M0 <- M0 %>% buildOnRuns(world, parameters = p0, n.years = 20, 
+#                     FUN = runNextYear, verbose = TRUE)
+  save(world, M0, file = "results/msexamples/adaptation.rda")
+}
+
+load("results/msexamples/adaptation.rda")
+source("text/figures/code/functions_plotting.R")
+
+n <- 14
+
+png("text/figures/example1_adaptation.png", 
+    width = 3000, height = 3000, res = 300)
+
+{
+  M <- rbind(1:n, rep(n+1:2, each = n/2), rep(n+3:4, each = n/2))
+  layout(M)
+  
+  par(oma = c(2,4,2,2), mgp = c(2,.25,0), las = 1, mar = c(4,0,0,0), 
+      xpd = NA, tck = 0, bty = "l")
+  M0.example <- M0$pop[paste0("Year",1:n - 1)] %T>% 
+    plotSomeYears(world, labelyears = TRUE, par = TRUE)
+  
+  par(mar = c(3,4,2,2), xpd = 0, cex.lab = 1.75, cex.axis = 1.25)
+  doublePlot(M0$pop, world, par = TRUE)
+  plotMigrationHat(M0$m.hat, 30, 25, par = TRUE)
+}
+
+dev.off()
+
+
+#####################################
+# Example 2: Learning to migrate
+######################################
+
+
+eval <- FALSE
+if(eval)
+{
+  world <- getSinePop(tau = 100, peak.max = 5, peak.min = -5, sd = 10)
+  world$m0 <- fitMigration(t = world$time, x = getMem(world$pop, world))
+  
+  world$resource <- getResource_drifting(world, 
+                                       c(t.peak = 25, t.sd = 5, 
+                                         x.peak = 50, x.sd = 10))
+  
+  p0 <- c(epsilon = 5, alpha = 500, kappa = 0, beta = 50, lambda = 40)
+  M0 <- runManyYears(world, parameters = p0, n.years = 23, 1, 
+                     FUN = runNextYear, verbose = TRUE)
+  # M0 <- M0 %>% buildOnRuns(world, parameters = p0, n.years = 20, 
+  #                     FUN = runNextYear, verbose = TRUE)
+  save(world, M0, file = "results/msexamples/learningtomigrate.rda")
+}
+
+
+
+M0.example <- M0$pop[paste0("Year",1:n - 1)] %T>% 
+  plotSomeYears(world, labelyears = TRUE)
+
+doublePlot(M0$pop, world, par = FALSE)
+plotMigrationHat(M0$m.hat, 30, 25, par = FALSE)

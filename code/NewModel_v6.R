@@ -15,19 +15,18 @@ world$resource <- getResource_island(world,
 
 image(world$resource)
 
-p0 <- c(epsilon = 1, alpha = 100, kappa = 1, beta = 100, lambda = 20)
-M0 <- runManyYears(world, parameters = p0, n.years = 10, 1, FUN = runNextYear, verbose = TRUE)
+p0 <- c(epsilon = 1, alpha = 200, kappa = 0, beta = 100, lambda = 30)
+M0 <- runManyYears(world, parameters = p0, n.years = 40, 1, FUN = runNextYear, verbose = TRUE)
 #M0 <- buildOnRuns(M0$pop, world, parameters = p0, n.years = 20, verbose = TRUE, FUN = runNextYear)
 doublePlot(M0$pop, world)
 plotManyRuns(M0$pop, world, nrow = 3)
-
-
-plotMigrationHat(M0$m.hat, 50, 25)
+plotMigrationHat(M0$m.hat, 30, 25)
 
 
 
 
-world <- getOptimalPop(tau = 100, x1 = 50, x2 = -50, t.peak = 25, t.sd = 12, x.sd = 12)
+world <- getOptimalPop(tau = 100, x1 = 50, x2 = -50, 
+                       t.peak = 25, t.sd = 12, x.sd = 12)
 world$resource <- getResource_drifting(world, 
                                      c(t.peak = 25, t.sd = 12, 
                                        x.peak = 50, x.sd = 12))
