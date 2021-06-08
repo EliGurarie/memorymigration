@@ -1,4 +1,7 @@
 library(shiny)
+source("code/functions_v6.R")
+source("code/functions_discretemigration.R")
+source("code/functions_plottingresults.R")
 ui <- fluidPage(
   
   h1("Memory Migration model"),
@@ -16,10 +19,10 @@ ui <- fluidPage(
            numericInput(inputId = "threshold", label = "Threshold of Similarity", value = 0.999, min = 0, max = 1, step = 0.01),
            numericInput(inputId = "alpha",
                         label = "Resource Following - Alpha",
-                        value = 100, min = 0, step = 0.01),
+                        value = 100, min = 0, step = 1),
            numericInput(inputId = "beta",
-                        label = "Spatial Scare of Sociality - Beta",
-                        value = 100, min = 0, step = 0.01),
+                        label = "Spatial Scale of Sociality - Beta",
+                        value = 100, min = 0, step = 1),
            sliderInput(inputId = "kappa",
                        label = "Memory Following - Kappa",
                        value = 1, min = 0, max = 1),
@@ -28,13 +31,14 @@ ui <- fluidPage(
                         value = 20, min = 0, step = 1),
            numericInput(inputId = "epsilon",
                         label = "Diffusion Parameter - Epsilon",
-                        value = 1, min = 0, step = 0.01)
+                        value = 1, min = 0, step = 1)
            ),
     column(6,
            h3("Migratory Population"),
            tableOutput("Indices"),
            plotOutput("Image", height = "400px"),
            plotOutput("Memory", height = "400px"),
+          plotOutput("DoublePlot", height = "400px"),
            h3("Resource"),
            plotOutput("Resourceimage", height = "400px")
            ),
@@ -64,7 +68,8 @@ ui <- fluidPage(
 
 
 server <- function(input, output) {
-  pcks <- c("shiny","sf","ggplot2","magrittr","plyr", "gplots", "memorymigration")
+  pcks <- c("shiny","sf","ggplot2","magrittr","plyr", "gplots", 
+            "memorymigration", "DT", "ggthemes", "minpack.lm", "fields","scales")
   lapply(pcks, require, character = TRUE)
   
   simulation <- eventReactive(input$run, {
@@ -78,12 +83,13 @@ server <- function(input, output) {
       }
     
     if(input$world == "world_nonmigratory"){
-      world <- getSinePop(tau = 100, peak.max = 0, peak.min = 0, sd = 10)
+      world <- getSinePop(tau = 100, peak.max = 1, peak.min = -1, sd = 10)
     }
     if(input$world == "world_sinusoidal"){
       world <- getSinePop(tau = 100, peak.max = 40, peak.min = -40, sd = 10)
     }
-     
+    world$m0 <- fitMigration(t = world$time, x = getMem(world$pop, world))
+
         par0 <- getCCpars(mu_x0 = as.numeric(input$mu.x0), 
                           mu_t0 = as.numeric(input$mu.t0),
                           beta_x = as.numeric(input$beta.x),
@@ -128,27 +134,33 @@ server <- function(input, output) {
         kappa = as.numeric(input$kappa),
         lambda = as.numeric(input$lambda)
       )
-      
+
     sim <- runManyYears(world=world, parameters = parameters, 
                    n.years = as.numeric(input$years), 
-                   threshold = as.numeric(input$threshold), verbose=FALSE)
+                   threshold = as.numeric(input$threshold), FUN = runNextYear, verbose=TRUE)
   
-    
-    indices <- data.frame(computeIndices(sim[[length(sim)]], 
+
+    indices <- data.frame(computeIndices(sim$pop[[length(sim)]], 
                                          world$resource[length(sim)-1,,], world),
-                          avgFE = computeAvgEfficiency(sim, world$resource, world),
-                          final_similarity = computeEfficiency(sim[[length(sim)-1]], 
-                                                               sim[[length(sim)]], world), 
-                          n.runs = length(sim) - 1,
+                          avgFE = computeAvgEfficiency(sim$pop, world$resource, world),
+                          final_similarity = computeEfficiency(sim$pop[[length(sim)-1]], 
+                                                               sim$pop[[length(sim)]], world), 
+                          n.runs = length(sim$pop) - 1,
                           resource_param, param.df)
     
     #parameters.df <- ldply (parameters, data.frame)
     indices <- format(indices, digits=4)
-    memory <- plotMemories(sim, world)
-    yearplot <- plotManyRuns(sim, world = world, nrow=ceiling(length(sim)/6), labelyears=TRUE)
+
+ # memory <- doublePlot(sim$pop, world)
+
+   yearplot <- plotManyRuns(sim$pop, world = world, nrow=ceiling(length(sim$pop)/6), labelyears=TRUE)
+
    
-    newlist <- list(sim,indices, memory, yearplot)
-    
+ # doubleplot <- plotMigrationHat(sim$m.hat, input$x.peak, input$t.peak, 
+  #                                cols = c("darkorange", "darkblue"))
+
+   # newlist <- list(sim,indices, memory, yearplot, doubleplot)
+    newlist <- list(sim,indices, yearplot, world)
     
   })
 
@@ -164,37 +176,27 @@ server <- function(input, output) {
     }
     
     if(input$world == "world_nonmigratory"){
-      world <- getSinePop(tau = 100, peak.max = 0, peak.min = 0, sd = 10)
+      world <- getSinePop(tau = 100, peak.max = 1, peak.min = -1, sd = 10)
     }
     if(input$world == "world_sinusoidal"){
       world <- getSinePop(tau = 100, peak.max = 40, peak.min = -40, sd = 10)
     }
-    
+    world$m0 <- fitMigration(t = world$time, x = getMem(world$pop, world))
+    par0 <- getCCpars(mu_x0 = as.numeric(input$mu.x0), 
+                      mu_t0 = as.numeric(input$mu.t0),
+                      beta_x = as.numeric(input$beta.x),
+                      beta_t = as.numeric(input$beta.t),
+                      n.years = as.numeric(input$years),
+                      sigma_x = as.numeric(input$x.sd),
+                      sigma_t = as.numeric(input$t.sd),
+                      psi_x = as.numeric(input$psi_x), 
+                      psi_t = as.numeric(input$psi_t))
     if(input$resource == "resources_island"){
-      par0 <- getCCpars(mu_x0 = as.numeric(input$mu.x0), 
-                        mu_t0 = as.numeric(input$mu.t0),
-                        beta_x = as.numeric(input$beta.x),
-                        beta_t = as.numeric(input$beta.t),
-                        n.years = as.numeric(input$years),
-                        sigma_x = as.numeric(input$x.sd),
-                        sigma_t = as.numeric(input$t.sd),
-                        psi_x = as.numeric(input$psi_x), 
-                        psi_t = as.numeric(input$psi_t))
       
       Resource.CC <- aaply(par0, 1, function(p) getResource_island(world, p))
     }
     
     if(input$resource == "resources_drifting"){
-      par0 <- getCCpars(mu_x0 = as.numeric(input$mu.x0), 
-                        mu_t0 = as.numeric(input$mu.t0),
-                        beta_x = as.numeric(input$beta.x),
-                        beta_t = as.numeric(input$beta.t),
-                        n.years = as.numeric(input$years),
-                        sigma_x = as.numeric(input$x.sd),
-                        sigma_t = as.numeric(input$t.sd),
-                        psi_x = as.numeric(input$psi_x), 
-                        psi_t = as.numeric(input$psi_t))
-      
       Resource.CC <- aaply(par0, 1, function(p) getResource_drifting(world, p))
     }
     
@@ -203,8 +205,8 @@ server <- function(input, output) {
     
   })
   
-  output$Image <- renderPlot({
-   simulation()[[4]]
+ output$Image <- renderPlot({
+   simulation()[[3]]
   }, res = 150)
   
   output$Resourceimage <- renderPlot({
@@ -215,9 +217,13 @@ server <- function(input, output) {
    simulation()[[2]][,1:6]
  }, digits = 3)
  
- output$Memory <- renderPlot({
-  simulation()[[3]]
+output$Memory <- renderPlot({
+ doublePlot(simulation()[[1]]$pop,simulation()[[4]])
  }, res = 150)
+ 
+#output$DoublePlot <- renderPlot({
+ #  simulation()[[]]
+#}, res = 150)
  
  output$downloadData <- downloadHandler(
    filename = "simulationRun.csv",

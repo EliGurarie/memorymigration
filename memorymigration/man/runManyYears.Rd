@@ -9,7 +9,8 @@ runManyYears(
   parameters,
   n.years = 20,
   threshold = 0.9999,
-  verbose = FALSE
+  verbose = FALSE,
+  FUN = runNextYear
 )
 }
 \arguments{
