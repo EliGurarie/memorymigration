@@ -44,37 +44,43 @@ We anticipate that under many conditions a blending of *tactical* (i.e. direct r
 In designing our study, our goal was to develop a minimal heuristic in which the following processes were explicitly modeled: (1) Random or exploratory movement, (2) attraction to resources, (3) a long-term (or *reference*) memory of large-scale movement behavior, (4) a short-term (or *working*) memory that updates movement behavior based on recent experience, (5) some social aspect to the learned behavior.  
 A diffusion-advection equation provided a computationally efficient and versatile framework for examining just such a system.  We consider a population moving in one dimension in a constrained domain ${\cal D}$ and distributing itself according to the following equation: 
 
-$${\frac{\partial u(x,t)}{\partial t}} = -\varepsilon {\frac{\partial^2 u(x,t)}{\partial x^2}} + 
-\alpha \frac{\partial}{\partial x}\left(u(x,t) \frac{\partial h(x,t)}{\partial x}\right) + v_m(x, t,y)
+$${\frac{\partial u}{\partial t}} = -\varepsilon {\frac{\partial^2 u}{\partial x^2}} + 
+\alpha \frac{\partial}{\partial x}\left(u \frac{\partial h}{\partial x}\right) + 
+\beta \frac{\partial}{\partial x}\left(v_s(u)\right) + 
+v_m(t)
 $$
 
-where  $u(x,t)$ represents the population distributed in time and space, $\varepsilon$ is the diffusion rate and $h(x,t)$ is the distribution of the resource.  The resource is structured and seasonal with period $\tau$, such that $h(x, t) \approx h(x, t-\tau)$. $\alpha$ represents the strength of advection in the direction of the resource $h(x,t)$ gradient, as standard in chemotaxis equations.  Finally, there is the social memory based speed term $v_m(x,t,y)$, which evolves with the year $y \in \{0,1,2,...\}$, i.e. the count of periods $\tau$: $y = \lfloor t/\tau \rfloor$.  
+where  $u$ represents the population distributed in time and space.  The first term is the diffusion term, capturing the fast time-scale exploration and "random" movements of individuals, with $\varepsilon$ is the diffusion rate.  
 
-The social memory term works as follows:  The population retains a memory of the mean location of the population exactly one year prior, i.e. $\widehat{u}(t-\tau)$. This working memory is combined with a baseline reference memory, $\widehat{u_o}(t)$ via:
+The second term represents the attraction to a dynamic resource $h$, with the proportionality of the advection to the gradient of the resource given by the parameter $\alpha$ (note, the population and resource distributions are functions of both space and time $u(x,t)$ and $h(x,t)$ - we omit the dependent variables in the notation for brevity).  This is the well-studied standard chemotaxic resource-following behavior. We borrow the general notation from our earlier related work [@Fagan2017;@Fagan2019]. 
 
-$$\widehat{u_m}(t) = \kappa^y \, \widehat{u_o}(t) + \left(1-\kappa^y\right)\,\widehat{u}(t-\tau)$$
+The third term captures the collective or social advection term of the population via a non-local, density dependent function $v_s(u,x)$.  If this function takes the form of a convolution around a non-local kernel $k$, i.e.~
+$$v_s(u) = k(x) * u(x)$$
+and that kernel is odd, an attractive or "swarming" behavior can be generated [@Mogilner1999]. We use the kernel analyzed by @Mogilner1999: 
+$$k(x) = \frac{x}{2\lambda^2} \exp(-x^2/2\lambda^2).$$ 
+The convolution of $u$ with this kernel has the property of pushing the population in a positive direction when $x < \widehat{u}$, and in a negative direction when $x > \widehat{u}$.  The parameter $\lambda$ is a length scale of sociality - roughly one-half the size of the "swarm", which $\beta$ is a parameter which quantifies the overall strength of sociality. 
 
-The long-term, reference memory term, which does not change throughout the evolution of the process is a strictly periodic function: $\widehat{u_o}(t)$ = $\widehat{u_o}(t - \tau)$.  The parameter $\kappa \in (0,1)$ captures the reliance on that long-term memory. When $\kappa = 0$, all of the actionable memory is from the preceding year, when $\kappa = 1$, the actionable memory is entirely the reference memory.  Importantly, the individuals remember not just the location of the actionable memory term, but the movement rate of that term as well, i.e. $d\widehat{u_m}(t)/dt$.  
+Finally, the last term captures the direct advection that emerges from a memory-driven migratory behavior. This term evolves with a set of parameters $\theta_y$ that slowly change each year $y \in \{0,1,2,...\}$, i.e. the count of periods $\tau$: $y = \lfloor t/\tau \rfloor$.  
+
+The migration speed is specified by six parameters $\theta$: the timing of the start and duration of two anticipated seasons (nominally, winter and summer) $t_1$, $dt_1$, $t_2$, $dt_2$, and the spatial coordinates of the population centroid for each season $x_1$ and $x_2$.  Thus the remembered migratory speed term is a simple step function given by:
+
+$$
+v_m(t, \theta_y) = \begin{cases}
+0 &;  & t > t_1 &\text{and} & t \leq t_1 + dt_1 \\ 
+s_{12} &;  &  t > t_1 + dt_1 &\text{and} & t \leq t_2 \\ 
+0 &; & t> t_2 &\text{and} &t \leq t_2 + dt_2 \\ 
+s_{21} &; &  t > t_2+dt_2 & \text{or} & t \leq t_1\\ 
+\end{cases}
+$$
+
+where the migration speeds $s_{12}$ and $s_{21}$ from the respective ranges are set such that they arrive at $x_1$ at $t_1$, leave at $t = t_1 + dt_1$, arrive at $x_2$ at $t = t_2$.  Thus, $s_{12} = \frac{x_2-x_1}{t_2 - (t_1 + dt_1)}$ and $s_{21} =  \frac{x_1-x_2}{t_1 - (t_2 - \tau + dt_2)}$.  We consider these six parameters to be the known or remembered determinants of the migratory behavior, with an initial set $\theta_0$ determining the reference migration behavior, which is updated each year by the experience of the population.  To perform this updating, we estimate a new set of parameters $\widehat{\theta_y}$ after each year, and combine these new parameters with the reference parameters according to the following weighted mean:
+
+$$\theta_{y+1} = \kappa^y \, \theta_o + \left(1-\kappa^y\right)\,\widehat{\theta_y}$$
+where each of the six parameters is updated identically. The estimates $\widehat{\theta_y}$ are obtained via a least-squares minimazation of the migration track ($m(t,\theta) = \int_0^t v_m(t',\theta_y) \, dt'$) against the spatial mean of the population process in year $y$ (i.e. $\widehat{u}(t) = \int_X u_y(t, x) dx$).  The parameter $\kappa \in (0,1)$ captures the reliance on that long-term memory. When $\kappa = 0$, all of the actionable memory is from the preceding year.  When $\kappa = 1$, the actionable memory is entirely the reference memory.  
 
 The overarching behavior of the population is to attempt to echo that social memory.  Thus the memory speed of the population at $x = \widehat{u_m}(t)$ is $du_m(t)/dt$; if $du_m/dt > 0$ and $x < \widehat{u_m}(t)$, i.e. for those animals that are lagging behind the optimal remembered location, the memory speed is greater than $du_m(t)/dt$, and if $x > \widehat{u_m}(t)$ the speed is somewhat lower, to allow the remainder of the population to catch up. 
 
-The specific relationship is a logistic curve: 
-
-$$v_m(x,t) =  \begin{cases}
-\frac{\lambda}{1 + \exp((x - x_+(t))/\beta)}  &\text{if} &  \frac{d\widehat{u_m}}{dt} > 0\\
-\frac{\lambda}{1 - \exp(-(x - x_-(t))/\beta)} &\text{if} & \frac{d\widehat{u_m}}{dt} < 0
-\end{cases}$$
-
-where $x_+(t)$ and $x_-(t)$ are fixed such that the value of $v_m(x,t) = d{u_m}/dt$ at $x = \widehat{u_m}$. 
-
-$$
-x_+ = \widehat{u_m} - \log\left(\lambda / \frac{d\widehat{u_m}}{dt} - 1\right) \beta \\
-x_- = \widehat{u_m} + \log\left(-\lambda / \frac{d\widehat{u_m}}{dt} - 1\right) \beta
-$$
-
-The parameter $\beta$, the reciprocal of the maximum slope of the logistic regression, can be considered a spatial scale of social cohesion.  If it is large, the population responds more or less similarly across the domain, with the extreme case $\beta = \infty$ corresponding to a shared velocity of $\frac{d\widehat{u_m}}{dt}$.  If it is small, then there is a very strong discrepancy in speeds at a short scale (Figure 1). The parameter $\lambda$ - corresponding to the maximum possible advective speed - is needed to constrain the speed at large distances from $u_m$ for numerical stability, but is not of central interest in our study.  
-
-The model is confined to a one-dimensional bounded domain $[-\chi,\chi]$, with no flux outside of the boundaries i.e. ${\frac{\partial u(-\chi,t)}{\partial t}} = {\frac{\partial u(\chi,t)}{\partial t}} =0$.  As there are no birth or death processes, to total population remains fixed and constant, for convenience integrating to 1.  Furthermore, the parameters remain constant throughout time, with no adaptation or mutation-selection process.  Our interest is entirely in the ability of a fixed set of memory and movement parameters to ``navigate'' an intra- and interannually dynamic, seasonal environment. 
+The model is confined to a one-dimensional bounded domain $[-\chi,\chi]$, with no flux outside of the boundaries i.e. ${\frac{\partial u(-\chi,t)}{\partial t}} = {\frac{\partial u(\chi,t)}{\partial t}} =0$.  As there are no birth or death processes, the total population remains fixed and constant, for convenience integrating to 1.  Furthermore, the parameters remain constant throughout time, with no adaptation or mutation-selection process.  Our interest is entirely in the ability of a fixed set of memory and movement parameters to ``navigate'' an intra- and interannually dynamic, seasonal environment. 
 
 <!-- A few special cases of this model have been studied in the past. @Shigesada1979 (section 3) thoroughly analyzed the resource following diffusion model with no memory and a static resource (i.e.~$\beta = 0$ and $h(x,t) = h(x)$), showing that at equilibrium, the log of the population density is proportional to $h(x)/\alpha$.  @Shi2019 consider a single period memory model ($\kappa = 0$) in detail, with the addition of an independent birth-death process. Importantly, the authors prove the well-posedness (existence, uniqueness, and positivity) of this model, with arguments that are equally valid for our model. @Fagan2017 numerically explored an extension of this model with no memory but a dynamic resource and the addition of non-local information, i.e.~a model where the resource $h(x,t)$ is "perceived" via a convolution with a detection function. @Fagan2019 added a behavioral switching behavior to the non-local information model.  The essential innovation of our study is the inclusion of an explicit, slowly-varying migratory advection term.
 -->
