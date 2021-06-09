@@ -72,10 +72,10 @@ plotSomeYears <- function(sim, world, years = NULL, nrow = 1, outer = TRUE,
 }
 
 plotMigrationHat <- function(mhat, x.peak, t.peak, 
-                             cols = c("darkorange", "darkblue"), par = FALSE){
+                             cols = c("darkorange", "darkblue"), par = FALSE, ylim1 = c(0,100)){
   if(!par) par(mfrow = c(1,2), mar = c(3,3,2,2), xpd = FALSE)
   with(mhat,{
-    plot(year, t1, ylim = c(0,100), ylab = "migration timing (day of year)", col = cols[1])
+    plot(year, t1, ylim = ylim1, ylab = "migration timing (day of year)", col = cols[1])
     segments(year, t1, year, t1+dt1, col = cols[1])
     points(year, t1 + dt1, col = cols[1])
     

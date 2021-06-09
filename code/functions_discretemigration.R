@@ -1,5 +1,5 @@
 
-getMigration <- function(t, t1, dt1, t2, dt2, x1, x2, tau = 100){
+stepMigration <- function(t, t1, dt1, t2, dt2, x1, x2, tau = 100){
   s12 <- (x2-x1)/(t2 - t1 - dt1)
   s21 <- (x1-x2)/(t1 - (t2 - tau) - dt2)
   ifelse((t > t1) & (t <= t1 + dt1), x1, 
@@ -9,13 +9,14 @@ getMigration <- function(t, t1, dt1, t2, dt2, x1, x2, tau = 100){
                               s21*(t - t2 - dt2 + tau) + x2))))
 }
 
-fitMigration <- function(t, x, m0 = NULL, tau = 100){
-  if(is.null(m0)) m0 <- c(t1 = 15, dt1 = 30, t2 = 55, dt2 = 30, 
-                          x1 = min(x), x2 = max(x))
-  migration.fit <- nlsLM(x ~ getMigration(t, t1, dt1, t2, dt2, x1, x2, tau = 100),
-                         start = as.list(m0)) 
+fitMigration <- function(t, x, m.start = NULL, tau = 100){
+  if(is.null(m.start)) m.start <- c(t1 = 15, dt1 = 30, t2 = 55, dt2 = 30, x1 = min(x), x2 = max(x))
+  migration.fit <- nlsLM(x ~ stepMigration(t, t1, dt1, t2, dt2, x1, x2, tau = 100), start = as.list(m.start),
+                         lower = c(0,0,0,0,-100,-100), 
+                         upper = c(100,100,100,100,100,100)) 
   summary(migration.fit)$coef[,1]
 }
+
 
 squashMigration <- function(m.hat, v.max, tau = 100){
   p.list <- as.list(m.hat)
@@ -43,9 +44,4 @@ squashMigration <- function(m.hat, v.max, tau = 100){
     m.new["dt2"] <- m.new["dt2"] - dt.migration/2
   }
   m.new
-}
-
-getMigrationParameters <- function(m0, pop, kappa, year, world){
-  m.new <- fitMigration(t = world$time, x = getMem(pop, world))
-  kappa^year * m0 + (1 - kappa^year) * m.new
 }

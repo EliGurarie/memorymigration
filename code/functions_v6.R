@@ -25,8 +25,10 @@ buildOnRuns <- function(M, world, ...){
   M2$pop[[1]] <- NULL
   M3 <- list()
   M3$pop <- c(M$pop, M2$pop)
-  M3$m.hat <- rbind(M$m.hat, M2$m.hat)
-  M3$m.hat$year = 1:nrow(M3$m.hat) - 1
+  
+  M3$migration.hat <- rbind(M$migration.hat, M2$migration.hat[-1,]) %>% mutate(year = 1:length(M3$pop)-1)
+  M3$memory.hat <- rbind(M$memory.hat, M2$memory.hat[-1,]) %>% mutate(year = 1:length(M3$pop)-1)
+  
   names(M3$pop) <- paste0("Year",1:length(M3$pop)-1)
   M3
 }
@@ -34,60 +36,46 @@ buildOnRuns <- function(M, world, ...){
 
 runManyYears <- function(world, parameters, n.years = 20, 
                          threshold= 0.9999, verbose = FALSE, 
-                         FUN = runNextYear){
+                         FUN = runNextYear, m0 = world$m0){
   cat("\n")
   cat(paste(names(parameters), parameters, collapse = "; "))
   
-  migration.list <- list(Year1 = world$m0)
-  pop.list <- list(Year1 = world$pop)
-
+  migration.list <- list(m0)
+  memory.list <- list(m0)
+  pop.list <- list(world$pop)
   similarity <- 0
   i <- 1 
   while((similarity < threshold) & (i < n.years)){
     if(verbose){cat("\n"); cat(paste("running year ", i))}
-   
     i <- i+1
-    
-    pop.new <- FUN(world = world, 
-                   parameters = parameters, 
+    pop.list[[i]] <- FUN(world = world, parameters = parameters, 
                    pop.lastyear = pop.list[[length(pop.list)]], 
-                   Year = i)
-    pop.list[[i]] <-  pop.new
-
-    migration.list[[i]] <- getMigrationParameters(world$m0, pop.new, 
-                                    parameters["kappa"], 
-                                    year = i, 
-                                    world)
+                   Year = i, m.start = migration.list[[i-1]])
+    
+    migration.list[[i]] <- fitMigration(t = world$time, x = getMem(pop.list[[i]], world), 
+                                        m.start = migration.list[[i-1]])
+    
+    memory.list[[i]] <- parameters["kappa"]^(i-1) * world$m0 + 
+      (1 - parameters["kappa"]^(i-1)) * migration.list[[i]]
+    
     similarity <- computeEfficiency(pop.list[[i-1]], pop.list[[i]], world)
-
   }
   names(pop.list) <- paste0("Year",0:(length(pop.list)-1))
   attr(pop.list, "parameters") <- parameters
   
-  m.hat <- ldply(migration.list, .id = "year") %>% mutate(year = 1:length(pop.list)-1)
-  final <- list(pop = pop.list, m.hat = m.hat)
+  migration.hat <- ldply(migration.list, .id = "year") %>% mutate(year = 1:length(pop.list)-1)
+  memory.hat <- ldply(memory.list, .id = "year") %>% mutate(year = 1:length(pop.list)-1)
+  final <- list(pop = pop.list, migration.hat = migration.hat, memory.hat = memory.hat)
   final
 }
 
-eval <- FALSE
-if(eval){
-  pop1 <- M0$pop[[4]]
-  image(world$time, world$X, pop1)
-  m.hat <- getMigrationParameters(world$m0, pop1, parameters["kappa"], Year, world)
-  with(as.list(m.hat), abline(v = c(t1 + c(0, dt1), 
-                                  t2 + c(0, dt2))))
-  with(as.list(m.hat), abline(h = c(x1, x2)))
-  contour(world$time, world$X, world$resource, add = TRUE)
-}
-
-
-runNextYear <- function(world, parameters, pop.lastyear, Year){
+runNextYear <- function(world, parameters, pop.lastyear, Year, m.start = world$m0){
   pop0 <- world$pop
   pop1 <- pop.lastyear
   pop2 <- pop0*0
   Time <- world$time
 
-  m.hat <- getMigrationParameters(world$m0, pop1, parameters["kappa"], Year, world)
+  m.hat <- getMemoryMigration(world$m0, pop1, parameters["kappa"], Year, world, m.start = m.start)
   
   migration.hat <- with(as.list(m.hat), getMigration(Time, t1, dt1, t2, dt2, x1, x2))
   
@@ -103,8 +91,7 @@ runNextYear <- function(world, parameters, pop.lastyear, Year){
       pop_now <- pop.lastyear[nrow(pop.lastyear),] else 
         pop_now <- pop2[t-1,]
       dp <- convolvePop(seq(world$X.min, world$X.max, world$dx), 
-                        pop = extend(pop_now), 
-                        lambda = parameters["lambda"])
+                        pop = extend(pop_now), lambda = parameters["lambda"])
       
       pop2[t,] <- ode(y = pop_now, 
                       times = 0:1, 
