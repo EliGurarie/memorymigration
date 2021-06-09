@@ -67,9 +67,9 @@ ui <- fluidPage(
 
 
 server <- function(input, output) {
-  pcks <- c("shiny","sf","ggplot2","magrittr","plyr", "gplots", 
-            "memorymigration", "DT", "ggthemes", "minpack.lm", "fields","scales")
-  lapply(pcks, require, character = TRUE)
+  #pcks <- c("shiny","sf","ggplot2","magrittr","plyr", "gplots", 
+  #          "memorymigration", "DT", "ggthemes", "minpack.lm", "fields","scales")
+  #lapply(pcks, require, character = TRUE)
   
   
   # Setting up World ---------------------
@@ -156,14 +156,11 @@ server <- function(input, output) {
 
 ## Plotting migrations -----------------
     
-  migrationhat <- plotMigrationHat(sim$migration.hat, 
-                                   as.numeric(input$x.peak), 
-                                   as.numeric(input$t.peak), cols = c("darkorange", "darkblue"))
-  
-    # newlist <- list(sim,indices, yearplot, memory)
-    newlist <- list(sim,indices, world, migrationhat)
-     # newlist <- list(sim,indices, yearplot, world)
-      
+    list(sim = sim,
+         indices = indices,
+         world = world, 
+         x.peak = as.numeric(input$x.peak),
+         t.peak = as.numeric(input$t.peak))
     })
 
 ## Resource Image ---------------------
@@ -207,34 +204,43 @@ server <- function(input, output) {
     
   })
   
- output$Image <- renderPlot({
-   plotManyRuns(simulation()[[1]]$pop, world = simulation()[[3]], nrow=ceiling(length(simulation()[[1]]$pop)/6), labelyears=TRUE)
-  }, res = 150)
+   output$Image <- renderPlot({
+     plotManyRuns(simulation()[[1]]$pop, world = simulation()[[3]], nrow=ceiling(length(simulation()[[1]]$pop)/6), labelyears=TRUE)
+    }, res = 150)
+    
+    output$Resourceimage <- renderPlot({
+      resourceImage()
+    }, res = 150)
+    
+   output$Indices <- renderTable({
+     simulation()[[2]][,1:6]
   
-  output$Resourceimage <- renderPlot({
-    resourceImage()
+   }, digits = 3)
+   
+   
+  # double Plot (migration and resource) ----------------------
+  output$Memory <- renderPlot({
+    doublePlotForShiny(simulation()$sim$pop, 
+                       world = simulation()$world)
+   }, res = 150)
+   
+  output$MigrationHat <- renderPlot({
+    par(mfrow = c(1,2), mar = c(2,2,1,1), 
+        tck = 0.01, mgp = c(1.5,.25,0), 
+        bty = "l", cex.lab = 1.25, las = 1, xpd = NA)
+    with(simulation(),
+    plotMigrationHat(sim$migration.hat, 
+                     x.peak = x.peak, t.peak = t.peak)
+    )
   }, res = 150)
-  
- output$Indices <- renderTable({
-   simulation()[[2]][,1:6]
-
- }, digits = 3)
- 
-output$Memory <- renderPlot({
-  doublePlot(simulation()[[1]]$pop, simulation()[[3]])
- }, res = 150)
- 
-output$MigrationHat <- renderPlot({
-   simulation()[[4]]
-}, res = 150)
- 
- output$downloadData <- downloadHandler(
-   filename = "simulationRun.csv",
-   content = function(file) {
-     
-     write.csv(simulation()[[2]], file)
-   }
- )
+   
+   output$downloadData <- downloadHandler(
+     filename = "simulationRun.csv",
+     content = function(file) {
+       
+       write.csv(simulation()[[2]], file)
+     }
+   )
 }
 
 
