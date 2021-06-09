@@ -75,8 +75,6 @@ runNextYear <- function(world, parameters, pop.lastyear, Year, m.start = world$m
   pop2 <- pop0*0
   Time <- world$time
 
-  m.hat <- getMemoryMigration(world$m0, pop1, parameters["kappa"], Year, world, m.start = m.start)
-  
   migration.hat <- with(as.list(m.hat), getMigration(Time, t1, dt1, t2, dt2, x1, x2))
   
   if(length(dim(world$resource)) == 3)

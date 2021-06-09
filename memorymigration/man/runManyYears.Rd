@@ -10,7 +10,7 @@ runManyYears(
   n.years = 20,
   threshold = 0.9999,
   verbose = FALSE,
-  FUN = runNextYear
+  m0 = world$m0
 )
 }
 \arguments{

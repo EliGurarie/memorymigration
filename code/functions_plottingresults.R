@@ -1,55 +1,3 @@
-plotbasicstats <- function(r){
-  p1 <- ggplot(r %>% mutate(tactic = factor(alpha), diffusion = factor(epsilon)), 
-               aes(tactic, MI, col = diffusion)) + geom_boxplot() + ggtitle("Migratoriness")
-  p2 <- ggplot(r %>%  mutate(tactic = factor(alpha), diffusion = factor(epsilon)), 
-               aes(tactic, FE, col = diffusion)) + geom_boxplot() + ggtitle("Foraging efficiency")
-  p3 <- ggplot(r %>% mutate(tactic = factor(alpha), diffusion = factor(epsilon)), 
-               aes(tactic, SC, col = diffusion)) + geom_boxplot() + ggtitle("Social cohesion")
-  p4 <- ggplot(r %>%  mutate(tactic = factor(alpha), diffusion = factor(epsilon)), 
-               aes(tactic, n.runs, col = diffusion)) + geom_boxplot() + ggtitle("Number of runs")
-  grid.arrange(p1, p2, p3, p4, ncol = 1)
-}
-
-
-compareResourceTypes <- function(df, beta0.high = 200, beta1.high = 300){
-  p <- ggplot(df %>% 
-                mutate(extent = (space.sd*2) %>% factor,
-                       duration = (time.sd*2) %>% factor,
-                       model = ifelse(beta0 == 0 & beta1 == 500, "c) Memory: 500",
-                                      ifelse(beta0 == 500 & beta1 == 0, "b) Sociality: 500",
-                                             ifelse(beta0 == beta0.high & beta1 == beta1.high, 
-                                                    paste("d) Memory:", beta1.high,  "Sociality: ", beta0.high),
-                                                    ifelse(beta0 == 0 & beta1 == 0, "a) Tactics only", NA))))) %>% 
-                subset(!is.na(model)), 
-              aes(FE, MI, col = extent, pch = duration)) + 
-    geom_line(aes(FE, MI, group = duration), col = "grey", lty = 3) + 
-    geom_line(aes(FE, MI, group = extent), col = "grey", lty = 3) + 
-    geom_point(size = 3) + facet_wrap(.~model, ncol = 2) + 
-    theme_few() + ylab("Migratoriness") + xlab("Foraging efficiency") 
-  return(p)
-}
-
-
-
-compareResourceTypes_v2 <- function(df, beta0.high = 200, beta1.high = 300){
-  p <- ggplot(df %>% 
-                mutate(extent = (space.sd*2) %>% factor,
-                       duration = (time.sd*2) %>% factor,
-                       model = ifelse(beta0 == 0 & beta1 == 500, "c) Memory: 500",
-                                      ifelse(beta0 == 500 & beta1 == 0, "b) Sociality: 500",
-                                             ifelse(beta0 == beta0.high & beta1 == beta1.high, 
-                                                    paste("d) Memory:", beta1.high,  "Sociality: ", beta0.high),
-                                                    ifelse(beta0 == 0 & beta1 == 0, "a) Tactics only", NA))))) %>% 
-                subset(!is.na(model)), 
-              aes(MI, FE, col = extent, pch = duration)) + 
-    geom_line(aes(MI, FE, group = duration), col = "grey", lty = 3) + 
-    geom_line(aes(MI, FE, group = extent), col = "grey", lty = 3) + 
-    geom_point(size = 3) + facet_wrap(.~model, ncol = 2) + 
-    theme_few() + xlab("Migratoriness") + ylab("Foraging efficiency") 
-  return(p)
-}
-
-
 plotMemory <- function(M, add = FALSE){
   require(plyr)
   memory.df <- ldply(M, function(l)
@@ -85,7 +33,15 @@ doublePlot <- function(M, world){
                  .id = "year") %>% mutate(year = 1:length(year))
     plot(FE1, type = "o")
   }
-  
+}
+
+
+#' @export
+plotEfficiency <- function(M, world, ...){
+  FE1 <- ldply(M, computeEfficiency, 
+               resource = world$resource[1,,], world = world,
+               .id = "year") %>% mutate(year = 1:length(year))
+  plot(FE1, type = "o", ...)
 }
 
 plotMigrationHat <- function(mhat, x.peak, t.peak, 
@@ -109,3 +65,11 @@ plotMigrationHat <- function(mhat, x.peak, t.peak,
            legend = c( "summer", "winter", "true value"), col = c(cols, "darkgrey"), bty = "n")
   })
 }
+
+
+
+
+
+
+
+

@@ -1,6 +1,6 @@
 
 
-plotMemory <- function(M, add = FALSE){
+plotMigration <- function(M, add = FALSE){
   require(plyr)
   memory.df <- ldply(M, function(l)
     data.frame(time = 1:nrow(l), 
@@ -11,8 +11,6 @@ plotMemory <- function(M, add = FALSE){
   palette(rich.colors(n.years))
   ddply(memory.df, "year", function(df)
     with(df, lines(time, memory, col = as.integer(year))))
-  #legend("topright", legend = 1:n.years, col = 1:n.years, 
-  #       lty = 1, ncol = 2, title = "year", bty = "n")
 }
 
 doublePlot <- function(M, world, par = FALSE){
@@ -23,7 +21,7 @@ doublePlot <- function(M, world, par = FALSE){
   
   with(world, image(time, X, resource, col = grey.colors(100),
                     ylab = "space", xlab = "time of year"))
-  plotMemory(M, add = TRUE)
+  plotMigration(M, add = TRUE)
   FE1 <- ldply(M, computeEfficiency, 
                resource = world$resource, world = world,
                .id = "year") %>% mutate(year = 1:length(year))

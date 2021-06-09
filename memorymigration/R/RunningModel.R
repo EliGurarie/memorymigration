@@ -22,32 +22,59 @@
 #'  @example examples/indices_examples.R
 #' @export
 #' 
+
+
 runManyYears <- function(world, parameters, n.years = 20, 
                          threshold= 0.9999, verbose = FALSE, 
-                         FUN = runNextYear){
+                         m0 = world$m0){
   cat("\n")
   cat(paste(names(parameters), parameters, collapse = "; "))
   
-  pop.list <- list(Year1 = world$pop)
-  i <- 1
-  pop.list[[i+1]] <- FUN(world, Parameters = parameters, 
-                                 Pop_lastyear = world$pop, Year = 1)
-  similarity <- computeEfficiency(pop.list[[i]], pop.list[[i+1]], world)
-  
+  migration.list <- list(m0)
+  memory.list <- list(m0)
+  pop.list <- list(world$pop)
+  similarity <- 0
+  i <- 1 
   while((similarity < threshold) & (i < n.years)){
     if(verbose){cat("\n"); cat(paste("running year ", i))}
-    
     i <- i+1
-    pop.list[[i+1]] <- FUN(world = world, 
-                                   Parameters = parameters, 
-                                   Pop_lastyear = pop.list[[i]], 
-                                   Year = i)
-    similarity <- computeEfficiency(pop.list$pop[[i]], pop.list$pop[[i+1]], world)
+    pop.list[[i]] <- runFWM(world = world, parameters = parameters, 
+                         pop.lastyear = pop.list[[length(pop.list)]], 
+                         Year = i, m.hat = memory.list[[i-1]])
+    
+    migration.list[[i]] <- fitMigration(t = world$time, x = getMem(pop.list[[i]], world), 
+                                        m.start = migration.list[[i-1]])
+    
+    memory.list[[i]] <- parameters["kappa"]^(i-1) * world$m0 + 
+      (1 - parameters["kappa"]^(i-1)) * migration.list[[i]]
+    
+    similarity <- computeEfficiency(pop.list[[i-1]], pop.list[[i]], world)
   }
   names(pop.list) <- paste0("Year",0:(length(pop.list)-1))
   attr(pop.list, "parameters") <- parameters
-  return(pop.list)
+  
+  migration.hat <- ldply(migration.list, .id = "year") %>% mutate(year = 1:length(pop.list)-1)
+  memory.hat <- ldply(memory.list, .id = "year") %>% mutate(year = 1:length(pop.list)-1)
+  final <- list(pop = pop.list, migration.hat = migration.hat, memory.hat = memory.hat)
+  final
 }
+
+#' @export
+#' 
+buildOnRuns <- function(M, world, ...){
+  world$pop <- M$pop[[length(M$pop)]]
+  M2 <- runManyYears(world, threshold = 1, ...)
+  M2$pop[[1]] <- NULL
+  M3 <- list()
+  M3$pop <- c(M$pop, M2$pop)
+  
+  M3$migration.hat <- rbind(M$migration.hat, M2$migration.hat[-1,]) %>% mutate(year = 1:length(M3$pop)-1)
+  M3$memory.hat <- rbind(M$memory.hat, M2$memory.hat[-1,]) %>% mutate(year = 1:length(M3$pop)-1)
+  
+  names(M3$pop) <- paste0("Year",1:length(M3$pop)-1)
+  M3
+}
+  
 
 #' Run Many Runs for a set of parameters
 #' 
@@ -118,15 +145,4 @@ runManyRuns <- function (parameters.df, resource_param, world, resource,
         save(newresults, file =paste0(results.dir,"/",filename,".rda"))
     }}
   return(newresults) 
-}
-
-
-#' @export
-buildOnRuns <- function(M, world, ...){
-  world$pop <- M[[length(M)]]
-  M2 <- runManyYears(world, threshold = 1, ...)
-  M2[[1]] <- NULL
-  M3 <- c(M, M2)
-  names(M3) <- paste0("Year",1:length(M3))
-  M3
 }

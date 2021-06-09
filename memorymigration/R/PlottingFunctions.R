@@ -65,9 +65,73 @@ printParameters <- function(p) {
 mypersp <- function(x,y,z,...)
   persp(x,y,z, theta=45, phi=45, bor=NA, shade=TRUE, ylab = "x", xlab="time", zlab="population", ...)
 
-#' Plotting simulation results
+#' Plotting efficiency
+#' @export
+plotEfficiency <- function(M, world, ...){
+  FE1 <- ldply(M, computeEfficiency, 
+               resource = world$resource, 
+               world = world,
+               .id = "year") %>% mutate(year = 1:length(year))
+  plot(FE1, type = "o", ...)
+}
+
+
+#' Plot migration patterns over resource
+#' 
+#' @param 
+#' @export
+plotMigration <- function(M, world, plotresource = TRUE, add = FALSE){
+  if(plotresource) 
+    with(world, image(time, X, resource, col = grey.colors(100))) else 
+      with(world, image(time, X, resource, col = NA))
+  memory.df <- ldply(M, function(l)
+    data.frame(time = 1:nrow(l), 
+               memory = getMem(l, world = world)),.id = "year")
+  
+  if(!add) with(memory.df, plot(time, memory, type= "n"))
+  n.years <- length(unique(memory.df$year))
+  palette(rich.colors(n.years))
+  ddply(memory.df, "year", function(df)
+    with(df, lines(time, memory, col = as.integer(year))))
+}
+
+
+
+#' Plot estimated migration (with or without memory)
+#' 
+#' @param mhat data frame of migration estimates
+#' @param {x.peak,t.peak} 
 #' @export
 
+plotMigrationHat <- function(mhat, x.peak = NULL, t.peak  = NULL, 
+                             cols = c("darkorange", "darkblue"), legend = TRUE){
+  par(mfrow = c(1,2), mar = c(3,3,2,2), xpd = FALSE); with(mhat,{
+    plot(year, t1, ylim = c(0,100), ylab = "migration timing (day of year)", col = cols[1])
+    segments(year, t1, year, t1+dt1, col = cols[1])
+    points(year, t1 + dt1, col = cols[1])
+    
+    points(year, t2, col = cols[2])
+    points(year, t2 + dt2, col = cols[2])
+    segments(year, t2, year, t2+dt2, col = cols[2])
+    if(!is.null(t.peak))
+      abline(h = c(t.peak,100-t.peak), col =alpha("black",.3), lwd = 3, lty =3)
+    
+    plot(year, x1, type = "o", ylim = c(-100,100), ylab = "seasonal centroids", col = cols[1])
+    lines(year, x2, type = "o", col = cols[2])
+    
+    if(!is.null(x.peak))
+    abline(h = c(-x.peak,x.peak), col =alpha("black",.3), lwd = 3, lty =3)
+    
+    if(legend)
+    legend("topright", pch = c(1,1,NA), lty = c(1,1,3), 
+           lwd = c(1,1,3), 
+           legend = c( "summer", "winter", "true value"), col = c(cols, "darkgrey"), bty = "n")
+  })
+}
+
+
+#' Plotting simulation results
+#' @export
 plotManyRuns <- function(sim, world, years = NULL, nrow = 1, outer = TRUE, 
                          labelyears = FALSE, 
                          par = NULL, ylab = "", ...){

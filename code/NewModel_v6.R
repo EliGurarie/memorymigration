@@ -1,9 +1,9 @@
 
-#rm(list=ls())
+rm(list=ls())
 require(memorymigration)
-source("code/functions_v6.R")
-source("code/functions_discretemigration.R")
-source("code/functions_plottingresults.R")
+#source("code/functions_v6.R")
+#source("code/functions_discretemigration.R")
+#source("code/functions_plottingresults.R")
 require(minpack.lm); require(fields); require(scales)
 
 
