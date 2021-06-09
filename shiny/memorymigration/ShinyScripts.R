@@ -1,7 +1,4 @@
-library(shiny)
-source("code/functions_v6.R")
-source("code/functions_discretemigration.R")
-source("code/functions_plottingresults.R")
+# Setting up Input Interface --------------------------
 ui <- fluidPage(
   
   h1("Memory Migration model"),
@@ -21,13 +18,13 @@ ui <- fluidPage(
                         label = "Resource Following - Alpha",
                         value = 100, min = 0, step = 1),
            numericInput(inputId = "beta",
-                        label = "Spatial Scale of Sociality - Beta",
+                        label = "Strength of Sociality - Beta",
                         value = 100, min = 0, step = 1),
            sliderInput(inputId = "kappa",
-                       label = "Memory Following - Kappa",
-                       value = 1, min = 0, max = 1),
+                       label = "Proportion reference vs. working memory - Kappa",
+                       value = 0, min = 0, max = 1),
            numericInput(inputId = "lambda",
-                        label = "Maximum Speed - Lambda",
+                        label = "Spatial Scale of Sociality - Lambda",
                         value = 20, min = 0, step = 1),
            numericInput(inputId = "epsilon",
                         label = "Diffusion Parameter - Epsilon",
@@ -68,10 +65,14 @@ ui <- fluidPage(
 ))
 
 
+
 server <- function(input, output) {
   pcks <- c("shiny","sf","ggplot2","magrittr","plyr", "gplots", 
             "memorymigration", "DT", "ggthemes", "minpack.lm", "fields","scales")
   lapply(pcks, require, character = TRUE)
+  
+  
+  # Setting up World ---------------------
   
   simulation <- eventReactive(input$run, {
       if(input$world == "world_optimal"){
@@ -135,11 +136,12 @@ server <- function(input, output) {
         kappa = as.numeric(input$kappa),
         lambda = as.numeric(input$lambda)
       )
-
+      
+## Running the model ---------------------
     sim <- runManyYears(world=world, parameters = parameters, 
                    n.years = as.numeric(input$years), 
-                   threshold = as.numeric(input$threshold), FUN = runNextYear, verbose=TRUE)
-  
+                   threshold = as.numeric(input$threshold), 
+                   verbose=TRUE)
 
     indices <- data.frame(computeIndices(sim$pop[[length(sim)]], 
                                          world$resource[length(sim)-1,,], world),
@@ -152,17 +154,19 @@ server <- function(input, output) {
     #parameters.df <- ldply (parameters, data.frame)
     indices <- format(indices, digits=4)
 
-   
-migrationhat <- plotMigrationHat(sim$m.hat, 
-                                 as.numeric(input$x.peak), as.numeric(input$t.peak), cols = c("darkorange", "darkblue"))
-
-  # newlist <- list(sim,indices, yearplot, memory)
-  newlist <- list(sim,indices, world, migrationhat)
-   # newlist <- list(sim,indices, yearplot, world)
+## Plotting migrations -----------------
     
-  })
-
+  migrationhat <- plotMigrationHat(sim$migration.hat, 
+                                   as.numeric(input$x.peak), 
+                                   as.numeric(input$t.peak), cols = c("darkorange", "darkblue"))
   
+    # newlist <- list(sim,indices, yearplot, memory)
+    newlist <- list(sim,indices, world, migrationhat)
+     # newlist <- list(sim,indices, yearplot, world)
+      
+    })
+
+## Resource Image ---------------------
   resourceImage <- eventReactive(input$run | input$viewresource,{
     if(input$world == "world_optimal"){
       world <- getOptimalPop(tau=100, X.min = -100, X.max = 100, dx=1, 
