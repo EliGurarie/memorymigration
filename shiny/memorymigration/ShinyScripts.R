@@ -144,10 +144,10 @@ server <- function(input, output) {
                    verbose=TRUE)
 
     indices <- data.frame(computeIndices(sim$pop[[length(sim)]], 
-                                         world$resource[length(sim)-1,,], world),
+                                         world$resource[length(sim$pop)-1,,], world),
                           avgFE = computeAvgEfficiency(sim$pop, world$resource, world),
-                          final_similarity = computeEfficiency(sim$pop[[length(sim)-1]], 
-                                                               sim$pop[[length(sim)]], world), 
+                          final_similarity = computeEfficiency(sim$pop[[length(sim$pop)-1]], 
+                                                               sim$pop[[length(sim$pop)]], world), 
                           n.runs = length(sim$pop) - 1,
                           resource_param, param.df)
     

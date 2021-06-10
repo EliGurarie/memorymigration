@@ -21,7 +21,7 @@ doublePlot <- function(M, world, par = FALSE){
   
   with(world, image(time, X, resource, col = grey.colors(100),
                     ylab = "space", xlab = "time of year"))
-  plotMigration(M, add = TRUE)
+  plotMigration(M, world, add = TRUE)
   FE1 <- ldply(M, computeEfficiency, 
                resource = world$resource, world = world,
                .id = "year") %>% mutate(year = 1:length(year))

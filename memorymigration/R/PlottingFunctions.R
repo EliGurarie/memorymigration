@@ -195,7 +195,7 @@ doublePlotForShiny <- function(M, world){
       bty = "l", cex.lab = 1.25, las = 1, xpd = NA)
   if(min(dim(world$resource))<=50){
     with(world, image(time, X, resource[1,,], col = grey.colors(100)))
-    plotMigration(M, add = TRUE)
+    plotMigrationForShiny(M, world, add = TRUE)
     FE1 <- ldply(M, computeEfficiency, 
                  resource = world$resource[1,,], world = world,
                  .id = "year") %>% mutate(year = 1:length(year))
@@ -203,10 +203,26 @@ doublePlotForShiny <- function(M, world){
   }
   else{
     with(world, image(time, X, resource, col = grey.colors(100)))
-    plotMigration(M, add = TRUE)
+    plotMigration(M, world, add = TRUE)
     FE1 <- ldply(M, computeEfficiency, 
                  resource = world$resource[1,,], world = world,
                  .id = "year") %>% mutate(year = 1:length(year))
     plot(FE1, type = "o")
   }
+}
+
+#' @export
+plotMigrationForShiny <- function(M, world, plotresource = TRUE, add = FALSE){
+  if(plotresource) 
+    with(world, image(time, X, resource[1,,], col = grey.colors(100))) else 
+      with(world, image(time, X, resource[1,,], col = NA))
+  memory.df <- ldply(M, function(l)
+    data.frame(time = 1:nrow(l), 
+               memory = getMem(l, world = world)),.id = "year")
+  
+  if(!add) with(memory.df, plot(time, memory, type= "n"))
+  n.years <- length(unique(memory.df$year))
+  palette(rich.colors(n.years))
+  ddply(memory.df, "year", function(df)
+    with(df, lines(time, memory, col = as.integer(year))))
 }
