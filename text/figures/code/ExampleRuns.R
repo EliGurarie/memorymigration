@@ -101,8 +101,8 @@ png("text/figures/example2_learningtomigrate.png", width = 3000, height = 3000, 
     plotSomeYears(world, labelyears = TRUE, nrow = 1, par = TRUE)
   
   par(mar = c(3,4,2,2), xpd = 0, cex.lab = 1.75, cex.axis = 1.25)
-  doublePlot(M0$pop, world, par = TRUE, ylim1 = c(0,120))
-  plotMigrationHat(M0$migration.hat, 30, 25, par = TRUE)
+  doublePlot(M0$pop, world, par = TRUE)
+  plotMigrationHat(M0$migration.hat, 30, 25, par = TRUE, ylim1 = c(0,120))
 }
 dev.off()  
 
