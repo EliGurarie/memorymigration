@@ -104,6 +104,7 @@ buildOnRuns <- function(M, world, ...){
 runManyRuns <- function (parameters.df, resource_param, world, resource, 
                          filename = NULL, results.dir = NULL, ...) {
   newresults <- data.frame()
+  FE.matrix <- matrix(NA, nrow=0, ncol = resource_param$n.years)
   
   for(i in 1:nrow(parameters.df)) {
     for(j in 1:nrow(resource_param)){
@@ -119,12 +120,12 @@ runManyRuns <- function (parameters.df, resource_param, world, resource,
                              psi_t = psi_t[j]))
       
       if(resource == "drifting")
-      Resource.CC <- aaply(par0, 1, function(p) getResource_drifting(world, p)) 
+      world$resource <- aaply(par0, 1, function(p) getResource_drifting(world, p)) 
       if(resource == "island")
-      Resource.CC <- aaply(par0, 1, function(p) getResource_island(world, p)) 
+      world$resource <- aaply(par0, 1, function(p) getResource_island(world, p)) 
       
       
-      world$resource <- Resource.CC
+      attr(world$resource, "par") <- par0[nrow(par0),]
       
       myparams <- with(parameters.df[i,], 
                        c(epsilon = epsilon, 
@@ -134,12 +135,17 @@ runManyRuns <- function (parameters.df, resource_param, world, resource,
                          lambda = lambda))
       
       M <- try(runManyYears(world, parameters = myparams, 
-                            n.years = 40, threshold = 1))
+                            n.years = 100, threshold = 0.9999))
+      
+    
       
       if(!inherits(M, "try-error")){
+        myFE <- computeAnnualEfficiency(M$pop, world$resource, world)
+        FE.matrix <- rbind(FE.matrix, rep(NA,ncol(FE.matrix)))
+        FE.matrix[nrow(FE.matrix), 1:length(myFE)] <- myFE
         myR <- data.frame(parameters.df[i, ], computeIndices(M$pop[[length(M$pop)]], 
-                                                             world$resource[length(M$pop)-1,,], world), 
-                          computeAnnualEfficiency(M$pop, world$resource, world),
+                                                             world$resource[length(M$pop)-1,,], world),
+                          computeMigrationIndices(M, world),
                           avgFE = computeAvgEfficiency(M$pop, world$resource, world),
                           n.runs = length(M$pop) - 1,
                           final_similarity = computeEfficiency(M$pop[[length(M$pop)-1]], 
@@ -147,10 +153,13 @@ runManyRuns <- function (parameters.df, resource_param, world, resource,
                     
                           resource_param[j,],
                           resource = resource)
+        
         newresults <- rbind(newresults, c(myR))
       }
+
       if(!is.null(results.dir) & (i %% 10 == 0 | i == max(i)))  
         save(newresults, file =paste0(results.dir,"/",filename,".rda"))
     }}
+  newresults$annualFE <- FE.matrix
   return(newresults) 
 }
