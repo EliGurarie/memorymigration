@@ -148,7 +148,13 @@ Figure 2 illustrates the ability of the model was able to learn to migrate in a 
 
 We found that the relatively straightforward inclusion of a migration specific memory in a social diffusion-advection framework was sufficient to capture many fundamental phenomena related to migration.  In essense, our model allowed a population of individuals with a hybrid migratory and resource following behavior to adjust the migratory behavior based on recent experiences with the resource location. The model, while simple, was able to emulate the successful navigation of an environment with temporally and spatially isolated seasonal resource patches, the spontaneous emergence of a migratory behavior, and intrinsic robustness to changes in those environmental resources, whether as trends or inter-annual stochasticity. 
 
+It is worth considering the assumptions of our model with respect to a biological population.  Notably, the fact that the memory is not easily interpreted as an 
 
+**Describing conditions for adaptability.**
+
+**Describing conditions for learning migration.**
+
+**Describing conditions for climate change resilience.**
 
 
 Our model is somewhat similar to an evolutionary individual-based model [@Anderson2013], which showed that some inherent phenotypic plasticity is required to hedge both against persistent trends and increased stochasticity of resource distributions, but at the risk of sub-optimal access to resources [@Anderson2013].  
