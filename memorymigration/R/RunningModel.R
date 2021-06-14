@@ -101,10 +101,10 @@ buildOnRuns <- function(M, world, ...){
 #' @param results.dir string containing directory of where results from the R scripts will be stored
 #' @export
 #' 
-runManyRuns <- function (parameters.df, resource_param, world, resource, 
+runManyRuns <- function (world_param, parameters.df, resource_param, world, resource, 
                          filename = NULL, results.dir = NULL, ...) {
   newresults <- data.frame()
-  FE.matrix <- matrix(NA, nrow=0, ncol = resource_param$n.years)
+  FE.matrix <- matrix(NA, nrow=nrow(parameters.df)*nrow(resource_param), ncol = resource_param$n.years[1])
   
   for(i in 1:nrow(parameters.df)) {
     for(j in 1:nrow(resource_param)){
@@ -118,6 +118,15 @@ runManyRuns <- function (parameters.df, resource_param, world, resource,
                              sigma_t = sigma_t[j],
                              psi_x = psi_x[j], 
                              psi_t = psi_t[j]))
+      
+
+      world <- with(world_param, getOptimalPop(tau = tau, X.min = X.min,
+                             X.max = X.max, dx = dx,
+                             x1 = x1, x2 = x2, t.peak = t.peak,
+                             x.sd = resource_param$sigma_x[j],
+                             t.sd = resource_param$sigma_t[j]))
+                             
+      world$m0 <- fitMigration(t = world$time, x = getMem(world$pop, world))
       
       if(resource == "drifting")
       world$resource <- aaply(par0, 1, function(p) getResource_drifting(world, p)) 
@@ -141,8 +150,8 @@ runManyRuns <- function (parameters.df, resource_param, world, resource,
       
       if(!inherits(M, "try-error")){
         myFE <- computeAnnualEfficiency(M$pop, world$resource, world)
-        FE.matrix <- rbind(FE.matrix, rep(NA,ncol(FE.matrix)))
-        FE.matrix[nrow(FE.matrix), 1:length(myFE)] <- myFE
+        FE.matrix[nrow(newresults)+1, 1:length(myFE)] <- myFE
+        
         myR <- data.frame(parameters.df[i, ], computeIndices(M$pop[[length(M$pop)]], 
                                                              world$resource[length(M$pop)-1,,], world),
                           computeMigrationIndices(M, world),
@@ -160,6 +169,6 @@ runManyRuns <- function (parameters.df, resource_param, world, resource,
       if(!is.null(results.dir) & (i %% 10 == 0 | i == max(i)))  
         save(newresults, file =paste0(results.dir,"/",filename,".rda"))
     }}
-  newresults$annualFE <- FE.matrix
+  newresults$annualFE <- FE.matrix[1:nrow(newresults),]
   return(newresults) 
 }

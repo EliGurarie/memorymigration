@@ -5,6 +5,7 @@
 \title{Run Many Runs for a set of parameters}
 \usage{
 runManyRuns(
+  world_param,
   parameters.df,
   resource_param,
   world,
