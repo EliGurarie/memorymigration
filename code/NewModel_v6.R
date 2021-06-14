@@ -16,7 +16,7 @@ world$resource <- getResource_island(world,
 image(world$resource)
 
 p0 <- c(epsilon = 1, alpha = 200, kappa = 0, beta = 100, lambda = 30)
-M0 <- runManyYears(world, parameters = p0, n.years = 40, 1, FUN = runNextYear, verbose = TRUE)
+M0 <- runManyYears(world, parameters = p0, n.years = 40, 1, verbose = TRUE)
 #M0 <- buildOnRuns(M0$pop, world, parameters = p0, n.years = 20, verbose = TRUE, FUN = runNextYear)
 doublePlot(M0$pop, world)
 plotManyRuns(M0$pop, world, nrow = 3)

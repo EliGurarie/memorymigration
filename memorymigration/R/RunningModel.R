@@ -128,15 +128,17 @@ runManyRuns <- function (parameters.df, resource_param, world, resource,
                          lambda = lambda))
       
       M <- try(runManyYears(world, parameters = myparams, 
-                            n.years = 20, threshold = 0.9999))
+                            n.years = 40, threshold = 1))
       
       if(!inherits(M, "try-error")){
-        myR <- data.frame(parameters.df[i, ], computeIndices(M[[length(M)]], 
-                                                             world$resource[length(M)-1,,], world), 
-                          avgFE = computeAvgEfficiency(M, world$resource, world),
-                          n.runs = length(M) - 1,
-                          final_similarity = computeEfficiency(M[[length(M)-1]], 
-                                                               M[[length(M)]], world), 
+        myR <- data.frame(parameters.df[i, ], computeIndices(M$pop[[length(M$pop)]], 
+                                                             world$resource[length(M$pop)-1,,], world), 
+                          computeAnnualEfficiency(M$pop, world$resource, world),
+                          avgFE = computeAvgEfficiency(M$pop, world$resource, world),
+                          n.runs = length(M$pop) - 1,
+                          final_similarity = computeEfficiency(M$pop[[length(M$pop)-1]], 
+                                                               M$pop[[length(M$pop)]], world), 
+                    
                           resource_param[j,],
                           resource = resource)
         newresults <- rbind(newresults, c(myR))

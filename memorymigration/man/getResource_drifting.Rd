@@ -67,6 +67,20 @@ sinusoidally in such a way as to fulfill the criteria above.
   with(world_sinusoidal, image.plot(time, X, resource_island))
   
   
+## Climate Change Island Resource
+  par0 <- getCCpars(mu_x0 = 80, 
+                    mu_t0 = 25,
+                    beta_x = -1,
+                    beta_t = 0,
+                    n.years = 5,
+                    sigma_x = 5,
+                    sigma_t = 12,
+                    psi_x = 0, 
+                    psi_t = 0)
+  world$resource <- aaply(par0, 1, function(p) getResource_island(world, p))
+
+  
+  
 }
 \seealso{
 \link{getResource_island}, \link{getCCpars}

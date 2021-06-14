@@ -14,6 +14,8 @@ stepMigration <- function(t, t1, dt1, t2, dt2, x1, x2, tau = 100){
                               s21*(t - t2 - dt2 + tau) + x2))))
 }
 
+#' Fit Migration
+#' 
 #'@export
 fitMigration <- function(t, x, m.start = NULL, tau = 100){
   if(is.null(m.start)) m.start <- c(t1 = 15, dt1 = 30, t2 = 55, dt2 = 30, x1 = min(x), x2 = max(x))
