@@ -32,6 +32,7 @@ runManyYears <- function(world, parameters, n.years = 20,
   
   migration.list <- list(m0)
   memory.list <- list(m0)
+  
   pop.list <- list(world$pop)
   similarity <- 0
   i <- 1 
@@ -63,13 +64,18 @@ runManyYears <- function(world, parameters, n.years = 20,
 #' 
 buildOnRuns <- function(M, world, ...){
   world$pop <- M$pop[[length(M$pop)]]
-  M2 <- runManyYears(world, threshold = 1, ...)
+  
+  M2 <- runManyYears(world, threshold = 1, m0 = M0$memory.hat[1,1:6], ...)
   M2$pop[[1]] <- NULL
+  
   M3 <- list()
   M3$pop <- c(M$pop, M2$pop)
   
-  M3$migration.hat <- rbind(M$migration.hat, M2$migration.hat[-1,]) %>% mutate(year = 1:length(M3$pop)-1)
-  M3$memory.hat <- rbind(M$memory.hat, M2$memory.hat[-1,]) %>% mutate(year = 1:length(M3$pop)-1)
+  M3$migration.hat <- rbind(M$migration.hat, M2$migration.hat[-1,]) %>% 
+    mutate(year = 1:length(M3$pop)-1)
+  
+  M3$memory.hat <- rbind(M$memory.hat, M2$memory.hat[-1,]) %>% 
+    mutate(year = 1:length(M3$pop)-1)
   
   names(M3$pop) <- paste0("Year",1:length(M3$pop)-1)
   M3

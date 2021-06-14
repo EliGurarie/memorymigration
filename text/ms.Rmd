@@ -125,6 +125,16 @@ We assessed a wide range of parameter values and resource geometries and dynamic
 
 # Results
 
+## Migration
+
+Under what conditions is migration stable:
+
+sigma_t, sigma_x, 
+epsilon, alpha, 
+beta, lambda, 
+x_peak = 30, t_peak = 25
+
+
 
 ## Adaptation 
 
@@ -133,6 +143,7 @@ We assessed a wide range of parameter values and resource geometries and dynamic
 
 We illustrate an example of a population with a particular migration behavior confronted with a major sudden shift in the spatio-temporal distribution of the resource in Figure 1.  In the illustrated scenario, it takes nearly 40 years to attain an equilibrium, and the eventual "optimum" is one where the centroid of the migration lines up exactly with the centroid of the resource, and the arrival timing conincides with the *peak* of resource availability.  Notably, the path to this equilibrium is somewhat indirect, with the summer season, in particular, taking    
 
+*Under what conditions can we adapt.*>
 
 ## Learning to migrate
 
@@ -141,12 +152,17 @@ We illustrate an example of a population with a particular migration behavior co
 
 Figure 2 illustrates the ability of the model was able to learn to migrate in a weakly drifting resource environment with a narrow pulse of resource peaking at 50 and -50, but a uniform distribution of resource at times 0 and 50.   In order to learn to migrate, the system needed to have a higher exploratory impulse (higher diffusion constant $\epsilon$), a stronger resource advection (higher $\alpha$) and somewhat weaker sociality (lower $\beta$).  The qualitative behavior of this process was to start drifting northward, while slowly developing a weak southward pulse in winter as well.  After first locking in on the summer resource, the southward migration, driven both by high diffusion and high resource following, slowly extended itself until both narrow peaks of resource could be reached consistently.
 
+*Under what conditions can be learn.*
+
 
 ## Adapting to climate change
 
 # Discussion
 
-We found that the relatively straightforward inclusion of a migration specific memory in a social diffusion-advection framework was sufficient to capture many fundamental phenomena related to migration.  In essense, our model allowed a population of individuals with a hybrid migratory and resource following behavior to adjust the migratory behavior based on recent experiences with the resource location. The model, while simple, was able to emulate the successful navigation of an environment with temporally and spatially isolated seasonal resource patches, the spontaneous emergence of a migratory behavior, and intrinsic robustness to changes in those environmental resources, whether as trends or inter-annual stochasticity. 
+We found that the relatively straightforward inclusion of a migration specific memory in a social diffusion-advection framework was sufficient to capture many fundamental phenomena related to migration. In essense, our model allowed a population of individuals with a hybrid migratory and resource following behavior to adjust the migratory behavior based on recent experiences with the resource location. The model, while simple, was able to emulate the successful navigation of an environment with temporally and spatially isolated seasonal resource patches, the spontaneous emergence of a migratory behavior, and intrinsic robustness to changes in those environmental resources, whether as trends or inter-annual stochasticity. 
+
+However, the ability to migrate was highly dependent on the nature of the resource dynamics.  In particular, the reinforcement of memory and foraging is strongest when patches are concentrated in time, but relatively large in space.  **ALSO SOME STUFF WE LEARN ABOUT THE INTERACTION BETWEEN DIFFUSION, RESOURCE FOLLOWING, SOCIALITY**
+
 
 It is worth considering the assumptions of our model with respect to a biological population.  Notably, the fact that the memory is not easily interpreted as an 
 

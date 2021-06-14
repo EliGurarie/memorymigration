@@ -99,6 +99,7 @@ getResource_drifting <- function(world, par){
   colnames(R) <- x
   rownames(R) <- t
   R <- apply(R, 1, function(x) x/sum(x)) %>% t
+  attr(R, "par") <- par
   return(R)
 }
 
@@ -147,6 +148,6 @@ getResource_island <- function(world, par){
   colnames(R) <- x
   rownames(R) <- t
   R <- R/sum(R) * world$tau
-  
+  attr(R, "par") <- par
   return(R)
 }
