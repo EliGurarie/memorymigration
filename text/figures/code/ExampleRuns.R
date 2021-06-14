@@ -33,7 +33,7 @@ if(eval)
 }
 
 load("results/msexamples/adaptation.rda")
-source("text/figures/code/functions_plotting.R")
+source("text/figures/code/functions_plottingForMS.R")
 
 n <- 14
 
@@ -77,15 +77,32 @@ if(eval)
   })
   p0 <- c(epsilon = 4, alpha = 500, kappa = 0, beta = 50, lambda = 40)
   M0 <- runManyYears(world, parameters = p0, n.years = 100, 1, verbose = TRUE)
-  
-  #m0 <- M0$migration.hat[nrow(M0$migration.hat),] %>% mutate(year = NULL) %>% 
-  #  as.list %>% unlist
-  #M0b <- M0 %>% buildOnRuns(world, parameters = p0, n.years = 50, verbose = TRUE, m0 = m0)
-  #M0 <- M0b
   save(world, M0, file = "results/msexamples/learningtomigrate.rda")
 }
-load("results/msexamples/learningtomigrate.rda")
 
-M0.example <- M0$pop[paste0("Year",seq(0,100,10))] %T>% plotSomeYears(world, labelyears = TRUE, nrow = 2)
-doublePlot(M0$pop, world, par = FALSE)
-plotMigrationHat(M0$memory.hat, x.peak = 50, t.peak = 25, par = FALSE, ylim1 = c(0,120))
+load("results/msexamples/learningtomigrate.rda")
+source("text/figures/code/functions_plottingForMS.R")
+require(fields)
+require(scales)
+
+require(memorymigration)
+png("text/figures/example2_learningtomigrate.png", width = 3000, height = 3000, res = 300)
+{
+  M0.example <- M0$pop[paste0("Year",c(0:10,20,40,100))] %T>% 
+    plotSomeYears(world, labelyears = TRUE, nrow = 1)
+  
+  n <- length(M0.example)
+  M <- rbind(1:n, rep(n+1:2, each = n/2), rep(n+3:4, each = n/2))
+  layout(M)
+  
+  par(oma = c(2,4,2,2), mgp = c(2,.25,0), las = 1, mar = c(4,0,0,0), 
+      xpd = NA, tck = 0, bty = "l")
+  M0.example <- M0$pop[paste0("Year",c(0:10,20,40,100))] %T>% 
+    plotSomeYears(world, labelyears = TRUE, nrow = 1, par = TRUE)
+  
+  par(mar = c(3,4,2,2), xpd = 0, cex.lab = 1.75, cex.axis = 1.25)
+  doublePlot(M0$pop, world, par = TRUE, ylim1 = c(0,120))
+  plotMigrationHat(M0$migration.hat, 30, 25, par = TRUE)
+}
+dev.off()  
+

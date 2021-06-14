@@ -114,28 +114,40 @@ For numerical runs with climate change, we run the simulation for 30 years, sinc
 
 We explored this model using numerical differencing of a system of ordinary differential equations (ODE's) approximating the PDE in equation (2) with the Runge-Kutte algorithm using the `deSolve` [@Soetaert2010] and `ReacTran` [@Soetaert2012] packages in R.  We additionally used the `nlsLM` function in package `minpack.LM` [@minpack.lm] for robust and fast annual estimation of the migration parameters.  The complete code is available as an R package (`memorymigration`) available on GitHub at https://github.com/EliGurarie/memorymigration and as an interactive Shiny application at https://url.to.be.determined. 
 
+We assessed a wide range of parameter values and resource geometries and dynamics with the goal of answering the three main questions:
 
-We assessed a wide range of parameter values and resource geometries and dynamics with the goal of answering the three main questions. 
+1. Can this model adapt to a discrete shift in peak resource location and timing?  What is the relative role of memory and sociality?  
+
+2. Can this model "acquire" a migratory behavior from a non-migratory initial condition?  
+
+3. Can this model adapt when the resource peak shifts in space and time?  What is the role of the reference memory.  
+
 
 # Results
 
 
-```{r}
-require(memorymigration)
-source("../code/")
-```
+## Adaptation 
 
 ![](figures/example1_adaptation.png)
+**Figure 1. Example of adaptation to a shift in resource peak. The initial (year 0) behavior migrates to locations 50 and -50 at days 15 and 60, whereas the resource peak is at 30 and -30, peaking at times 25 and 75.  (a) shows the first 14 years of the simulation; (b) The centroid of the annual movement of the population is shown in panel b, with dark blue to red colors indicating year 0 to year 40; (c) annual foraging efficiency across years; (d) migration timing parameters for each year, with orange segments indicating arrival and departure from the summering (northern) grounds, and the blue segments indicating timing of arrival and departure at the wintering grounds; (e) migration arrival and departure location across years, with blue and orange indicating winter (southern) and summer (northern) locations.**
 
-![](figures/FinalMigratoryFollowing.png){width=50%}
+We illustrate an example of a population with a particular migration behavior confronted with a major sudden shift in the spatio-temporal distribution of the resource in Figure 1.  In the illustrated scenario, it takes nearly 40 years to attain an equilibrium, and the eventual "optimum" is one where the centroid of the migration lines up exactly with the centroid of the resource, and the arrival timing conincides with the *peak* of resource availability.  Notably, the path to this equilibrium is somewhat indirect, with the summer season, in particular, taking    
+
+
+## Learning to migrate
+
+![](figures/example2_learningtomigrate.png)
+**Figure 2. Example of model learning to migrate. The resource is a "weakly drifting" resource and the initial (year 0) condition is non migratory.  The simulation was run for 100 years, and a sampling of those years (labeled) are presented in panel a:  all years from 0 to 10, followerd by 20, 40 and 100.  Otherwise, panels are as in Figure 1.  Parameter values were $\epsilon  = 5$, $\alpha = 500$ and $\beta = 50$.**
+
+Figure 2 illustrates the ability of the model was able to learn to migrate in a weakly drifting resource environment with a narrow pulse of resource peaking at 50 and -50, but a uniform distribution of resource at times 0 and 50.   In order to learn to migrate, the system needed to have a higher exploratory impulse (higher diffusion constant $\epsilon$), a stronger resource advection (higher $\alpha$) and somewhat weaker sociality (lower $\beta$).  The qualitative behavior of this process was to start drifting northward, while slowly developing a weak southward pulse in winter as well.  After first locking in on the summer resource, the southward migration, driven both by high diffusion and high resource following, slowly extended itself until both narrow peaks of resource could be reached consistently.
+
+
+## Adapting to climate change
 
 # Discussion
 
-1. The model seems to - approximately - work for exploring this dynamic.
-2. It is - however - difficult to make it really repeat previous behavior strongly. I was hoping for a "knob" that perfectly replicates past behavior, but the diffusion-taxis formulation makes that somehow hard.  I haven't programmed longer time scaled memories (> 1 year) but that would probably be helpful / interesting. 
-3. The memory bit does demand iteratively feeding a year's cycle back into it rather than having some analytical function, which slows the whole thing down a bit. That said, with deepthought a lot of runs could be fitted simultaneously - and I tend to be very picky about "slow" - it actually only takes about 6 seconds to run a 6 year hybrid model on a 100 x 100 spatio-temporal grid.  But sometimes, the results are more numerically stable on a finer grid. 
-4. We need a metric of success!  And also - somehow - a metric of "migratoriness". 
-5. What questions do we wnat to explore?  I think a big one is adaptability of the model under different kinds of resource perturbations, e.g. if the timing shifts, or location shifts.
+We found that the relatively straightforward inclusion of a migration specific memory in a social diffusion-advection framework was sufficient to capture many fundamental phenomena related to migration.  In essense, our model allowed a population of individuals with a hybrid migratory and resource following behavior to adjust the migratory behavior based on recent experiences with the resource location. The model, while simple, was able to emulate the successful navigation of an environment with temporally and spatially isolated seasonal resource patches, the spontaneous emergence of a migratory behavior, and intrinsic robustness to changes in those environmental resources, whether as trends or inter-annual stochasticity. 
+
 
 
 
