@@ -172,3 +172,72 @@ runManyRuns <- function (world_param, parameters.df, resource_param, world, reso
   newresults$annualFE <- FE.matrix[1:nrow(newresults),]
   return(newresults) 
 }
+
+#' Run Many Runs Mig 
+#' 
+#' Running on server for initial population constant
+#' @export
+
+runManyRunsmig<- function (parameters.df, resource_param, world, resource, 
+filename = NULL, results.dir = NULL, ...) {
+  newresults <- data.frame()
+  FE.matrix <- matrix(NA, nrow=nrow(parameters.df)*nrow(resource_param), ncol = resource_param$n.years[1])
+  
+  for(i in 1:nrow(parameters.df)) {
+    for(j in 1:nrow(resource_param)){
+      par0 <- with(resource_param, 
+                   getCCpars(mu_x0 = mu_x0[j],
+                             mu_t0 = mu_t0[j],
+                             beta_x = beta_x[j],
+                             beta_t = beta_t[j],
+                             n.years = n.years[j],
+                             sigma_x = sigma_x[j],
+                             sigma_t = sigma_t[j],
+                             psi_x = psi_x[j], 
+                             psi_t = psi_t[j]))
+      
+      if(resource == "drifting")
+        world$resource <- aaply(par0, 1, function(p) getResource_drifting(world, p)) 
+      if(resource == "island")
+        world$resource <- aaply(par0, 1, function(p) getResource_island(world, p)) 
+      
+      
+      attr(world$resource, "par") <- par0[nrow(par0),]
+      
+      myparams <- with(parameters.df[i,], 
+                       c(epsilon = epsilon, 
+                         alpha = alpha, 
+                         beta = beta, 
+                         kappa = kappa, 
+                         lambda = lambda))
+      
+      M <- try(runManyYears(world, parameters = myparams, 
+                            n.years = 100, threshold = 0.9999))
+      
+      
+      
+      if(!inherits(M, "try-error")){
+        myFE <- computeAnnualEfficiency(M$pop, world$resource, world)
+        FE.matrix[nrow(newresults)+1, 1:length(myFE)] <- myFE
+        
+        myR <- data.frame(parameters.df[i, ], computeIndices(M$pop[[length(M$pop)]], 
+                                                             world$resource[length(M$pop)-1,,], world),
+                          computeMigrationIndices(M, world),
+                          avgFE = computeAvgEfficiency(M$pop, world$resource, world),
+                          n.runs = length(M$pop) - 1,
+                          final_similarity = computeEfficiency(M$pop[[length(M$pop)-1]], 
+                                                               M$pop[[length(M$pop)]], world), 
+                          
+                          resource_param[j,],
+                          resource = resource)
+        
+        newresults <- rbind(newresults, c(myR))
+      }
+      
+      if(!is.null(results.dir) & (i %% 10 == 0 | i == max(i)))  
+        save(newresults, file =paste0(results.dir,"/",filename,".rda"))
+    }}
+  newresults$annualFE <- FE.matrix[1:nrow(newresults),]
+  return(newresults) 
+}
+
