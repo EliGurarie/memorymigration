@@ -33,7 +33,7 @@ if(eval)
 }
 
 load("results/msexamples/adaptation.rda")
-source("text/figures/code/functions_plotting.R")
+source("text/figures/code/functions_plottingForMS.R")
 
 n <- 14
 
@@ -86,6 +86,44 @@ if(eval)
 }
 load("results/msexamples/learningtomigrate.rda")
 
-M0.example <- M0$pop[paste0("Year",seq(0,100,10))] %T>% plotSomeYears(world, labelyears = TRUE, nrow = 2)
+M0.example <- M0$pop[paste0("Year",seq(0,90,10))] %T>% 
+  plotSomeYears(world, labelyears = TRUE, nrow = 2)
 doublePlot(M0$pop, world, par = FALSE)
 plotMigrationHat(M0$memory.hat, x.peak = 50, t.peak = 25, par = FALSE, ylim1 = c(0,120))
+
+
+
+world <- getSinePop(tau = 100, peak.max = 1, peak.min = -1, sd = 10)
+world$m0 <- fitMigration(t = world$time, x = getMem(world$pop, world))
+world$resource <- getResource_drifting(world, 
+                                       c(t.peak = 25, t.sd = 12, 
+                                         x.peak = 30, x.sd = 9))
+par(mfrow = c(1,2))
+with(world, {
+  image.plot(time, X, pop)
+  image.plot(time, X, resource)
+})
+p0 <- c(epsilon = 1, alpha = 400, kappa = 0, beta = 800, lambda = 80)
+M0 <- runManyYears(world, parameters = p0, n.years = 100, .9999, verbose = TRUE)
+
+M0$pop[paste0("Year",seq(0,90,10))] %>% plotSomeYears(world, labelyears = TRUE, nrow = 2)
+doublePlot(M0$pop, world, par = FALSE)
+plotMigrationHat(M0$memory.hat, x.peak = 30, t.peak = 25, par = FALSE, ylim1 = c(0,120))
+
+
+
+
+fitMigration <- function(t, x, m.start = NULL, tau = 100){
+  if(is.null(m.start)) m.start <- c(t1 = 15, dt1 = 30, t2 = 55, dt2 = 30, x1 = min(x), x2 = max(x))
+  migration.fit <- nlsLM(x ~ stepMigration(t, t1, dt1, t2, dt2, x1, x2, tau = 100), 
+                         start = as.list(m.start),
+                         lower = c(-100,0,0,0,-100,-100), 
+                         upper = c(100,100,200,100,100,100)) 
+  summary(migration.fit)$coef[,1]
+}
+
+t <- world$time
+x <- getMem(M0$pop[[64]], world)
+m.start <- M0$migration.hat[64,1:6]
+
+plot(t,x)

@@ -97,14 +97,6 @@ computeAvgEfficiency <- function(sim, resource, world){
       }}
   mean(average[,1])
 }
-#' Compuate Efficiency for Each Year
-#' 
-#' @export
-computeAnnualEfficiency <- function(sim, resource, world){
-  sapply(2:length(sim), function(i) computeEfficiency(sim[[i]], resource[i-1,,], world))
-      
-}
-#' 
 #' 
 #' Compute Migratoriness
 #' 
@@ -140,34 +132,6 @@ computeMigratoriness <- function(pop, world){
   list(times = which(Overlap == minOverlap, arr.ind = TRUE),
        overlap = minOverlap)
 }
-
-
-#' @export
-computeMigrationIndices <- function(sim, world){
-  
-  dx <- world$dx
-  tau <- world$tau
-  par <- attributes(world$resource)$par
-
-  m.hat <- tail(sim$migration.hat, 1)
-  
-  if(par["t.peak"] < m.hat$t1 | par["t.peak"] > m.hat$t1 + m.hat$dt1)
-    t1.error <- min( abs(par["t.peak"] - m.hat$t1), 
-       abs(par["t.peak"] - m.hat$t1  - m.hat$dt1)) else 
-         t1.error = 0
-  
-  if(world$tau - par["t.peak"] < m.hat$t2 | 
-     world$tau - par["t.peak"] > m.hat$t2 + m.hat$dt2)
-    t2.error <- min( abs(world$tau - par["t.peak"] - m.hat$t2), 
-                     abs( world$tau - par["t.peak"] - m.hat$t2  - m.hat$dt2)) else 
-                       t2.error = 0
-  
-  x1.error <- par["x.peak"] - m.hat$x1
-  x2.error <- - par["x.peak"] - m.hat$x2
-  
-  data.frame(t1.error, t2.error, x1.error, x2.error)
-}
-
 
 #' Compute Indicies
 #' 

@@ -1,39 +1,66 @@
 require(memorymigration)
+require(plyr)
+
+fixTE <- function(df){
+  df %>% mutate(TE = t1.error + t2.error + abs(x1.error) + abs(x2.error), 
+         Migration = cut(TE, c(0,1,7,1e3), labels = c("perfect", "good", "bad")), 
+         Migration = ifelse(is.na(Migration), "bad", Migration))
+}
 
 a <- load("results/stability/stability_1.rda")
-eps1 <- newresults %>% mutate(TE = t1.error + t2.error + abs(x1.error) + abs(x2.error))
+eps1 <- newresults %>% fixTE
 load("results/stability/stability_4.rda")
-eps4 <- newresults %>% mutate(TE = t1.error + t2.error + abs(x1.error) + abs(x2.error))
+eps4 <- newresults %>% fixTE
 load("results/stability/stability_8.rda")
-eps8 <- newresults %>% mutate(TE = t1.error + t2.error + abs(x1.error) + abs(x2.error))
+eps8 <- newresults %>% fixTE
 
-require(ggplot2)
-require(ggthemes)
-require(gridExtra)
 
-ggResults <- function(df, ss = TRUE, ...){
+
+ggResults <- function(df, ...){
   
-  cuts <- c(0, 2^(seq(-1,10,1)))
+  require(gplots)
+  require(ggplot2)
+  require(ggthemes)
+  require(gridExtra)
   
-  p1 <- df %>% subset(ss) %>% mutate(TotalError = cut(TE, cuts)) %>% 
-    ggplot(aes(sigma_t, sigma_x, fill = TE)) + 
+  #cuts <- c(0, 2^(seq(-1,10,1)))
+  
+  df %>% 
+    ggplot(aes(sigma_t, sigma_x, fill = factor(Migration))) + 
     facet_grid(beta~alpha) + 
-    scale_fill_gradientn(trans = "log", breaks = cuts, colours = rich.colors(100)[100:1]) + 
-    #scale_fill_manual(values = rich.colors(length(cuts)-1)) + 
-    geom_tile() + theme_few() + ggtitle("Total error") + xlab("")
+    #scale_fill_gradientn(trans = "log", breaks = cuts, colours = rich.colors(100)[100:1]) + 
+    scale_fill_manual(values = c("darkblue", "grey", "white")) + 
+    geom_tile() + theme_few() + 
+    xlab("") + theme(legend.position = "none")
 
-#  p2 <- df %>% subset(ss) %>% 
-#   ggplot(aes(sigma_t, sigma_x, fill = n.runs)) + 
-#    facet_grid(beta~alpha) + 
-#    geom_tile() + theme_few() + ggtitle("N. runs")  + xlab("")
-  
-  p3 <- df %>% subset(ss) %>% 
-    ggplot(aes(sigma_t, sigma_x, fill = FE)) + 
-    facet_grid(beta~alpha) + scale_fill_gradientn(colours = rich.colors(100)) + 
-    geom_tile() + theme_few() + ggtitle("Foraging Efficiency")
-  
-  grid.arrange(p1, p3, ncol = 1, ...)
+  #  p2 <- df %>% subset(ss) %>% 
+  #   ggplot(aes(sigma_t, sigma_x, fill = n.runs)) + 
+  #    facet_grid(beta~alpha) + 
+  #    geom_tile() + theme_few() + ggtitle("N. runs")  + xlab("")
+    
+  #  p3 <- df %>% subset(ss) %>% 
+  #    ggplot(aes(sigma_t, sigma_x, fill = FE)) + 
+  #    facet_grid(beta~alpha) + scale_fill_gradientn(colours = rich.colors(100)) + 
+  #    geom_tile() + theme_few() + ggtitle("Foraging Efficiency")
+    
+  #  grid.arrange(p1, p3, nrow = 1, ...)
 }
+
+
+df <- smartbind(eps1, eps4, eps8)
+
+
+plist <- dlply(df, c("epsilon","lambda"), 
+               function(df) ggResults(df) + 
+                 ggtitle(paste("epsilon =", df$epsilon[1], ";", paste("lambda =", df$lambda[1]))))
+
+
+pdf("plots/StabilityResults.pdf", height = 10, width = 12)
+grid.arrange(plist[[1]], plist[[2]], plist[[3]], 
+             plist[[4]], plist[[5]], plist[[6]], 
+             plist[[7]], plist[[8]],
+             ncol = 3)
+dev.off()
 
 pdf("plots/StabilityResults.pdf", height = 11, width = 8)
 ggResults(eps1, top = "epsilon = 1")
@@ -43,7 +70,7 @@ dev.off()
 
 table(eps1$lambda)
 
-pdf("plots/StabilityResults_eps1_bylambda.pdf", height = 11, width = 8)
+pdf("plots/StabilityResults_eps1_bylambda.pdf", height = 6, width = 11)
 ggResults(eps1 %>% subset(lambda == 20), top = "epsilon = 1, lambda = 20")
 ggResults(eps1 %>% subset(lambda == 50), top = "epsilon = 1, lambda = 50")
 ggResults(eps1 %>% subset(lambda == 100), top = "epsilon = 1, lambda = 100")
@@ -52,14 +79,22 @@ dev.off()
 
 
 table(eps4$lambda)
-pdf("plots/StabilityResults_eps4_bylambda.pdf", height = 11, width = 8)
+pdf("plots/StabilityResults_eps4_bylambda.pdf", height = 6, width = 11)
 ggResults(eps4 %>% subset(lambda == 20), top = "epsilon = 4, lambda = 20")
 ggResults(eps4 %>% subset(lambda == 50), top = "epsilon = 4, lambda = 50")
-#ggResults(eps1 %>% subset(lambda == 100), top = "epsilon = 1, lambda = 100")
+ggResults(eps4 %>% subset(lambda == 100), top = "epsilon = 1, lambda = 100")
 dev.off()
 
 
-hist(eps1$TE[eps1$TE < 7], breaks = 50)
+ggResults(eps8 %>% subset(lambda == 20), top = "epsilon = 4, lambda = 20")
+ggResults(eps8 %>% subset(lambda == 50), top = "epsilon = 4, lambda = 50")
+# ggResults(eps8 %>% subset(lambda == 100), top = "epsilon = 1, lambda = 100")
+
+
+
+hist(eps4$TE[eps4$TE < 7], breaks = 50)
+
+
 
 
 summary(TE.lm)
