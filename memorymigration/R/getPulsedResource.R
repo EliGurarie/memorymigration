@@ -56,17 +56,18 @@ getCCpars <- function(mu_x0, mu_t0, sigma_x, sigma_t,
 #' @param par vector with four values: t.peak (which is the maximum peak of t), 
 #' t.sd (which is the standard deviation of t), x.peak (which is the maximum peak of x),
 #' and x.sd (which is the standard deviation of x).
+#' @param x.null extent of "dead area" - needed to keep the process from extending too far beyond the limits of the range.
 #' @return A X x X matrix containing values of the resource distribution
 #' @example examples/WorldsandResources.R
 #' @export
 #' @seealso \link{getResource_island}, \link{getCCpars}
 #' 
-getResource_drifting <- function(world, par){
+getResource_drifting <- function(world, par, x.null = 0){
   
   t <- 1:world$tau
   x <- world$X
-  x.max <- world$X.max
-  x.min <- world$X.min
+  x.max <- world$X.max - x.null
+  x.min <- world$X.min + x.null
   x.range <- x.max - x.min
   
   t.peak <- par["t.peak"] 

@@ -55,7 +55,7 @@ plotSomeYears <- function(sim, world, years = NULL, nrow = 1, outer = TRUE,
       axis(2, at = seq(-80,80,20))
       mtext(side = 2, line = 1.5, 
             "space", las = 0, cex = 1.25)
-      title(side = 3, "year 0", line = 0.3)
+      title("year 0", line = 0.3)
     }
     if(i == round(max(years)/2))
       mtext(side = 1, line = 2, "time", cex = 1.25)

@@ -4,7 +4,7 @@
 \alias{getResource_drifting}
 \title{Get Resource Drifting}
 \usage{
-getResource_drifting(world, par)
+getResource_drifting(world, par, x.null = 0)
 }
 \arguments{
 \item{world}{world object (e.g. from getSinePop/getOptimalPop); list of 7: a population distribution across the time period in a T x X matrix,
@@ -15,6 +15,8 @@ the dx value and the tau value. Can incorporate resource attribute into the worl
 \item{par}{vector with four values: t.peak (which is the maximum peak of t), 
 t.sd (which is the standard deviation of t), x.peak (which is the maximum peak of x),
 and x.sd (which is the standard deviation of x).}
+
+\item{x.null}{extent of "dead area" - needed to keep the process from extending too far beyond the limits of the range.}
 }
 \value{
 A X x X matrix containing values of the resource distribution
