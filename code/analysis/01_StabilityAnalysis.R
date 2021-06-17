@@ -1,3 +1,5 @@
+require(memorymigration)
+
 a <- load("results/stability/stability_1.rda")
 eps1 <- newresults %>% mutate(TE = t1.error + t2.error + abs(x1.error) + abs(x2.error))
 load("results/stability/stability_4.rda")
@@ -38,3 +40,57 @@ ggResults(eps1, top = "epsilon = 1")
 ggResults(eps4, top = "epsilon = 4")
 ggResults(eps8, top = "epsilon = 8")
 dev.off()
+
+table(eps1$lambda)
+
+pdf("plots/StabilityResults_eps1_bylambda.pdf", height = 11, width = 8)
+ggResults(eps1 %>% subset(lambda == 20), top = "epsilon = 1, lambda = 20")
+ggResults(eps1 %>% subset(lambda == 50), top = "epsilon = 1, lambda = 50")
+ggResults(eps1 %>% subset(lambda == 100), top = "epsilon = 1, lambda = 100")
+dev.off()
+
+
+
+table(eps4$lambda)
+pdf("plots/StabilityResults_eps4_bylambda.pdf", height = 11, width = 8)
+ggResults(eps4 %>% subset(lambda == 20), top = "epsilon = 4, lambda = 20")
+ggResults(eps4 %>% subset(lambda == 50), top = "epsilon = 4, lambda = 50")
+#ggResults(eps1 %>% subset(lambda == 100), top = "epsilon = 1, lambda = 100")
+dev.off()
+
+
+hist(eps1$TE[eps1$TE < 7], breaks = 50)
+
+
+summary(TE.lm)
+
+require(broom)
+require("GGally")
+
+coefs.eps1 <- glm(I(TE < 2) ~ (scale(alpha) + 
+                                          scale(beta) + 
+                                          scale(sigma_t) + 
+                                          scale(sigma_x) + 
+                                          (factor(lambda) - 1))^2, 
+                           data = eps1 %>% subset(lambda < 100), family = "binomial") %>% 
+  tidy(conf.int = TRUE) 
+
+
+
+coefs.eps4 <- glm(I(TE < 2) ~ (scale(alpha) + 
+                                 scale(beta) + 
+                                 scale(sigma_t) + 
+                                 scale(sigma_x) + 
+                                 (factor(lambda) - 1))^2, 
+                  data = eps4, family = "binomial") %>% 
+  tidy(conf.int = TRUE) 
+
+
+coefs.eps1 %>% mutate(term = gsub("scale", "", term ), 
+         term = gsub("factor", "", term )) %>%  
+  ggcoef()
+
+coefs.eps4 %>% mutate(term = gsub("scale", "", term ), 
+                      term = gsub("factor", "", term )) %>%  
+  ggcoef()
+

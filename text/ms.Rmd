@@ -127,14 +127,21 @@ We assessed a wide range of parameter values and resource geometries and dynamic
 
 ## Migration
 
-Under what conditions is migration stable:
-
 sigma_t, sigma_x, 
 epsilon, alpha, 
 beta, lambda, 
 x_peak = 30, t_peak = 25
 
 
+All variables contribute to the ability of the organism to find a stable, migratory state that matches the resource dynamics and maximizes foraging efficiency.  
+
+- In general, greater values of $\alpha$ (resource following) lead to an improved ability to match the migration,
+
+- Resource peaks with larger spatial extent (high $\sigma_x$) are smaller duration (low $\sigma_t$) are generally better for migration matching, suggesting that broad but short pulses have the strongest impact on the migration memory. 
+
+- Larger values of social attraction ($\beta$) generally lead to poorer migration matching except in those cases where the sociality scale $\lambda$ was high.  Thus, for example, at $\lambda = 20$, no simulations at $\beta >= 200$ managed to acquire or maintain a matched migration.  However, at $\lambda = 50$ or $100$, the migration was slightly better matched at high values of $\beta.  (Fig. **X**) 
+
+- Higher diffusion rate 
 
 ## Adaptation 
 
