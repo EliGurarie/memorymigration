@@ -102,8 +102,8 @@ buildOnRuns <- function(M, world, ...){
 #' @export
 #' 
 #' 
-runManyRuns<- function (parameters.df, resource_param, world, resource, 
-                        filename = NULL, results.dir = NULL, ...) {
+runManyRuns <- function (parameters.df, resource_param, world, resource, 
+                         filename = NULL, results.dir = NULL, ...) {
   newresults <- data.frame()
   FE.matrix <- matrix(NA, nrow=nrow(parameters.df)*nrow(resource_param), ncol = resource_param$n.years[1])
   
@@ -120,8 +120,10 @@ runManyRuns<- function (parameters.df, resource_param, world, resource,
                              psi_x = psi_x[j], 
                              psi_t = psi_t[j]))
       
+  
+      
       if(resource == "drifting")
-        world$resource <- aaply(par0, 1, function(p) getResource_drifting(world, p, x.null = 50)) 
+        world$resource <- aaply(par0, 1, function(p) getResource_drifting(world, p, x.null=50)) 
       if(resource == "island")
         world$resource <- aaply(par0, 1, function(p) getResource_island(world, p)) 
       
@@ -153,7 +155,6 @@ runManyRuns<- function (parameters.df, resource_param, world, resource,
                                                                M$pop[[length(M$pop)]], world), 
                           
                           resource_param[j,],
-                          x.null = 50,
                           resource = resource)
         
         newresults <- rbind(newresults, c(myR))
@@ -249,8 +250,8 @@ runManyRuns_res <- function (world_param, parameters.df, resource_param, world, 
 #' 
 #' @export
 
-runMissedRuns<- function (parameters.df, resource_param, world, resource, 
-                        filename = NULL, results.dir = NULL, ...) {
+runMissedRuns <- function (world_param, parameters.df, resource_param, world, resource, 
+                             filename = NULL, results.dir = NULL, ...) {
   newresults <- data.frame()
   FE.matrix <- matrix(NA, nrow=nrow(parameters.df)*nrow(resource_param), ncol = resource_param$n.years[1])
   
@@ -265,6 +266,7 @@ runMissedRuns<- function (parameters.df, resource_param, world, resource,
                              sigma_t = sigma_t[i],
                              psi_x = psi_x[i], 
                              psi_t = psi_t[i]))
+      
       
       world <- with(world_param, getOptimalPop(tau = tau, X.min = X.min,
                                                X.max = X.max, dx = dx,
@@ -306,7 +308,7 @@ runMissedRuns<- function (parameters.df, resource_param, world, resource,
                           final_similarity = computeEfficiency(M$pop[[length(M$pop)-1]], 
                                                                M$pop[[length(M$pop)]], world), 
                           
-                          resource_param[i,],
+                          resource_param[j,],
                           resource = resource)
         
         newresults <- rbind(newresults, c(myR))
@@ -318,4 +320,3 @@ runMissedRuns<- function (parameters.df, resource_param, world, resource,
   newresults$annualFE <- FE.matrix[1:nrow(newresults),]
   return(newresults) 
 }
-
