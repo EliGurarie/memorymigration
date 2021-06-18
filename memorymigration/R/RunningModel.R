@@ -308,7 +308,7 @@ runMissedRuns <- function (world_param, parameters.df, resource_param, world, re
                           final_similarity = computeEfficiency(M$pop[[length(M$pop)-1]], 
                                                                M$pop[[length(M$pop)]], world), 
                           
-                          resource_param[j,],
+                          resource_param[i,],
                           resource = resource)
         
         newresults <- rbind(newresults, c(myR))
