@@ -142,3 +142,17 @@ parameterGrid <- function(epsilons, alphas, betas, kappas, lambdas, existing=NUL
   
   params.df
 }
+
+#' Parameter Grid for Resource
+#' 
+#' Generates a data frame splitting up all of the combinations of parameters and considers resource
+#' 
+#' @export
+parameterGridres <- function(params, existing){
+  
+    existing <- existing[c("epsilon","alpha","beta", "kappa", "lambda", "mu_x0", "mu_t0",
+                           "beta_x", "beta_t", "n.years", "sigma_x", "sigma_t", "psi_x", "psi_t")]
+    params.df <- dplyr::setdiff(params, existing)
+  
+  params.df
+}
