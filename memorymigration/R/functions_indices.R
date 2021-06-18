@@ -159,3 +159,19 @@ computeIndices <- function(pop, resource, world){
   FE = computeEfficiency(pop, resource, world)
   data.frame(SC, MI, FE)
 }
+
+#' Compute Annual Efficiency
+#' 
+#' @export
+computeAnnualEfficiency <- function(sim, resource, world){
+  annual <- data.frame()
+  for(i in 2:length(sim)){
+    efficiency <- computeEfficiency(sim[[i]], resource[i-1,,], world)
+    annual <- rbind(annual, efficiency)
+  }
+  annual_row <- as.data.frame(t(annual))
+  colnames(annual_row) <- paste("FE", 1:nrow(annual), sep = "")
+  annual_row
+  sapply(2:length(sim), function(i) computeEfficiency(sim[[i]], resource[i-1,,], world))
+  
+}

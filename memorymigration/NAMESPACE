@@ -3,6 +3,7 @@
 export()
 export(ForagingWithMemory)
 export(buildOnRuns)
+export(computeAnnualEfficiency)
 export(computeAvgEfficiency)
 export(computeCohesiveness)
 export(computeEfficiency)
