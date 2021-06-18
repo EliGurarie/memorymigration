@@ -5,6 +5,7 @@
 \title{Run Missed Runs}
 \usage{
 runMissedRuns(
+  world_param,
   parameters.df,
   resource_param,
   world,
