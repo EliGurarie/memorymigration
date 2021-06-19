@@ -56,6 +56,7 @@ ui <- fluidPage(
            numericInput(inputId = "beta.t", label = "Resource Change in Time ", value = 0, step = 1),
            numericInput(inputId = "psi_x", label = "Stochasticity in Space", value = 0, step = 1),
            numericInput(inputId = "psi_t", label = "Stochasticity in Time ", value = 0, step = 1),
+           numericInput(inputId = "x_null", label = "Constraint in Space ", value = 50, step = 1),
            radioButtons(inputId = "resource",
                         label = "Type of resource", 
                         choices = c("Island" = "resources_island", "Drifting" = "resources_drifting"), inline = TRUE)
@@ -107,7 +108,7 @@ server <- function(input, output) {
       }
       
       if(input$resource == "resources_drifting"){
-        Resource.CC <- aaply(par0, 1, function(p) getResource_drifting(world, p))
+        Resource.CC <- aaply(par0, 1, function(p) getResource_drifting(world, p, as.numeric(input$x_null)))
         world$resource <- Resource.CC
       }
       
@@ -196,7 +197,7 @@ server <- function(input, output) {
     }
     
     if(input$resource == "resources_drifting"){
-      Resource.CC <- aaply(par0, 1, function(p) getResource_drifting(world, p))
+      Resource.CC <- aaply(par0, 1, function(p) getResource_drifting(world, p, x.null = 50))
     }
     
     par(mfrow = c(ceiling(min(dim(Resource.CC))/5), 5), mar = c(0,0,1,0), oma = c(2,2,0,2), tck = 0.01)
