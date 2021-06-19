@@ -102,7 +102,7 @@ plotMigrationHat(M0$memory.hat, x.peak = 50, t.peak = 25, par = FALSE, ylim1 = c
 
 world <- getSinePop(tau = 100, peak.max = 1, peak.min = -1, sd = 10)
 world$m0 <- fitMigration(t = world$time, x = getMem(world$pop, world))
-world$resource <- getResource_drifting(world, c(t.peak = 25, t.sd = 12, 
+world$resource <- getResource_drifting(world, c(t.peak = 25, t.sd = 9, 
                                                 x.peak = 30, x.sd = 9), 
                                        x.null = 50)
 

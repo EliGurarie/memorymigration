@@ -43,7 +43,10 @@ runManyYears <- function(world, parameters, n.years = 20,
                          pop.lastyear = pop.list[[length(pop.list)]], 
                          Year = i, m.hat = memory.list[[i-1]])
     
-    migration.list[[i]] <- fitMigration(t = world$time, x = getMem(pop.list[[i]], world), 
+    # m.hat.lastyear  <- migration.list[[i-1]]
+    if(abs(migration.list[[i-1]]["x2"] - migration.list[[i-1]]["x1"]) < 1){
+      migration.list[[i]] <- migration.list[[i-1]]
+    } else migration.list[[i]] <- fitMigration(t = world$time, x = getMem(pop.list[[i]], world), 
                                         m.start = migration.list[[i-1]])
     
     memory.list[[i]] <- parameters["kappa"]^(i-1) * world$m0 + 
