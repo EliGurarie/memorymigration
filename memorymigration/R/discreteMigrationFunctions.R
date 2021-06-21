@@ -21,7 +21,7 @@ fitMigration <- function(t, x, m.start = NULL, tau = 100){
   if(is.null(m.start)) m.start <- c(t1 = 15, dt1 = 30, t2 = 55, dt2 = 30, x1 = min(x), x2 = max(x))
   migration.fit <- nlsLM(x ~ stepMigration(t, t1, dt1, t2, dt2, x1, x2, tau = 100), 
                          start = as.list(m.start),
-                         lower = c(-100,0,0,0,-100,-100), 
+                         lower = c(-100,-50,0,-50,-100,-100), 
                          upper = c(100,100,200,100,100,100)) 
   summary(migration.fit)$coef[,1]
 }

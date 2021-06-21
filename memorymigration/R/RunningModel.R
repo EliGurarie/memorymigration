@@ -46,9 +46,18 @@ runManyYears <- function(world, parameters, n.years = 20,
     # m.hat.lastyear  <- migration.list[[i-1]]
     if(abs(migration.list[[i-1]]["x2"] - migration.list[[i-1]]["x1"]) < 1){
       migration.list[[i]] <- migration.list[[i-1]]
-    } else migration.list[[i]] <- fitMigration(t = world$time, x = getMem(pop.list[[i]], world), 
+    } else{
+      migration.list[[i]] <- fitMigration(t = world$time, x = getMem(pop.list[[i]], world), 
                                         m.start = migration.list[[i-1]])
-    
+      if(migration.list[[i]]["dt1"] < 0){
+          migration.list[[i]]["dt1"] <- 0
+          warning("\nnegative dt1 estimated!!!  coerced to 0")
+      }
+      if(migration.list[[i]]["dt2"] < 0){
+        migration.list[[i]]["dt2"] <- 0
+        warning("\nnegative dt2 estimated!!!  coerced to 0")
+      }
+    }
     memory.list[[i]] <- parameters["kappa"]^(i-1) * world$m0 + 
       (1 - parameters["kappa"]^(i-1)) * migration.list[[i]]
     
