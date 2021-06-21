@@ -143,6 +143,8 @@ All variables contribute to the ability of the organism to find a stable, migrat
 
 - Higher diffusion rate 
 
+A random forest analysis indicated that the most important variables for attaining optimal migratory behavior were $\alpha$ and $\lambda$, and the least important, consistently, was $\sigma_t$ (table **X**). 
+
 ## Adaptation 
 
 ![](figures/example1_adaptation.png)
@@ -159,6 +161,10 @@ We illustrate an example of a population with a particular migration behavior co
 
 Figure 2 illustrates the ability of the model was able to learn to migrate in a weakly drifting resource environment with a narrow pulse of resource peaking at 50 and -50, but a uniform distribution of resource at times 0 and 50.   In order to learn to migrate, the system needed to have a higher exploratory impulse (higher diffusion constant $\epsilon$), a stronger resource advection (higher $\alpha$) and somewhat weaker sociality (lower $\beta$).  The qualitative behavior of this process was to start drifting northward, while slowly developing a weak southward pulse in winter as well.  After first locking in on the summer resource, the southward migration, driven both by high diffusion and high resource following, slowly extended itself until both narrow peaks of resource could be reached consistently.
 
+
+The model had, in general, a difficult time learning migration from a non-migratory initial condition.  Curiously, the conditions that were more conducive to learning migration were pulses of *longer* duration (high $\sigma_t$)
+ but narrow spatial extent (low $\sigma_x$).  This was in contrast to the conditions that were most amenable for stable migratory behavior (high $\sigma_x$, intermediate $\sigma_t$).   Furthermore 
+
 *Under what conditions can be learn.*
 
 
@@ -173,10 +179,13 @@ However, the ability to migrate was highly dependent on the nature of the resour
 
 It is worth considering the assumptions of our model with respect to a biological population.  Notably, the fact that the memory is not easily interpreted as an 
 
-**Describing conditions for adaptability.**
+**Describing conditions for adaptability / stability.**
+
+
 
 **Describing conditions for learning migration.**
 
+ 
 **Describing conditions for climate change resilience.**
 
 
