@@ -206,7 +206,7 @@ server <- function(input, output) {
   })
   
    output$Image <- renderPlot({
-     plotManyRuns(simulation()[[1]]$pop, world = simulation()[[3]], nrow=ceiling(length(simulation()[[1]]$pop)/6), labelyears=TRUE)
+     plotManyRuns(simulation()[[1]]$pop, world = simulation()[[3]], nrow=ceiling(length(simulation()[[1]]$pop)/10), labelyears=TRUE)
     }, res = 150)
     
     output$Resourceimage <- renderPlot({
