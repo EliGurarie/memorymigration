@@ -9,6 +9,7 @@ ui <- fluidPage(
                         label = "Run Model"),
            downloadButton(outputId = "downloadData", 
                           label = "Download Results"),
+       #   progressBar(id = "pb1", value = 50),
            radioButtons(inputId = "world",
                         label = "Initial distribution of population in year 0", 
                         choices = c("Optimal" = "world_optimal", "Non-Migratory" = "world_nonmigratory", "Sinusoidal" = "world_sinusoidal"), inline = TRUE),
@@ -67,15 +68,17 @@ ui <- fluidPage(
 
 
 
-server <- function(input, output) {
+server <- function(input, output, session) {
   #pcks <- c("shiny","sf","ggplot2","magrittr","plyr", "gplots", 
   #          "memorymigration", "DT", "ggthemes", "minpack.lm", "fields","scales")
   #lapply(pcks, require, character = TRUE)
   
   
+  
   # Setting up World ---------------------
   
   simulation <- eventReactive(input$run, {
+    
       if(input$world == "world_optimal"){
         world <- getOptimalPop(tau=100, X.min = -100, X.max = 100, dx=1, 
                                x1 =as.numeric(input$mu.x0), 
@@ -206,6 +209,14 @@ server <- function(input, output) {
   })
   
    output$Image <- renderPlot({
+     
+     
+     progress <- Progress$new(session, min=1, max=15)
+     on.exit(progress$close())
+     
+     progress$set(message = 'Calculation in progress',
+                  detail = 'This may take a while...')
+     
      plotManyRuns(simulation()[[1]]$pop, world = simulation()[[3]], nrow=ceiling(length(simulation()[[1]]$pop)/10), labelyears=TRUE)
     }, res = 150)
     
