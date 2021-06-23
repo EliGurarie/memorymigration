@@ -34,7 +34,7 @@ if(eval){
   eps8 <- smartbind(eps8, newresults %>% fixTE)
   
   stability <- smartbind(eps1, eps4, eps8)
-  save(df, file = "results/stability/stability_compiled.rda")
+  save(stability, file = "results/stability/stability_compiled.rda")
 }
 
 
@@ -86,7 +86,7 @@ plotBlock <- function(block, cols = c("darkblue", "orange", "lightgrey"),
 
 
 
-PlotMiniblock <- function(){
+PlotMiniblock <- function(cols = c("darkblue", "orange", "lightgrey")){
   miniM <- subset(df, 
                   lambda == 100 & epsilon == 1 & 
                     beta == 400 & alpha == 200)[,c("sigma_t", "sigma_x", "TE")] %>% 
@@ -99,12 +99,12 @@ PlotMiniblock <- function(){
   mtext(side = 2, at = sigs-1.5, sigs, line = .5, cex = 1.15)
   abline(v = sigs, col = "white")
   abline(h = sigs, col = "white")
-  mtext(side = 1, expression("Resource duration "~(sigma[t])), line = 3, cex = 1.25)
-  mtext(side = 2, expression("Resource extent "~(sigma[x])), line = 2, cex = 1.25)
+  mtext(side = 1, expression("resource duration "~(sigma[t])), line = 3, cex = 1.1)
+  mtext(side = 2, expression("resource extent "~(sigma[x])), line = 2, cex = 1.1)
 }
 
 
-plotStability <- function(stability){
+plotStability <- function(stability,  cols = c("darkblue", "orange", "lightgrey")){
   layout(rbind(1:3,4:6) %>% cbind(7:8))
   par( mar = c(1,1,1,1)/2, oma = c(3,3,3,3), xpd = FALSE)
   for(e in c(1,8)) for(l in c(20,50,100)){
@@ -117,7 +117,7 @@ plotStability <- function(stability){
       }
       if(l == 50){
         plotBlock(myblock)
-        mtext(side = 3, expression("medium swarm"~(lambda == 40)), line = 1, cex = 1.25)
+        mtext(side = 3, expression("medium swarm"~(lambda == 50)), line = 1, cex = 1.25)
       }
       if(l == 100){
         plotBlock(myblock, side2 = TRUE)
@@ -128,7 +128,10 @@ plotStability <- function(stability){
         plotBlock(myblock, side1 = TRUE)
         mtext(side = 2, expression("high diffusion "~(epsilon == 8)), line = 1, cex = 1.25)
       }
-      if(l == 50) plotBlock(myblock, side1 = TRUE)
+      if(l == 50){ 
+        plotBlock(myblock, side1 = TRUE)
+        mtext(side = 1, expression("resource following "~(alpha)), line = 2, cex = 1.25)
+      }
       if(l == 100){  
         plotBlock(myblock, side1 = TRUE, side2 = TRUE)
       }
@@ -137,7 +140,6 @@ plotStability <- function(stability){
   b <- myblock[,c("TE", "alpha", "beta", "sigma_t", "sigma_x")]
   ns <- apply(b[,-1], 2, function(x) length(unique(x)))
   
-  mtext(side = 1, outer = TRUE, expression("resource following "~(alpha)), line = 1.5, cex = 1.25)
   text(ns["sigma_t"] * ns["alpha"]  + 3, 
        ns["sigma_x"] * ns["beta"], srt = 270, xpd = NA, 
        cex = 2, 
@@ -145,7 +147,8 @@ plotStability <- function(stability){
 
   par(mar = c(4,8,4,0))  
   plot.new()
-  legend("center", fill = cols, legend = c("< 1", "1-5", ">1"), cex = 2, title = "total error", bty = "n")
+  legend("center", fill = cols, legend = c("< 1", "1-5", "> 5"), cex = 2, 
+         title = "total mismatch")
   PlotMiniblock()
 }
 

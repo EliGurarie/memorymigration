@@ -4,7 +4,13 @@
 \alias{fitMigration}
 \title{Fit Migration}
 \usage{
-fitMigration(t, x, m.start = NULL, tau = 100)
+fitMigration(
+  t,
+  x,
+  m.start = NULL,
+  tau = 100,
+  lower = c(-100, 0, 0, 0, -100, -100)
+)
 }
 \description{
 Fit Migration

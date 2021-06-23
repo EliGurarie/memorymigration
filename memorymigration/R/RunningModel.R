@@ -47,8 +47,23 @@ runManyYears <- function(world, parameters, n.years = 20,
     if(abs(migration.list[[i-1]]["x2"] - migration.list[[i-1]]["x1"]) < 1){
       migration.list[[i]] <- migration.list[[i-1]]
     } else{
-      migration.list[[i]] <- fitMigration(t = world$time, x = getMem(pop.list[[i]], world), 
-                                        m.start = migration.list[[i-1]])
+      
+      lower = c(-100,0,0,0,-100,-100)
+      
+      m.hat <- try(fitMigration(t = world$time, x = getMem(pop.list[[i]], world), 
+                            m.start = migration.list[[i-1]]))
+      if(inherits(m.hat, "try-error"))
+        m.hat <- try(fitMigration(t = world$time, x = getMem(pop.list[[i]], world), 
+                                  lower = c(-100,-20,0,0,-100,-100), 
+                                  m.start = migration.list[[i-1]]))
+      if(inherits(m.hat, "try-error"))
+        m.hat <- try(fitMigration(t = world$time, x = getMem(pop.list[[i]], world), 
+                                  lower = c(-100,-50,0,-20,-100,-100), 
+                                  m.start = migration.list[[i-1]]))
+      if(inherits(m.hat, "try-error")) stop(cat("\n We tried, and failed at year", i)) else
+          migration.list[[i]] <- m.hat
+        
+      migration.list[[i]] <- 
       if(migration.list[[i]]["dt1"] < 0){
           migration.list[[i]]["dt1"] <- 0
           warning("\nnegative dt1 estimated!!!  coerced to 0")
