@@ -141,7 +141,7 @@ All variables contribute to the ability of the organism to find a stable, migrat
 
 - Larger values of social attraction ($\beta$) generally lead to poorer migration matching except in those cases where the sociality scale $\lambda$ was high.  Thus, for example, at $\lambda = 20$, no simulations at $\beta >= 200$ managed to acquire or maintain a matched migration.  However, at $\lambda = 50$ or $100$, the migration was slightly better matched at high values of $\beta.  (Fig. **X**) 
 
-- Higher diffusion rate 
+- Higher diffusion rates 
 
 A random forest analysis indicated that the most important variables for attaining optimal migratory behavior were $\alpha$ and $\lambda$, and the least important, consistently, was $\sigma_t$ (table **X**). 
 
