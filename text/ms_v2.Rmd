@@ -90,10 +90,10 @@ The model is confined to a one-dimensional bounded domain $[-\chi,\chi]$, with n
 
 ## Seasonal resource
 
-We ran our numerical experiments on a spatial domain $x \in [-100,100]$, and a periodicity $\tau = 100$ (i.e.~100 day years).  We were interested in an approximately periodic resource dynamic, i.e. one in which $h(x,t \approx h(x, t-\tau))$. We generated two types of resource distributions. A "non-surfable" resource (*island resource*), and weakly surfable resource (*drifting resource*).  Both are characterized by a peak in time and space centered at $m_x$ at $m_t$, and $-m_x$ at $\tau - m_t$ (for example, locations 40 and -40 at times 25 and 75, respectively). These pulses have a shared time scale of duration $s_t$ and a spatial scale of extent $s_x$, the standard deviation in the time and space dimension respectively.  The island resource is simply two uncorrelated bivariate normal distributions $$h(x,t) = K\,(\Phi(m_x, m_t, s_x, s_t) + \Phi(-m_x, \tau - m_t, s_x, s_t))$$
+We ran our numerical experiments on a spatial domain $x \in [-100,100]$, and a periodicity $\tau = 100$ (i.e.~100 day years).  We were interested in an approximately periodic resource dynamic, i.e. one in which $h(x,t \approx h(x, t-\tau))$. We generated two types of resource distributions. A "non-surfable" resource (*island resource*), and weakly surfable resource (*drifting resource*).  Both are characterized by a peak in time and space centered at $M_x$ at $m_t$, and $-m_x$ at $\tau - m_t$ (for example, locations 40 and -40 at times 25 and 75, respectively). These pulses have a shared time scale of duration $s_t$ and a spatial scale of extent $s_x$, the standard deviation in the time and space dimension respectively.  The island resource is simply two uncorrelated bivariate normal distributions $$h(x,t) = K\,(\Phi(m_x, m_t, s_x, s_t) + \Phi(-m_x, \tau - m_t, s_x, s_t))$$
 where $\Phi$ is the bivariate Gaussian distribution function, and the normalizing constant $K$ is selected such that the average total amount of resource throughout the year is 1, i.e. ${1 \over \tau} \int_T\int_X h(x,t) dx\,dt = 1$. 
 
-The drifting resource differs from the island resource in that the total amount of resource at any given time point is 1 ($\int_X h(x,t) dx = 1$).  This property is attained by distributing the resource as a re-scaled beta distribution, where the shape and scale parameters vary sinusoidally in such a way as to make the standard deviations and means match the desired values of $m_x, m_t, s_x, s_t$ (see appendix for details).  Both types of resources are illustrated in Figure 1. 
+The drifting resource differs from the island resource in that the total amount of resource at any given time point is 1 ($\int_X h(x,t) dx = 1$).  This property is attained by distributing the resource as a re-scaled beta distribution, where the shape and scale parameters vary sinusoidally in such a way as to make the standard deviations and means match the desired values of $m_x, m_t, s_x, s_t$ (see appendix for details). 
 
 Within a given year, the resource is entirely symmetric: $h_y(x,t) = h_y(-x, \tau-t)$.  However, in scenarios exploring climate change we allow the peaks to vary with drift and stochasticity according to:  $m_x(y) \sim {\cal N}(\mu_x + \beta_x\,y, \sigma_x)$ and $m_t(y) \sim {\cal N}(\mu_t + \beta_t\,y, \sigma_t)$, where the $\mu$, $\beta$ and $\sigma$ terms are the mean, slope and variance, respectively, for the location and time duration of the pulse.  Thus, if $\beta=0$ and $\sigma=0$, the conditions are constant across years, if $\beta_x > 0$ there is a drift of the resource towards extremes, if $\beta_t < 0$ there is a shift towards earlier resource pulses.  These trends mirror the pole-ward shift of peak resources and the earlier spring phenology occurring with a warming global climate.  The spatial scales ($s_x$ and $s_t$) remain constant in all of our simulations.  
 
@@ -103,9 +103,7 @@ Within a given year, the resource is entirely symmetric: $h_y(x,t) = h_y(-x, \ta
 
 ## Metrics
 
-The main metrics we are interested are *migration mismatch* and *foraging efficiency*.  
-
-Migration mismatch captures the similarity between the migration phenology and the resource phenology. To do this, we compute the total mismatch, i.e. is a sum of the difference between the migration coefficients and the resource peaks.  Thus, the spatial mismatch is given by the absolute difference between the migration targets and the resource peaks, i.e. $MM_x = |x_1 - m_x| + |x_2 + m_x|$.  The temporal mismatch is the difference between the arrival time and the peak of the resource if arrival is post-peak, the difference between the departure time and the peak of the resource if departure is pre-peak, and 0 if the seasonal duration spans the peak, i.e.  $MM_t = max\{t_1 - m_1, m_1 - (t_1 + dt_1), 0\} + max\{t_2 - m_2, m_2 - (t_2 + dt_2), 0\}$. The total mismatch is the sum of $MM_x$ and $MM_t$.  If the total mismatch is less than 1, we consider the migration to be perfect.  If it is between 1 and 5, we consider it to be good.  Otherwise, we consider the migration to be mismatched. 
+The main metrics we are interested are *migratoriness* and *foraging efficiency*.  The migratoriness is measured as the maximum distance between the median of the population distribution within a given year.  The median is a more reliable metric than the mean, as even as distributions become highly assymetric - pulling the mean in one directon or another - the median can  remain consistently in the middle of the spatial domain indicating a net flux of animals of 0. This is the anticipated (and realized) result of a purely "tactical" model pursuing the periodic resource pulses. 
 
 To quantify the foraging efficiency, i.e., the organisms’ ability to track the distribution of the resources over space and time, we use a continuous form of the Bhattacharyya Coefficient [@Bhattacharyya1943] which quantifies the similarity between two distributions.  We compute this coefficient at every time point in a given year, and take the mean across the equilibrium year to determine foraging efficiency (FE). Thus, the foraging efficiency index is: 
 $$FE = {1\over \tau} \int_{0}^\tau \int_{0}^{\chi} \sqrt{u(x,t) \, h(x,t)} \,\, dx\,dt$$
@@ -114,7 +112,6 @@ where the spatial integral is taken over the domain.  This metric is constrained
 For simulations with a constant resource, we run those until a quasi-equilibrium state is achieved, i.e. where the Bhattacharya index of the population distribution across subsequent years reaches a value of 0.9999.  Once that state is attained, we compute the mirgatoriness and foraging efficiency metrics, and additionally collect the number of years that were required to reach stationarity.  
 
 For numerical runs with climate change, we run the simulation for 30 years, since equilibrium is never achieved) and retain the foraging efficiency for the final 10 years, reflecting something like the dynamic long-term average of the system's ability to keep track of climate change.  We also record the migration parameters $\widehat{\theta_y}$ for each year. 
-
 
 
 ## Simulation studies
@@ -132,27 +129,32 @@ We assessed a wide range of parameter values and resource geometries and dynamic
 
 # Results
 
-![](figures/example1_adaptation.png)
-**Figure 2.** *Example of adaptation to a shift in resource peak. The initial (year 0) behavior migrates to locations 50 and -50 at days 15 and 60, whereas the resource peak is at 30 and -30, peaking at times 25 and 75.  (a) shows the first 14 years of the simulation; (b) The centroid of the annual movement of the population is shown in panel b, with dark blue to red colors indicating year 0 to year 40; (c) annual foraging efficiency across years; (d) migration timing parameters for each year, with orange segments indicating arrival and departure from the summering (northern) grounds, and the blue segments indicating timing of arrival and departure at the wintering grounds; (e) migration arrival and departure location across years, with blue and orange indicating winter (southern) and summer (northern) locations.*
+## Migration
 
-## Adaptation to resource phenology
+sigma_t, sigma_x, 
+epsilon, alpha, 
+beta, lambda, 
+x_peak = 30, t_peak = 25
 
-The ability of this system to adjust its migration phenology to find a stable, migratory state that matches the dynamics of the resource is illustrated in Figure 2.  Furthermore, in the illustrated example, the eventual steady state is one where the foraging efficiency is relatively high. This fundamental dynamic, of attaining and maintaining a well-matched migration phenology, can occur under many combinations of parameters (Figure 3).  In fact, all parameters play a role.  
 
-Among the more intuitive results are that greater values of $\alpha$ (resource following) lead to an improved ability to match the migration.  Furthermore, resource peaks with larger spatial extent (higher $\sigma_x$) are generally better for migration matching.  A larger set of parametets matched migration with low diffusion than high diffusion. 
+All variables contribute to the ability of the organism to find a stable, migratory state that matches the resource dynamics and maximizes foraging efficiency.  
 
-Less obvious was that higher levels of social attraction ($\beta$) led to improved migration matching except in those cases where the sociality scale $\lambda$ was high.  Thus, for example, at $\lambda = 20$, no simulations at $\beta >= 200$ managed to acquire or maintain a matched migration.  However, at $\lambda = 50$ or $100$, the migration was slightly better matched at high values of $\beta$.  (Fig. **X**)  The spatial extent of the swarm was a remarkably significant variable.  Smaller swarms were able to match migration only at low values of social attraction ($\beta = 200$), and relatively high values of resource attraction ($\alpha \geq 600$)
+- In general, greater values of $\alpha$ (resource following) lead to an improved ability to match the migration,
+
+- Resource peaks with larger spatial extent (high $\sigma_x$) are smaller duration (low $\sigma_t$) are generally better for migration matching, suggesting that broad but short pulses have the strongest impact on the migration memory. 
+
+- Larger values of social attraction ($\beta$) generally lead to poorer migration matching except in those cases where the sociality scale $\lambda$ was high.  Thus, for example, at $\lambda = 20$, no simulations at $\beta >= 200$ managed to acquire or maintain a matched migration.  However, at $\lambda = 50$ or $100$, the migration was slightly better matched at high values of $\beta.  (Fig. **X**) 
+
+- Higher diffusion rates 
 
 A random forest analysis indicated that the most important variables for attaining optimal migratory behavior were $\alpha$ and $\lambda$, and the least important, consistently, was $\sigma_t$ (table **X**). 
 
-![](figures/StabilityResults.png)
-**Figure 3.** *Migration phenology matching across six model parameters. Low and high diffusion ($\epsilon = 1$ and $8$ in upper and lower panel blocks), tight, medium and loose swarms ($\lambda = 20, 50, 100$) left to right panels.  Within each of these blocks, high values of the resource following parmaeters $\alpha$ from 0 to 1000 are left to right, and higher values of the sociality parameter $\beta$ are bottom to top.  Finally, within each of the combinations of $\epsilon, \lambda, \alpha, \beta$, we show results ranging across 6 values of resource duration ($\sigma_t$, 3-15 left to right), and 6 values of resource extent ($\sigma_x$, 3-15 bottom to top), as in the zoomed in panel at bottom right. Finally, the color scheme reflects the total mismatch, i.e. the sum of the absolute differences between the migration timing and locations from the resource peak.* 
+## Adaptation 
 
+![](figures/example1_adaptation.png)
+**Figure 2. Example of adaptation to a shift in resource peak. The initial (year 0) behavior migrates to locations 50 and -50 at days 15 and 60, whereas the resource peak is at 30 and -30, peaking at times 25 and 75.  (a) shows the first 14 years of the simulation; (b) The centroid of the annual movement of the population is shown in panel b, with dark blue to red colors indicating year 0 to year 40; (c) annual foraging efficiency across years; (d) migration timing parameters for each year, with orange segments indicating arrival and departure from the summering (northern) grounds, and the blue segments indicating timing of arrival and departure at the wintering grounds; (e) migration arrival and departure location across years, with blue and orange indicating winter (southern) and summer (northern) locations.**
 
-
-We illustrate an example of a population with a particular migration behavior confronted with a major sudden shift in the spatio-temporal distribution of the resource in Figure 1.  In the illustrated scenario, it takes nearly 40 years to attain an equilibrium, and the eventual steady state is one where the centroid of the migration lines up exactly with the centroid of the resource, and the arrival timing coincides with the *peak* of resource availability.  Notably, the path to this equilibrium is somewhat indirect, with the summer season, in particular, taking    
-
-
+We illustrate an example of a population with a particular migration behavior confronted with a major sudden shift in the spatio-temporal distribution of the resource in Figure 1.  In the illustrated scenario, it takes nearly 40 years to attain an equilibrium, and the eventual "optimum" is one where the centroid of the migration lines up exactly with the centroid of the resource, and the arrival timing conincides with the *peak* of resource availability.  Notably, the path to this equilibrium is somewhat indirect, with the summer season, in particular, taking    
 
 *Under what conditions can we adapt.*>
 
@@ -162,7 +164,6 @@ We illustrate an example of a population with a particular migration behavior co
 **Figure 2. Example of model learning to migrate. The resource is a "weakly drifting" resource and the initial (year 0) condition is non migratory.  The simulation was run for 100 years, and a sampling of those years (labeled) are presented in panel a:  all years from 0 to 10, followerd by 20, 40 and 100.  Otherwise, panels are as in Figure 1.  Parameter values were $\epsilon  = 5$, $\alpha = 500$ and $\beta = 50$.**
 
 Figure 2 illustrates the ability of the model was able to learn to migrate in a weakly drifting resource environment with a narrow pulse of resource peaking at 50 and -50, but a uniform distribution of resource at times 0 and 50.   In order to learn to migrate, the system needed to have a higher exploratory impulse (higher diffusion constant $\epsilon$), a stronger resource advection (higher $\alpha$) and somewhat weaker sociality (lower $\beta$).  The qualitative behavior of this process was to start drifting northward, while slowly developing a weak southward pulse in winter as well.  After first locking in on the summer resource, the southward migration, driven both by high diffusion and high resource following, slowly extended itself until both narrow peaks of resource could be reached consistently.
-
 
 
 The model had, in general, a difficult time learning migration from a non-migratory initial condition.  Curiously, the conditions that were more conducive to learning migration were pulses of *longer* duration (high $\sigma_t$)
