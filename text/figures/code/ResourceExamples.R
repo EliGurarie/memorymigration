@@ -26,6 +26,7 @@ R.list <- list(R1, R2, R3,R4)
 R.max <-  R.list%>% sapply(max) %>% max
 
 b  <- seq(0, R.max, length = 101)
+require(viridis)
 cols <- rich.colors(100)
   
 x <- world$X
