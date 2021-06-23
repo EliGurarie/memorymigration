@@ -93,7 +93,7 @@ The model is confined to a one-dimensional bounded domain $[-\chi,\chi]$, with n
 We ran our numerical experiments on a spatial domain $x \in [-100,100]$, and a periodicity $\tau = 100$ (i.e.~100 day years).  We were interested in an approximately periodic resource dynamic, i.e. one in which $h(x,t \approx h(x, t-\tau))$. We generated two types of resource distributions. A "non-surfable" resource (*island resource*), and weakly surfable resource (*drifting resource*).  Both are characterized by a peak in time and space centered at $M_x$ at $m_t$, and $-m_x$ at $\tau - m_t$ (for example, locations 40 and -40 at times 25 and 75, respectively). These pulses have a shared time scale of duration $s_t$ and a spatial scale of extent $s_x$, the standard deviation in the time and space dimension respectively.  The island resource is simply two uncorrelated bivariate normal distributions $$h(x,t) = K\,(\Phi(m_x, m_t, s_x, s_t) + \Phi(-m_x, \tau - m_t, s_x, s_t))$$
 where $\Phi$ is the bivariate Gaussian distribution function, and the normalizing constant $K$ is selected such that the average total amount of resource throughout the year is 1, i.e. ${1 \over \tau} \int_T\int_X h(x,t) dx\,dt = 1$. 
 
-The drifting resource differs from the island resource in that the total amount of resource at any given time point is 1 ($\int_X h(x,t) dx = 1$).  This property is attained by distributing the resource as a re-scaled beta distribution, where the shape and scale parameters vary sinusoidally in such a way as to make the standard deviations and means match the desired values of $m_x, m_t, s_x, s_t$ (see appendix for details). 
+The drifting resource differs from the island resource in that the total amount of resource at any given time point is 1 ($\int_X h(x,t) dx = 1$).  This property is attained by distributing the resource as a re-scaled beta distribution, where the shape and scale parameters vary sinusoidally in such a way as to make the standard deviations and means match the desired values of $m_x, m_t, s_x, s_t$ (see appendix for details).  Both types of resources are illustrated in Figure 1. 
 
 Within a given year, the resource is entirely symmetric: $h_y(x,t) = h_y(-x, \tau-t)$.  However, in scenarios exploring climate change we allow the peaks to vary with drift and stochasticity according to:  $m_x(y) \sim {\cal N}(\mu_x + \beta_x\,y, \sigma_x)$ and $m_t(y) \sim {\cal N}(\mu_t + \beta_t\,y, \sigma_t)$, where the $\mu$, $\beta$ and $\sigma$ terms are the mean, slope and variance, respectively, for the location and time duration of the pulse.  Thus, if $\beta=0$ and $\sigma=0$, the conditions are constant across years, if $\beta_x > 0$ there is a drift of the resource towards extremes, if $\beta_t < 0$ there is a shift towards earlier resource pulses.  These trends mirror the pole-ward shift of peak resources and the earlier spring phenology occurring with a warming global climate.  The spatial scales ($s_x$ and $s_t$) remain constant in all of our simulations.  
 
@@ -127,21 +127,17 @@ We assessed a wide range of parameter values and resource geometries and dynamic
 
 ## Migration
 
-sigma_t, sigma_x, 
-epsilon, alpha, 
-beta, lambda, 
-x_peak = 30, t_peak = 25
-
+An illustration of the ability to adjust its migration to find a stable, migratory state that matches the dynamics of the resource is illustrated in Figure X.  Under many combinations of parameters, this kind of steady state adjustment is obtained and maintained.  
 
 All variables contribute to the ability of the organism to find a stable, migratory state that matches the resource dynamics and maximizes foraging efficiency.  
 
-- In general, greater values of $\alpha$ (resource following) lead to an improved ability to match the migration,
+In general, greater values of $\alpha$ (resource following) lead to an improved ability to match the migration,
 
-- Resource peaks with larger spatial extent (high $\sigma_x$) are smaller duration (low $\sigma_t$) are generally better for migration matching, suggesting that broad but short pulses have the strongest impact on the migration memory. 
+Resource peaks with larger spatial extent (high $\sigma_x$) are smaller duration (low $\sigma_t$) are generally better for migration matching, suggesting that broad but short pulses have the strongest impact on the migration memory. 
 
-- Larger values of social attraction ($\beta$) generally lead to poorer migration matching except in those cases where the sociality scale $\lambda$ was high.  Thus, for example, at $\lambda = 20$, no simulations at $\beta >= 200$ managed to acquire or maintain a matched migration.  However, at $\lambda = 50$ or $100$, the migration was slightly better matched at high values of $\beta.  (Fig. **X**) 
+Larger values of social attraction ($\beta$) generally lead to poorer migration matching except in those cases where the sociality scale $\lambda$ was high.  Thus, for example, at $\lambda = 20$, no simulations at $\beta >= 200$ managed to acquire or maintain a matched migration.  However, at $\lambda = 50$ or $100$, the migration was slightly better matched at high values of $\beta.  (Fig. **X**) 
 
-- Higher diffusion rates 
+Higher diffusion rates 
 
 A random forest analysis indicated that the most important variables for attaining optimal migratory behavior were $\alpha$ and $\lambda$, and the least important, consistently, was $\sigma_t$ (table **X**). 
 
