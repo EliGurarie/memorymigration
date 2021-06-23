@@ -40,8 +40,8 @@ runManyYears <- function(world, parameters, n.years = 20,
     if(verbose){cat("\n"); cat(paste("running year ", i))}
     i <- i+1
     pop.list[[i]] <- runFWM(world = world, parameters = parameters, 
-                         pop.lastyear = pop.list[[length(pop.list)]], 
-                         Year = i, m.hat = memory.list[[i-1]])
+                            pop.lastyear = pop.list[[length(pop.list)]], 
+                            Year = i, m.hat = memory.list[[i-1]])
     
     # m.hat.lastyear  <- migration.list[[i-1]]
     if(abs(migration.list[[i-1]]["x2"] - migration.list[[i-1]]["x1"]) < 1){
@@ -51,7 +51,7 @@ runManyYears <- function(world, parameters, n.years = 20,
       lower = c(-100,0,0,0,-100,-100)
       
       m.hat <- try(fitMigration(t = world$time, x = getMem(pop.list[[i]], world), 
-                            m.start = migration.list[[i-1]]))
+                                m.start = migration.list[[i-1]]))
       if(inherits(m.hat, "try-error"))
         m.hat <- try(fitMigration(t = world$time, x = getMem(pop.list[[i]], world), 
                                   lower = c(-100,-20,0,0,-100,-100), 
@@ -61,13 +61,13 @@ runManyYears <- function(world, parameters, n.years = 20,
                                   lower = c(-100,-50,0,-20,-100,-100), 
                                   m.start = migration.list[[i-1]]))
       if(inherits(m.hat, "try-error")) stop(cat("\n We tried, and failed at year", i)) else
-          migration.list[[i]] <- m.hat
-        
+        migration.list[[i]] <- m.hat
+      
       migration.list[[i]] <- 
-      if(migration.list[[i]]["dt1"] < 0){
+        if(migration.list[[i]]["dt1"] < 0){
           migration.list[[i]]["dt1"] <- 0
           warning("\nnegative dt1 estimated!!!  coerced to 0")
-      }
+        }
       if(migration.list[[i]]["dt2"] < 0){
         migration.list[[i]]["dt2"] <- 0
         warning("\nnegative dt2 estimated!!!  coerced to 0")
@@ -277,7 +277,74 @@ runManyRuns_res <- function (world_param, parameters.df, resource_param, world, 
 #' 
 #' @export
 
-runMissedRuns <- function (world_param, parameters.df, resource_param, world, resource, 
+runMissedRuns <- function (parameters.df, resource_param, world, resource, 
+                           filename = NULL, results.dir = NULL, ...) {
+  newresults <- data.frame()
+  FE.matrix <- matrix(NA, nrow=nrow(parameters.df)*nrow(resource_param), ncol = resource_param$n.years[1])
+  
+  for(i in 1:nrow(parameters.df)) {
+    par0 <- with(resource_param, 
+                 getCCpars(mu_x0 = mu_x0[i],
+                           mu_t0 = mu_t0[i],
+                           beta_x = beta_x[i],
+                           beta_t = beta_t[i],
+                           n.years = n.years[i],
+                           sigma_x = sigma_x[i],
+                           sigma_t = sigma_t[i],
+                           psi_x = psi_x[i], 
+                           psi_t = psi_t[i]))
+    
+    
+    if(resource == "drifting")
+      world$resource <- aaply(par0, 1, function(p) getResource_drifting(world, p, x.null=50)) 
+    if(resource == "island")
+      world$resource <- aaply(par0, 1, function(p) getResource_island(world, p)) 
+    
+    
+    attr(world$resource, "par") <- par0[nrow(par0),]
+    
+    myparams <- with(parameters.df[i,], 
+                     c(epsilon = epsilon, 
+                       alpha = alpha, 
+                       beta = beta, 
+                       kappa = kappa, 
+                       lambda = lambda))
+    
+    M <- try(runManyYears(world, parameters = myparams, 
+                          n.years = 150, threshold = 0.9999))
+    
+    
+    
+    if(!inherits(M, "try-error")){
+      myFE <- computeAnnualEfficiency(M$pop, world$resource, world)
+      FE.matrix[nrow(newresults)+1, 1:length(myFE)] <- myFE
+      
+      myR <- data.frame(parameters.df[i, ], computeIndices(M$pop[[length(M$pop)]], 
+                                                           world$resource[length(M$pop)-1,,], world),
+                        computeMigrationIndices(M, world),
+                        avgFE = computeAvgEfficiency(M$pop, world$resource, world),
+                        n.runs = length(M$pop) - 1,
+                        final_similarity = computeEfficiency(M$pop[[length(M$pop)-1]], 
+                                                             M$pop[[length(M$pop)]], world), 
+                        
+                        resource_param[i,],
+                        resource = resource)
+      
+      newresults <- rbind(newresults, c(myR))
+    }
+    
+    if(!is.null(results.dir) & (i %% 10 == 0 | i == max(i)))  
+      save(newresults, file =paste0(results.dir,"/",filename,".rda"))
+  }
+  newresults$annualFE <- FE.matrix[1:nrow(newresults),]
+  return(newresults) 
+}
+
+#' Run Missed Runs Resource
+#' 
+#' @export
+
+runMissedRuns_res <- function (world_param, parameters.df, resource_param, world, resource, 
                              filename = NULL, results.dir = NULL, ...) {
   newresults <- data.frame()
   FE.matrix <- matrix(NA, nrow=nrow(parameters.df)*nrow(resource_param), ncol = resource_param$n.years[1])
