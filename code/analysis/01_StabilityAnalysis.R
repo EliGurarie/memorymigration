@@ -47,7 +47,6 @@ ggMigration <- function(df,  cols = c("darkblue", "orange", "darkgrey"), ...){
     xlab("") + theme(legend.position = "none")
 }
 
-
 ggFE <- function(df, ...){
   df %>% 
     ggplot(aes(sigma_t, sigma_x, fill = FE)) + 
@@ -57,153 +56,10 @@ ggFE <- function(df, ...){
     xlab("") + theme(legend.position = "none")
 }
 
-plotBlock <- function(block, cols = c("darkblue", "orange", "lightgrey"), 
-                      side1 = FALSE, side2 = FALSE){
-  require(reshape2)
-  b <- block[,c("TE", "alpha", "beta", "sigma_t", "sigma_x")]
-  ns <- apply(b[,-1], 2, function(x) length(unique(x)))
-  
-  M <-   b %>% acast(alpha + sigma_t ~ beta +  sigma_x, 
-                     value.var = "TE")
-  
-  #M[is.na(M)] <- max(M, na.rm = TRUE)
-  image(1:ncol(M)-.5, 1:nrow(M)-.5, M, breaks = c(0,1,5,1000), 
-        col = cols, xaxt ="n", xlab = "", ylab = "", yaxt = "n")
-  abline(v = 1:ncol(M), col = "white")
-  abline(h = 1:nrow(M), col = "white")
-  abline(v = (0:ns["alpha"]) * ns["sigma_t"], lwd = 2)
-  abline(h = (0:ns["beta"]) * ns["sigma_x"], lwd = 2)
-  
-  if(side1)
-    text(1:ns["alpha"] * ns["sigma_t"] - ns["sigma_t"]/2, -1, 
-        unique(b$alpha), xpd = NA)
-  
-  if(side2)
-    text(nrow(M)+ 1, 
-        1:ns["beta"] * ns["sigma_x"] - ns["sigma_x"]/2,
-        unique(b$beta), xpd = NA, srt = 270)
-}
-
-
-
-PlotMiniblock <- function(cols = c("darkblue", "orange", "lightgrey")){
-  miniM <- subset(df, 
-                  lambda == 100 & epsilon == 1 & 
-                    beta == 400 & alpha == 200)[,c("sigma_t", "sigma_x", "TE")] %>% 
-    acast(sigma_t ~ sigma_x)
-  
-  sigs <- seq(3,15,3)
-  image(sigs - 1.5, sigs - 1.5, miniM, breaks = c(0,1,5,1000), 
-        col = cols, xaxt ="n", xlab = "", ylab = "", yaxt = "n", asp = 1)
-  mtext(side = 1, at = sigs-1.5, sigs, line = .5, cex = 1.15)
-  mtext(side = 2, at = sigs-1.5, sigs, line = .5, cex = 1.15)
-  abline(v = sigs, col = "white")
-  abline(h = sigs, col = "white")
-  mtext(side = 1, expression("resource duration "~(sigma[t])), line = 3, cex = 1.1)
-  mtext(side = 2, expression("resource extent "~(sigma[x])), line = 2, cex = 1.1)
-}
-
-
-plotStability <- function(stability,  cols = c("darkblue", "orange", "lightgrey")){
-  layout(rbind(1:3,4:6) %>% cbind(7:8))
-  par( mar = c(1,1,1,1)/2, oma = c(3,3,3,3), xpd = FALSE)
-  for(e in c(1,8)) for(l in c(20,50,100)){
-    myblock <- subset(stability, epsilon == e & lambda == l) 
-    if(e == 1){
-      if(l == 20){
-        plotBlock(myblock)
-        mtext(side = 3, expression("tight swarm "~(lambda == 20)), line = 1, cex = 1.25)
-        mtext(side = 2, expression("low diffusion "~(epsilon == 1)), line = 1, cex = 1.25)
-      }
-      if(l == 50){
-        plotBlock(myblock)
-        mtext(side = 3, expression("medium swarm"~(lambda == 50)), line = 1, cex = 1.25)
-      }
-      if(l == 100){
-        plotBlock(myblock, side2 = TRUE)
-        mtext(side = 3, expression("loose swarm"~(lambda == 100)), line = 1, cex = 1.25)
-      }} 
-    else{ 
-      if(l == 20){  
-        plotBlock(myblock, side1 = TRUE)
-        mtext(side = 2, expression("high diffusion "~(epsilon == 8)), line = 1, cex = 1.25)
-      }
-      if(l == 50){ 
-        plotBlock(myblock, side1 = TRUE)
-        mtext(side = 1, expression("resource following "~(alpha)), line = 2, cex = 1.25)
-      }
-      if(l == 100){  
-        plotBlock(myblock, side1 = TRUE, side2 = TRUE)
-      }
-    }
-  }
-  b <- myblock[,c("TE", "alpha", "beta", "sigma_t", "sigma_x")]
-  ns <- apply(b[,-1], 2, function(x) length(unique(x)))
-  
-  text(ns["sigma_t"] * ns["alpha"]  + 3, 
-       ns["sigma_x"] * ns["beta"], srt = 270, xpd = NA, 
-       cex = 2, 
-       expression("social attraction " ~(beta)))
-
-  par(mar = c(4,8,4,0))  
-  plot.new()
-  legend("center", fill = cols, legend = c("< 1", "1-5", "> 5"), cex = 2, 
-         title = "total mismatch")
-  PlotMiniblock()
-}
-
-load("results/stability/stability_compiled.rda")
-png("plots/StabilityResults.png", width = 3800, height = 2000, res = 300)
-plotStability(stability)
-dev.off()
 
 
 
 
-
-
-
-ns <- apply(b[,-1], 2, function(x) length(unique(x)))
-
-M <-   b %>% acast(alpha + sigma_t ~ beta +  sigma_x, 
-                   value.var = "TE")
-
-
-
-ggFE(subset(eps1, lambda == 50))
-
-require(gtools)
-
-
-p.migration.list <- dlply(df, c("epsilon","lambda"), 
-               function(df) ggMigration(df) + 
-                 ggtitle(paste("epsilon =", df$epsilon[1], ";", paste("lambda =", df$lambda[1]))))
-
-p.FE.list <- dlply(df, c("epsilon","lambda"), 
-                   function(df) ggFE(df) + 
-                     ggtitle(paste("epsilon =", df$epsilon[1], ";", paste("lambda =", df$lambda[1]))))
-
-
-pdf("plots/StabilityResults.pdf", height = 10, width = 12)
-grid.arrange(grobs = p.migration.list, ncol = 3)
-grid.arrange(grobs = p.FE.list, ncol = 3)
-dev.off()
-
-
-
-
-
-table(eps4$lambda)
-pdf("plots/StabilityResults_eps4_bylambda.pdf", height = 6, width = 11)
-ggResults(eps4 %>% subset(lambda == 20), top = "epsilon = 4, lambda = 20")
-ggResults(eps4 %>% subset(lambda == 50), top = "epsilon = 4, lambda = 50")
-ggResults(eps4 %>% subset(lambda == 100), top = "epsilon = 1, lambda = 100")
-dev.off()
-
-
-ggResults(eps8 %>% subset(lambda == 20), top = "epsilon = 4, lambda = 20")
-ggResults(eps8 %>% subset(lambda == 50), top = "epsilon = 4, lambda = 50")
-# ggResults(eps8 %>% subset(lambda == 100), top = "epsilon = 1, lambda = 100")
 
 
 
@@ -214,19 +70,33 @@ hist(eps4$TE[eps4$TE < 7], breaks = 50)
 require(broom)
 require("GGally")
 
-coefs.df <- glm(I(TE < 2) ~ (scale(alpha) + 
+load("results/stability/stability_compiled.rda")
+
+
+fit <- glm(I(TE < 2) ~ (scale(alpha) + 
                               scale(beta) + 
                               scale(sigma_t) + 
                               scale(sigma_x) + 
-                              (factor(epsilon) - 1) + 
-                              (factor(lambda) - 1))^2, 
-                           data = df, family = "binomial") %>% 
-  tidy(conf.int = TRUE) 
+                              scale(epsilon) + 
+                              scale(lambda))^2, 
+                           data = stability, family = "binomial") 
 
+fit2 <- lm(log(TE) ~ (scale(alpha) + 
+                          scale(beta) + 
+                          scale(sigma_t) + 
+                          scale(sigma_x) + 
+                          (factor(epsilon) - 1) + 
+                          (factor(lambda) - 1))^2, 
+           data = stability) 
 
-coefs.df %>% mutate(term = gsub("scale", "", term )) %>% 
-  mutate(term = gsub("factor", "", term, fixed = TRUE)) %>%  
-  ggcoef()
+AIC(fit, fit2)
+
+fit.coef <- fit2 %>% tidy(conf.int = TRUE) %>% mutate(term = gsub("scale", "", term )) %>% 
+  mutate(term = gsub("factor", "", term, fixed = TRUE))  %>% 
+  arrange(estimate) %>% 
+  mutate(term = factor(term, levels = as.character(term))) 
+
+ggcoef(fit.coef)
 
 
 
@@ -237,8 +107,8 @@ names(df)
 features <- c("epsilon","alpha","beta","lambda","sigma_x","sigma_t","TE")
 
 system.time(
-migration.rf <- randomForest(factor(I(TE < 2)) ~ ., 
-                             data=df[,features] %>% 
+migration.rf <- randomForest(log(TE) ~ ., 
+                             data=stability[,features] %>% 
                                mutate(epsilon = factor(epsilon),
                                       lambda = factor(lambda)), 
                              ntree=1000,
@@ -247,12 +117,73 @@ migration.rf <- randomForest(factor(I(TE < 2)) ~ .,
 
 )
 
-varImpPlot(migration.rf)
+system.time(
+  migration.rf2 <- randomForest(I(TE<1) ~ ., 
+                               data=stability[,features] %>% 
+                                 mutate(epsilon = factor(epsilon),
+                                        lambda = factor(lambda)), 
+                               ntree=1000,
+                               keep.forest=FALSE, 
+                               importance=TRUE)
+  
+)
 
+
+importance(migration.rf2)
+importance(migration.rf)
+
+
+
+with(stability, plot(TE, FE))
+
+ggplot(stability %>% mutate(mismatch = cut(TE, c(0,1,5,50,300))), 
+       aes(mismatch, FE, col = mismatch)) + 
+  #geom_jitter(alpha = 0.5, cex = 0.5) + 
+  geom_boxplot(varwidth = TRUE) + 
+  facet_grid(.~sigma_t)
+
+df <- stability %>% mutate(mismatch = cut(TE, c(0,1,5,50,300)))
+
+
+png("text/figures/ForagingEfficiency.png", width = 2400, height = 900, res = 300)
+  cols <- rich.colors(6)[2:5]
+  par(mfrow=c(1,5), mar = c(0,.5,0,.5), oma = c(2,3,4,2), bty = "l", tck = 0.02, mgp = c(1,.25,0), xpd = NA)
+  for(s in seq(3,15,3)){
+    boxplot(FE~mismatch, data = subset(df, sigma_t == s), 
+            varwidth = TRUE, yaxt = "n", xaxt = "n", xlab = "", ylab = "", ylim = c(0,1),
+            col = cols, lty = 1, border = grey(.4))
+    mtext(side = 3, bquote(sigma[t] == .(s)), line = 1, cex = 1.1)
+    # mtext(side = 1, at = 1:4, c("< 1", "1-5", "5-50", ">50"), line = 0.5)
+    if(s == 3){ 
+      axis(2, las = 2)
+      mtext(side = 2, "Foraging efficiency", line = 1.75)
+      legend("top", fill = cols, legend = c("< 1", "1-5", "5-50", ">50"), 
+             ncol = 2, cex = 1.3, xpd = NA, 
+             title = "Total mismatch", bty = "n")
+    }
+  }
+dev.off()
+
+  
 require(rpart)
-migration.dt <- rpart(factor(I(TE < 2)) ~ ., 
-                      data=df[,features] %>% mutate(epsilon = factor(epsilon),
-                                                    lambda = factor(lambda)))
 
+par(xpd = NA, mfrow = c(1,1), mar = c(0,0,0,0))
+migration.dt <- rpart(factor(cut(TE, c(0,1,5,Inf))) ~ ., 
+                      data=stability[,features] %>% mutate(epsilon = factor(epsilon),
+                                                           lambda = factor(lambda)))
 plot(migration.dt)
-text(migration.dt, use.n = TRUE)
+text(migration.dt, use.n = TRUE, cex = 0.5)
+
+require("randomForestExplainer")
+
+df <- stability[,features] 
+
+migration.rf <- randomForest(cut(TE, c(0,1,5,Inf)) ~ ., 
+                             data= df, 
+                             ntree=1000,
+                             keep.forest=TRUE, 
+                             importance=TRUE,
+                             localImp = TRUE)
+
+
+explain_forest(migration.rf, interactions = TRUE, data = stability)

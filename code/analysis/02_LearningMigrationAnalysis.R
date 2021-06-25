@@ -1,5 +1,8 @@
 require(memorymigration)
 require(plyr)
+require(ggthemes)
+require(gridExtra)
+
 
 fixTE <- function(df){
   df %>% mutate(TE = abs(t1.error) + abs(t2.error) + abs(x1.error) + abs(x2.error), 
@@ -8,16 +11,30 @@ fixTE <- function(df){
 }
 
 
+eval <- FALSE
+if(eval){
+  require(gtools)
+  
+  load("results/migratory/migratory_1.rda")
+  eps1 <- newresults %>% fixTE
+  load("results/migratory/migratory_1b.rda")
+  eps1 <- eps1 %>% smartbind(newresults %>% fixTE)
+  
+  load("results/migratory/migratory_4.rda")
+  eps4 <- newresults %>% fixTE
+  load("results/migratory/migratory_4b.rda")
+  eps4 <- eps4 %>% smartbind(newresults %>% fixTE)
+  
+  load("results/migratory/migratory_8.rda")
+  eps8 <- newresults %>% fixTE
+  load("results/migratory/migratory_8b.rda")
+  eps8 <- eps8 %>% smartbind(newresults %>% fixTE)
 
-load("results/migratory/migratory_1.rda")
-eps1 <- newresults %>% fixTE
-load("results/migratory/migratory_4.rda")
-eps4 <- newresults %>% fixTE
-load("results/migratory/migratory_8.rda")
-eps8 <- newresults %>% fixTE
+  learningmigration <- rbind(eps1, eps4, eps8)  
+  save(learningmigration, file = "results/migratory/learningmigration.rda")
+}
 
-require(gtools)
-df <- smartbind(eps1, eps4, eps8)
+load("results/migratory/learningmigration.rda")
 
 ggMigration <- function(df,  cols = rich.colors(4), ...){
   df %>% 
@@ -42,11 +59,11 @@ ggN.runs <- function(df, ...){
 }
 
 
-migration.plist <- dlply(df, c("epsilon","lambda"), 
+migration.plist <- dlply(learningmigration, c("epsilon","lambda"), 
                function(df) ggMigration(df) + 
                  ggtitle(paste("epsilon =", df$epsilon[1], ";", paste("lambda =", df$lambda[1]))))
 
-nruns.plist <- dlply(df, c("epsilon","lambda"), 
+nruns.plist <- dlply(learningmigration, c("epsilon","lambda"), 
                      function(df) ggN.runs(df) + 
                        ggtitle(paste("epsilon =", df$epsilon[1], ";", paste("lambda =", df$lambda[1]))))
 
@@ -58,12 +75,29 @@ dev.off()
 
 
 
-boxplot(MI ~ Migration * lambda, data =df, col = 2:5)
+fit <- glm(log(TE) ~ (scale(alpha) + 
+                          scale(beta) + 
+                          scale(sigma_t) + 
+                          scale(sigma_x) + 
+                          factor(epsilon) + 
+                          factor(lambda)-1)^2, 
+           data = learningmigration) 
 
-ggplot(df, aes(sigma_x, TE, col = factor(beta), 
+fit.coef <- fit %>% tidy(conf.int = TRUE) %>% mutate(term = gsub("scale", "", term )) %>% 
+  mutate(term = gsub("factor", "", term, fixed = TRUE)) 
+
+arrange(fit.coef, estimate) %>% 
+  mutate(term = factor(term, levels = as.character(term))) %>%  
+  ggcoef()
+
+par(mfrow = 1:2); plot(fit, 1:2)
+
+
+
+ggplot(df, aes(sigma_t, TE, col = factor(beta), 
                pch = factor(alpha))) + 
   geom_point(alpha = 0.5) + facet_grid(lambda ~ epsilon) + 
-  scale_y_continuous(trans='log2')  + theme_few()
+  scale_y_continuous(trans='log10')  + theme_few()
 
 
 summary(TE.lm)
@@ -74,7 +108,7 @@ require("GGally")
 
 # 
 require(randomForest)
-names(df)
+df <- learningmigration
 
 system.time(
   learning.rf <- randomForest(Migration ~ ., 
@@ -91,12 +125,15 @@ varImpPlot(learning.rf)
 
 require(rpart)
 
+load("results/migratory/learningmigration.rda")
+
+
+
 features <- c("epsilon","alpha","beta","lambda","sigma_x","sigma_t", "Migration")
 
 learning.dt <- rpart(Migration ~ ., 
-                      data=df[,features] %>% mutate(epsilon = factor(epsilon),
+                      data=learningmigration[,features] %>% mutate(epsilon = factor(epsilon),
                                                     lambda = factor(lambda)))
-
 plot(learning.dt)
 text(learning.dt, use.n = TRUE)
 

@@ -39,7 +39,7 @@ png("text/figures/ResourceExamples.png", width = 2000, height = 1200, res = 300)
   
   for(i in 1:4){ 
     image(t,x,R.list[[i]], 
-          breaks = b, col = cols, xaxt = "n", yaxt = "n", xlab = "", ylab = "")
+          col = cols, xaxt = "n", yaxt = "n", xlab = "", ylab = "")
     
     if(i == 1){
       axis(2, at = seq(-80,80,40))
