@@ -126,13 +126,14 @@ varImpPlot(learning.rf)
 require(rpart)
 
 load("results/migratory/learningmigration.rda")
+require(magrittr)
+require(plyr)
+df <- learningmigration %>% mutate(mismatch = factor(TE<20))
 
+features <- c("epsilon","alpha","beta","lambda","sigma_x","sigma_t", "mismatch")
 
-
-features <- c("epsilon","alpha","beta","lambda","sigma_x","sigma_t", "Migration")
-
-learning.dt <- rpart(Migration ~ ., 
-                      data=learningmigration[,features] %>% mutate(epsilon = factor(epsilon),
+learning.dt <- rpart(mismatch ~ ., 
+                      data=df[,features] %>% mutate(epsilon = factor(epsilon),
                                                     lambda = factor(lambda)))
 plot(learning.dt)
 text(learning.dt, use.n = TRUE)

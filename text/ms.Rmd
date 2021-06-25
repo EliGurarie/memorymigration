@@ -173,7 +173,7 @@ ddply(df, "mismatch", summarize, mean(FE), sd(FE))
 ![](figures/example2_learningtomigrate.png)
 **Figure X.** *Example of model learning to migrate. The resource is a "weakly drifting" resource and the initial (year 0) condition is non migratory.  The simulation was run for 100 years, and a sampling of those years (labeled) are presented in panel a:  all years from 0 to 10, followerd by 20, 40 and 100.  Otherwise, panels are as in Figure 1.  Parameter values were $\epsilon  = 5$, $\alpha = 500$ and $\beta = 50$.*    
 
-Figure **X** illustrates the ability of the model was able to learn to migrate in a weakly drifting resource environment with a narrow pulse of resource peaking at 50 and -50, but a uniform distribution of resource at times 0 and 50.   In order to learn to migrate, the system needed to have a higher exploratory impulse (higher diffusion constant $\epsilon$), a stronger resource advection (higher $\alpha$) and somewhat weaker sociality (lower $\beta$).  The qualitative behavior of this process was to start drifting northward, while slowly developing a weak southward pulse in winter as well.  After first locking in on the summer resource, the southward migration, driven both by high diffusion and high resource following, slowly extended itself until both narrow peaks of resource could be reached consistently.
+Figure **X** illustrates the ability of the model to learn to migrate in a weakly drifting resource environment with a narrow pulse of resource peaking at 50 and -50, but a uniform distribution of resource at times 0 and 50.   In order to learn to migrate, the system needed to have a higher exploratory impulse (higher diffusion constant $\epsilon$), a stronger resource advection (higher $\alpha$) and somewhat weaker sociality (lower $\beta$).  The qualitative behavior of this process was to start drifting northward, while slowly developing a weak southward pulse in winter as well.  After first locking in on the summer resource, the southward migration, driven both by high diffusion and high resource following, slowly extended itself until both narrow peaks of resource could be reached consistently.
 
 The model had, in general, a difficult time learning migration from a non-migratory initial condition.  Thus, out of 4047 successful runs, only 4 attained mismatch below 1, and 130 below 5 (Appendix Figure **Z**). Conditions that were more conducive to learning migration were pulses of *longer* duration (high $\sigma_t$), but *smaller* in scope (low $\sigma_x$). but narrow spatial extent (low $\sigma_x$), suggesting that the feedback that encourages migration needs to be compact but long enough in duration to lock in to the memory. 
 
@@ -184,9 +184,6 @@ df <- learningmigration
 table(df$TE %>% cut(c(0,1,5,50,300)))
 nrow(df)
 ```
-
-
-
 
 ## Adapting to climate change
 
