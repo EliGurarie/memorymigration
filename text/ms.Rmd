@@ -135,43 +135,60 @@ We assessed a wide range of parameter values and resource geometries and dynamic
 ![](figures/example1_adaptation.png)
 **Figure 2.** *Example of adaptation to a shift in resource peak. The initial (year 0) behavior migrates to locations 50 and -50 at days 15 and 60, whereas the resource peak is at 30 and -30, peaking at times 25 and 75.  (a) shows the first 14 years of the simulation; (b) The centroid of the annual movement of the population is shown in panel b, with dark blue to red colors indicating year 0 to year 40; (c) annual foraging efficiency across years; (d) migration timing parameters for each year, with orange segments indicating arrival and departure from the summering (northern) grounds, and the blue segments indicating timing of arrival and departure at the wintering grounds; (e) migration arrival and departure location across years, with blue and orange indicating winter (southern) and summer (northern) locations.*
 
+
 ## Adaptation to resource phenology
 
-The ability of this system to adjust its migration phenology to find a stable, migratory state that matches the dynamics of the resource is illustrated in Figure 2.  Furthermore, in the illustrated example, the eventual steady state is one where the foraging efficiency is relatively high. This fundamental dynamic, of attaining and maintaining a well-matched migration phenology, can occur under many combinations of parameters (Figure 3).  In fact, all parameters play a role.  
+The ability of this system to attain stable, migratory state that matches the dynamics of the resource is illustrated in Figure 2. In the illustrated scenario, it takes nearly 40 years to attain an equilibrium, and the eventual steady state is one where the centroid of the migration lines up exactly with the centroid of the resource, and the arrival timing coincides with the *peak* of resource availability.  Notably, the path to this equilibrium is somewhat indirect, with the winter (later, more southerly) range taking more time to stabilize than the summer (earlier, more northern) range.  The eventual steady state is one where the foraging efficiency is relatively high. 
 
-Among the more intuitive results are that greater values of $\alpha$ (resource following) lead to an improved ability to match the migration.  Furthermore, resource peaks with larger spatial extent (higher $\sigma_x$) are generally better for migration matching.  A larger set of parametets matched migration with low diffusion than high diffusion. 
+We ran this process for 8100 parameter combinations (Figure 3). The fundamental dynamic of attaining and maintaining a well-matched migration phenology, can occur under many combinations of parameter values, but that all parameters play a role. Among the more intuitive results are that greater values of $\alpha$ (resource following) lead to an improved ability to match the migration.  Resource peaks with larger spatial extent (higher $\sigma_x$) are generally better for migration matching.  A larger set of parameters matched migration with low diffusion than high diffusion. 
 
-Less obvious was that higher levels of social attraction ($\beta$) led to improved migration matching except in those cases where the sociality scale $\lambda$ was high.  Thus, for example, at $\lambda = 20$, no simulations at $\beta >= 200$ managed to acquire or maintain a matched migration.  However, at $\lambda = 50$ or $100$, the migration was slightly better matched at high values of $\beta$.  (Fig. **X**)  The spatial extent of the swarm was a remarkably significant variable.  Smaller swarms were able to match migration only at low values of social attraction ($\beta = 200$), and relatively high values of resource attraction ($\alpha \geq 600$)
+Less intuitive was the high importance of the sociality parameters, in particular the spatial scale of the swarming.  Higher levels of social attraction ($\beta$) led to improved migration matching except in those cases where the sociality scale $\lambda$ was high.  Thus, for example, at $\lambda = 20$, no simulations at $\beta >= 200$ managed to acquire or maintain a matched migration.  However, at $\lambda = 50$ or $100$, the migration was slightly better matched at high values of $\beta$.  (Fig. **X**)  The spatial extent of the swarm was a remarkably significant variable.  Smaller swarms were able to match migration only at low values of social attraction ($\beta = 200$), and relatively high values of resource attraction ($\alpha \geq 600$).  
 
-A random forest analysis indicated that the most important variables for attaining optimal migratory behavior were $\alpha$ and $\lambda$, and the least important, consistently, was $\sigma_t$ (table **X**). 
+Random forest analyses, whether on the log of total mismatch or on the classification of a perfect match, uniformly show that the most important variables [@Breiman2001] were $\alpha$ and $\lambda$ (4.14 and 4.02 proportional increase in MSE), and the least important was $\sigma_t$, with a 0.5 proportional increase (table **X**). 
+
+Overall, foraging efficiency was strongly correlated with migration matching, as expected.  At high mismatch (> 50), foraging efficiency was low (mean 0.29, s.d. 0.16) compared to the near-perfect matching migrations (mean 0.58, s.d. 0.14).  However, somewhat higher mismatch (1 to 5) showed an even higher overall foraging efficiency (mean 0.62, s.d. 0.18 - see also Figure **X**). 
+
+
+```{r, echo = FALSE, eval = FALSE}
+load("../results/stability/stability_compiled.rda")
+require(plyr)
+df <- stability %>% mutate(mismatch = cut(TE, c(0,1,5,50,300)))
+ddply(df, "mismatch", summarize, mean(FE), sd(FE))
+```
+
+
+
 
 ![](figures/StabilityResults.png)
 **Figure 3.** *Migration phenology matching across six model parameters. Low and high diffusion ($\epsilon = 1$ and $8$ in upper and lower panel blocks), tight, medium and loose swarms ($\lambda = 20, 50, 100$) left to right panels.  Within each of these blocks, high values of the resource following parmaeters $\alpha$ from 0 to 1000 are left to right, and higher values of the sociality parameter $\beta$ are bottom to top.  Finally, within each of the combinations of $\epsilon, \lambda, \alpha, \beta$, we show results ranging across 6 values of resource duration ($\sigma_t$, 3-15 left to right), and 6 values of resource extent ($\sigma_x$, 3-15 bottom to top), as in the zoomed in panel at bottom right. Finally, the color scheme reflects the total mismatch, i.e. the sum of the absolute differences between the migration timing and locations from the resource peak.* 
 
+![](figures/ForagingEfficiency.png)
+
+**Figure 4.** *Box-plots of foraging efficiency against mismatch across several values of foraging patch duration.* 
 
 
-We illustrate an example of a population with a particular migration behavior confronted with a major sudden shift in the spatio-temporal distribution of the resource in Figure 1.  In the illustrated scenario, it takes nearly 40 years to attain an equilibrium, and the eventual steady state is one where the centroid of the migration lines up exactly with the centroid of the resource, and the arrival timing coincides with the *peak* of resource availability.  Notably, the path to this equilibrium is somewhat indirect, with the summer season, in particular, taking    
-
-
-
-*Under what conditions can we adapt.*>
 
 ## Learning to migrate
 
 ![](figures/example2_learningtomigrate.png)
-**Figure 2. Example of model learning to migrate. The resource is a "weakly drifting" resource and the initial (year 0) condition is non migratory.  The simulation was run for 100 years, and a sampling of those years (labeled) are presented in panel a:  all years from 0 to 10, followerd by 20, 40 and 100.  Otherwise, panels are as in Figure 1.  Parameter values were $\epsilon  = 5$, $\alpha = 500$ and $\beta = 50$.**
+**Figure X.** *Example of model learning to migrate. The resource is a "weakly drifting" resource and the initial (year 0) condition is non migratory.  The simulation was run for 100 years, and a sampling of those years (labeled) are presented in panel a:  all years from 0 to 10, followerd by 20, 40 and 100.  Otherwise, panels are as in Figure 1.  Parameter values were $\epsilon  = 5$, $\alpha = 500$ and $\beta = 50$.*    
 
-Figure 2 illustrates the ability of the model was able to learn to migrate in a weakly drifting resource environment with a narrow pulse of resource peaking at 50 and -50, but a uniform distribution of resource at times 0 and 50.   In order to learn to migrate, the system needed to have a higher exploratory impulse (higher diffusion constant $\epsilon$), a stronger resource advection (higher $\alpha$) and somewhat weaker sociality (lower $\beta$).  The qualitative behavior of this process was to start drifting northward, while slowly developing a weak southward pulse in winter as well.  After first locking in on the summer resource, the southward migration, driven both by high diffusion and high resource following, slowly extended itself until both narrow peaks of resource could be reached consistently.
+Figure **X** illustrates the ability of the model to learn to migrate in a weakly drifting resource environment with a narrow pulse of resource peaking at 50 and -50, but a uniform distribution of resource at times 0 and 50.   In order to learn to migrate, the system needed to have a higher exploratory impulse (higher diffusion constant $\epsilon$), a stronger resource advection (higher $\alpha$) and somewhat weaker sociality (lower $\beta$).  The qualitative behavior of this process was to start drifting northward, while slowly developing a weak southward pulse in winter as well.  After first locking in on the summer resource, the southward migration, driven both by high diffusion and high resource following, slowly extended itself until both narrow peaks of resource could be reached consistently.
+
+The model had, in general, a difficult time learning migration from a non-migratory initial condition.  Thus, out of 4047 successful runs, only 4 attained mismatch below 1, and 130 below 5 (Appendix Figure **Z**). Conditions that were more conducive to learning migration were pulses of *longer* duration (high $\sigma_t$), but *smaller* in scope (low $\sigma_x$). but narrow spatial extent (low $\sigma_x$), suggesting that the feedback that encourages migration needs to be compact but long enough in duration to lock in to the memory. 
 
 
-
-The model had, in general, a difficult time learning migration from a non-migratory initial condition.  Curiously, the conditions that were more conducive to learning migration were pulses of *longer* duration (high $\sigma_t$)
- but narrow spatial extent (low $\sigma_x$).  This was in contrast to the conditions that were most amenable for stable migratory behavior (high $\sigma_x$, intermediate $\sigma_t$).   Furthermore 
-
-*Under what conditions can be learn.*
-
+```{r, echo = FALSE, eval = FALSE}
+load("../results/migratory/learningmigration.rda")
+df <- learningmigration
+table(df$TE %>% cut(c(0,1,5,50,300)))
+nrow(df)
+```
 
 ## Adapting to climate change
+
+
+
 
 # Discussion
 
