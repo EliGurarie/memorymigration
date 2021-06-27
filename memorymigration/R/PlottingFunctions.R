@@ -193,12 +193,11 @@ doublePlotForShiny <- function(M, world){
   par(mfrow = c(1,2), mar = c(2,2,1,1), 
       tck = 0.01, mgp = c(1.5,.25,0), 
       bty = "l", cex.lab = 1.25, las = 1, xpd = NA)
-    with(world, image(time, X, resource[1,,], col = grey.colors(100)))
-    plotMigrationForShiny(M, world, add = TRUE)
-    FE1 <- ldply(M, computeEfficiency, 
+      plotMigrationForShiny(M, world, add = TRUE)
+      FE1 <- ldply(M, computeEfficiency, 
                  resource = world$resource[1,,], world = world,
                  .id = "year") %>% mutate(year = 1:length(year))
-    plot(FE1, type = "o")
+      plot(FE1, type = "o")
   
 }
 
