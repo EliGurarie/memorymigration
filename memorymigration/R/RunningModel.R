@@ -133,7 +133,7 @@ buildOnRuns <- function(M, world, ...){
 runManyRuns <- function (parameters.df, resource_param, world, resource, 
                          filename = NULL, results.dir = NULL, ...) {
   newresults <- data.frame()
-  FE.matrix <- matrix(NA, nrow=nrow(parameters.df)*nrow(resource_param), ncol = resource_param$n.years[1])
+  FE.matrix <- matrix(NA, nrow=nrow(parameters.df)*nrow(resource_param), ncol = resource_param$n.years.null[1]+resource_param$n.years[1])
   
   for(i in 1:nrow(parameters.df)) {
     for(j in 1:nrow(resource_param)){
@@ -146,7 +146,8 @@ runManyRuns <- function (parameters.df, resource_param, world, resource,
                              sigma_x = sigma_x[j],
                              sigma_t = sigma_t[j],
                              psi_x = psi_x[j], 
-                             psi_t = psi_t[j]))
+                             psi_t = psi_t[j],
+                            n.years.null = n.years.null[j]))
       
       if(resource == "drifting")
         world$resource <- aaply(par0, 1, function(p) getResource_drifting(world, p, x.null=50)) 
@@ -164,7 +165,7 @@ runManyRuns <- function (parameters.df, resource_param, world, resource,
                          lambda = lambda))
       
       M <- try(runManyYears(world, parameters = myparams, 
-                            n.years = 150, threshold = 0.9999))
+                            n.years = 50, threshold = 1))
 
       if(!inherits(M, "try-error")){
         myFE <- computeAnnualEfficiency(M$pop, world$resource, world)
@@ -179,13 +180,13 @@ runManyRuns <- function (parameters.df, resource_param, world, resource,
                                                                M$pop[[length(M$pop)]], world), 
                           resource_param[j,],
                           resource = resource)
-        if(par0[j,]$beta_x != 0){ 
-          myR$SAI_total <- computeSpatialAdaptationIndex(M, resource_param1)
-          myR$SAI_recent <- computeSpatialAdaptationIndex(M, resource_param1, trim = 10)
+        if(resource_param[1,]$beta_x != 0){ 
+          myR$SAI_total <- computeSpatialAdaptationIndex(M, resource_param[1,])
+          myR$SAI_recent <- computeSpatialAdaptationIndex(M, resource_param[1,], trim = 10)
         }
-        if(par0[j,]$beta_t != 0){ 
-          myR$TAI_total <- computeTemporalAdaptationIndex(M, resource_param1)
-          myR$TAI_recent <- computeTemporalAdaptationIndex(M, resource_param1, trim = 10)
+        if(resource_param[1,]$beta_t != 0){ 
+          myR$TAI_total <- computeTemporalAdaptationIndex(M, resource_param[1,])
+          myR$TAI_recent <- computeTemporalAdaptationIndex(M, resource_param[1,], trim = 10)
         }
         
         newresults <- rbind(newresults, c(myR))

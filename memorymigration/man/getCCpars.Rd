@@ -13,7 +13,8 @@ getCCpars(
   beta_x = 0,
   beta_t = 0,
   psi_x = 0,
-  psi_t = 0
+  psi_t = 0,
+  n.years.null = 0
 )
 }
 \arguments{

@@ -31,8 +31,8 @@ getCCpars <- function(mu_x0, mu_t0, sigma_x, sigma_t,
   if(n.years.null > 0){
     pars.null <- cbind(x.peak = mu_x0,
                        t.peak = mu_t0,
-                       x.sd = rep(sigma_x, n.years),
-                       t.sd = rep(sigma_t, n.years))
+                       x.sd = rep(sigma_x, n.years.null),
+                       t.sd = rep(sigma_t, n.years.null))
   } else pars.null <- NULL
   
   pars.cc <- cbind(x.peak = mu_x0 - beta_x*1:n.years + rnorm(n.years,sd = psi_x),
