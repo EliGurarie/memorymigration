@@ -148,8 +148,6 @@ runManyRuns <- function (parameters.df, resource_param, world, resource,
                              psi_x = psi_x[j], 
                              psi_t = psi_t[j]))
       
-      
-      
       if(resource == "drifting")
         world$resource <- aaply(par0, 1, function(p) getResource_drifting(world, p, x.null=50)) 
       if(resource == "island")
@@ -167,9 +165,7 @@ runManyRuns <- function (parameters.df, resource_param, world, resource,
       
       M <- try(runManyYears(world, parameters = myparams, 
                             n.years = 150, threshold = 0.9999))
-      
-      
-      
+
       if(!inherits(M, "try-error")){
         myFE <- computeAnnualEfficiency(M$pop, world$resource, world)
         FE.matrix[nrow(newresults)+1, 1:length(myFE)] <- myFE
@@ -181,9 +177,16 @@ runManyRuns <- function (parameters.df, resource_param, world, resource,
                           n.runs = length(M$pop) - 1,
                           final_similarity = computeEfficiency(M$pop[[length(M$pop)-1]], 
                                                                M$pop[[length(M$pop)]], world), 
-                          
                           resource_param[j,],
                           resource = resource)
+        if(par0[j,]$beta_x != 0){ 
+          myR$SAI_total <- computeSpatialAdaptationIndex(M, resource_param1)
+          myR$SAI_recent <- computeSpatialAdaptationIndex(M, resource_param1, trim = 10)
+        }
+        if(par0[j,]$beta_t != 0){ 
+          myR$TAI_total <- computeTemporalAdaptationIndex(M, resource_param1)
+          myR$TAI_recent <- computeTemporalAdaptationIndex(M, resource_param1, trim = 10)
+        }
         
         newresults <- rbind(newresults, c(myR))
       }
@@ -220,7 +223,6 @@ runManyRuns_res <- function (world_param, parameters.df, resource_param, world, 
                              psi_x = psi_x[j], 
                              psi_t = psi_t[j]))
       
-      
       world <- with(world_param, getOptimalPop(tau = tau, X.min = X.min,
                                                X.max = X.max, dx = dx,
                                                x1 = x1, x2 = x2, t.peak = t.peak,
@@ -234,9 +236,7 @@ runManyRuns_res <- function (world_param, parameters.df, resource_param, world, 
       if(resource == "island")
         world$resource <- aaply(par0, 1, function(p) getResource_island(world, p)) 
       
-      
       attr(world$resource, "par") <- par0[nrow(par0),]
-      
       myparams <- with(parameters.df[i,], 
                        c(epsilon = epsilon, 
                          alpha = alpha, 
@@ -246,8 +246,6 @@ runManyRuns_res <- function (world_param, parameters.df, resource_param, world, 
       
       M <- try(runManyYears(world, parameters = myparams, 
                             n.years = 100, threshold = 0.9999))
-      
-      
       
       if(!inherits(M, "try-error")){
         myFE <- computeAnnualEfficiency(M$pop, world$resource, world)
@@ -263,7 +261,6 @@ runManyRuns_res <- function (world_param, parameters.df, resource_param, world, 
                           
                           resource_param[j,],
                           resource = resource)
-        
         newresults <- rbind(newresults, c(myR))
       }
       

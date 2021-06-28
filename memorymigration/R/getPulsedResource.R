@@ -26,11 +26,21 @@
 getCCpars <- function(mu_x0, mu_t0, sigma_x, sigma_t, 
                       n.years, 
                       beta_x = 0, beta_t = 0, 
-                      psi_x = 0, psi_t = 0){
-  cbind(x.peak = mu_x0 - beta_x*1:n.years + rnorm(n.years,sd = psi_x),
+                      psi_x = 0, psi_t = 0,
+                      n.years.null = 0){
+  if(n.years.null > 0){
+    pars.null <- cbind(x.peak = mu_x0,
+                       t.peak = mu_t0,
+                       x.sd = rep(sigma_x, n.years),
+                       t.sd = rep(sigma_t, n.years))
+  } else pars.null <- NULL
+  
+  pars.cc <- cbind(x.peak = mu_x0 - beta_x*1:n.years + rnorm(n.years,sd = psi_x),
         t.peak = mu_t0 + beta_t*1:n.years + rnorm(n.years,sd = psi_t),
         x.sd = rep(sigma_x, n.years),
         t.sd = rep(sigma_t, n.years))
+  
+  rbind(pars.null, pars.cc)
 }
 
 

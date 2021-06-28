@@ -92,3 +92,37 @@ plotMigrationHat <- function(mhat, x.peak, t.peak,
            legend = c( "summer", "winter", "true value"), col = c(cols, "darkgrey"), bty = "n")
   })
 }
+
+
+plotMigrationHatCC <- function(mhat, cc.params,  
+                               cols = c("darkorange", "darkblue"), 
+                               par = FALSE, ylim1 = c(0,100)){
+  if(par) par(mfrow = c(1,2), mar = c(3,3,2,2), xpd = FALSE)
+  with(mhat,{
+    plot(year, t1, ylim = ylim1, ylab = "migration timing (day of year)", col = cols[1])
+    segments(year, t1, year, t1+dt1, col = cols[1])
+    points(year, t1 + dt1, col = cols[1])
+    
+    points(year, t2, col = cols[2])
+    points(year, t2 + dt2, col = cols[2])
+    segments(year, t2, year, t2+dt2, col = cols[2])
+    with(cc.params, {
+      abline(mu_t0, beta_t, col =alpha("black",.3), lwd = 3, lty =3)
+      abline(100 - mu_t0, beta_t, col =alpha("black",.3), lwd = 3, lty =3)
+    })
+    
+    plot(year, x1, type = "o", ylim = c(-100,100), ylab = "seasonal centroids", col = cols[1])
+    lines(year, x2, type = "o", col = cols[2])
+    #abline(h = c(-x.peak,x.peak), col =alpha("black",.3), lwd = 3, lty =3)
+    
+    with(cc.params, {
+      abline(mu_x0, -beta_x, col =alpha("black",.3), lwd = 3, lty =3) 
+      abline(-mu_x0, beta_x, col =alpha("black",.3), lwd = 3, lty =3) 
+    })
+    
+    legend("topleft", pch = c(1,1,NA), lty = c(1,1,3), 
+           lwd = c(1,1,3), 
+           legend = c( "summer", "winter", "true value"), col = c(cols, "darkgrey"), bty = "n")
+  })
+}
+
