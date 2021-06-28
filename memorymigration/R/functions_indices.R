@@ -202,3 +202,30 @@ computeAnnualEfficiency <- function(sim, resource, world){
   sapply(2:length(sim), function(i) computeEfficiency(sim[[i]], resource[i-1,,], world))
   
 }
+
+#' Keeping up with Climate Change - Spatial Adaptation Index
+#' 
+#' @export
+
+computeSpatialAdaptationIndex <- function(sim, cc.params, trim = 1){
+  m.hat <- sim$migration.hat
+  beta1_hat <- lm(x1~year, data = m.hat[-(1:trim),])$coef[2]
+  beta2_hat <- lm(x2~year, data = m.hat[-(1:trim),])$coef[2]
+  mean(c(beta1_hat/-cc.params$beta_x, beta2_hat/cc.params$beta_x))
+}
+
+
+#' Keeping up with Climate Change - Temporal Adaptation Index
+#' 
+#' @export
+
+computeTemporalAdaptationIndex <- function(sim, cc.params, trim = 1){
+  m.hat <- sim$migration.hat
+  beta1_hat <- lm(t1~year, data = m.hat[-(1:trim),])$coef[2]
+  beta2_hat <- lm(t2~year, data = m.hat[-(1:trim),])$coef[2]
+  mean(c(beta1_hat/-cc.params$beta_t, beta2_hat/cc.params$beta_t))
+}
+
+
+
+

@@ -20,8 +20,8 @@ if(eval){
   cctime <- data.frame()
   for(f in files[grepl("rda", files)]){ 
     print(f)
-   load(paste0("results/climate_time/raw/", f))
-   cctime <- cctime %>% smartbind(newresults %>% fixTE)
+    load(paste0("results/climate_time/raw/", f))
+    cctime <- cctime %>% smartbind(newresults %>% fixTE)
   }
   
   save(cctime, file = "results/climate_time/cctime.rda")
@@ -43,6 +43,6 @@ cctime %>% subset(epsilon > 4 & beta_t == -1) %>%
   ggplot(aes(alpha, beta, fill = cut(TE, seq(0,750,150)))) + 
   geom_tile() + facet_grid(epsilon~lambda~beta_t) + ggtitle("Foraging efficiency")
 
- 
+
 cctime %>% subset(epsilon > 4 & beta_t == -1) %>% 
   ggplot(aes(FE, TE, col = alpha)) + geom_point()  + facet_grid(.~lambda)
