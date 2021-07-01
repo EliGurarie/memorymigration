@@ -84,14 +84,14 @@ computeEfficiency <- function(pop, resource, world){
 #' 
 computeAvgEfficiency <- function(sim, resource, world){
   average <- data.frame()
-  if (length(sim) <= 10){
+  if (length(sim) <= 20){
     for(i in 2:length(sim)){
       efficiency <- computeEfficiency(sim[[i]], resource[i-1,,], world)
       average <- rbind(average, efficiency)
     }}
     
-    if (length(sim) > 10){
-      for(i in 10:length(sim)){
+    if (length(sim) > 20){
+      for(i in length(sim)-20:length(sim)){
         efficiency <- computeEfficiency(sim[[i]], resource[i-1,,], world)
         average <- rbind(average, efficiency)
       }}
