@@ -91,7 +91,7 @@ computeAvgEfficiency <- function(sim, resource, world){
     }}
     
     if (length(sim) > 20){
-      for(i in length(sim)-20:length(sim)){
+      for(i in 10:length(sim)){
         efficiency <- computeEfficiency(sim[[i]], resource[i-1,,], world)
         average <- rbind(average, efficiency)
       }}
