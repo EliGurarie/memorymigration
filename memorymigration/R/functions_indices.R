@@ -226,6 +226,52 @@ computeTemporalAdaptationIndex <- function(sim, cc.params, trim = 1){
   mean(c(beta1_hat/-cc.params$beta_t, beta2_hat/cc.params$beta_t))
 }
 
+#' Computing Total Mismatch
+#' 
+#' @export
+#' 
+computeTotalError <- function(sim, world){
+  MI <- computeMigrationIndices(sim,world)
+  abs(MI$t1.error) + abs(MI$t2.error) + abs(MI$x1.error) + abs(MI$x1.error)
+  
+}
 
+#' Computing Average Total Mismatch
+#' 
+#' @export
+#' 
+computeAvgTotalError <- function(sim, world, par0){
+  dx <- world$dx
+  tau <- world$tau
+  average <- data.frame()
+  
+  for(i in 10:length(sim)){
+    par <- par0[i,]
+    m.hat <- sim$migration.hat[i,]
+    if(par["t.peak"] < m.hat$t1 | par["t.peak"] > m.hat$t1 + m.hat$dt1)
+      t1.error <- min( abs(par["t.peak"] - m.hat$t1), 
+                       abs(par["t.peak"] - m.hat$t1  - m.hat$dt1)) else 
+                         t1.error = 0
+    
+    if(world$tau - par["t.peak"] < m.hat$t2 | 
+       world$tau - par["t.peak"] > m.hat$t2 + m.hat$dt2)
+      t2.error <- min( abs(world$tau - par["t.peak"] - m.hat$t2), 
+                       abs( world$tau - par["t.peak"] - m.hat$t2  - m.hat$dt2)) else 
+                         t2.error = 0
+    
+    x1.error <- par["x.peak"] - m.hat$x1
+    x2.error <- - par["x.peak"] - m.hat$x2
+    
+   error <- abs(MI$t1.error) + abs(MI$t2.error) + abs(MI$x1.error) + abs(MI$x1.error)
+    
+   average <- rbind(average, error)
+  }
+  mean(average[,1])
+  }
+
+  
+  
+  
+  
 
 
