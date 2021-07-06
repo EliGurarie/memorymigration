@@ -262,7 +262,7 @@ computeAvgTotalError <- function(sim, world, par0){
     x1.error <- par["x.peak"] - m.hat$x1
     x2.error <- - par["x.peak"] - m.hat$x2
     
-   error <- abs(MI$t1.error) + abs(MI$t2.error) + abs(MI$x1.error) + abs(MI$x1.error)
+   error <- abs(t1.error) + abs(t2.error) + abs(x1.error) + abs(x1.error)
     
    average <- rbind(average, error)
   }
