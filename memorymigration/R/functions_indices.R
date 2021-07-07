@@ -91,7 +91,7 @@ computeAvgEfficiency <- function(sim, resource, world){
     }}
     
     if (length(sim) > 20){
-      for(i in 10:length(sim)){
+      for(i in 30:length(sim)){
         efficiency <- computeEfficiency(sim[[i]], resource[i-1,,], world)
         average <- rbind(average, efficiency)
       }}
@@ -245,7 +245,7 @@ computeAvgTotalError <- function(sim, world, par0){
   tau <- world$tau
   average <- data.frame()
   
-  for(i in 10:length(sim)){
+  for(i in 30:length(sim$pop)){
     par <- par0[i,]
     m.hat <- sim$migration.hat[i,]
     if(par["t.peak"] < m.hat$t1 | par["t.peak"] > m.hat$t1 + m.hat$dt1)
