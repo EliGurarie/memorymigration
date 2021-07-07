@@ -1,0 +1,19 @@
+Guttal, V. and Couzin, I.D., 2010. Social interactions, information use, and the evolution of collective migration. Proceedings of the national academy of sciences, 107(37), pp.16172-16177.
+
+- IBM
+
+
+Shaw, A.K. and Couzin, I.D., 2013. Migration or residency? The evolution of movement behavior and information usage in seasonal environments. The American Naturalist, 181(1), pp.114-124.
+
+- Goal: ecological conditions under which migration should "Evolve"
+- Evolutionary IBM based model 
+- Separates Resource / Historical / Social (similar to us) ... but no fitness or selection
+- OUR WORK IS UNIQUELY PATCHY - non-connected  ... migration only POSSIBLE strategy, but it can develop even WITHOUT selection / evolution. 
+
+
+Flack, A., Nagy, M., Fiedler, W., Couzin, I.D. and Wikelski, M., 2018. From local collective behavior to global migratory patterns in white storks. Science, 360(6391), pp.911-914.
+
+Berdahl, A.M., Kao, A.B., Flack, A., Westley, P.A., Codling, E.A., Couzin, I.D., Dell, A.I. and Biro, D., 2018. Collective animal navigation and migratory culture: from theoretical models to empirical evidence. Philosophical Transactions of the Royal Society B: Biological Sciences
+
+
+IBMs have shown that a collective aspect is important for the evolution of migration (Guttal and Couzin, Shaw and Couzin).  In these models, however, the main mechanism of migration is a resource followign behavior. 
