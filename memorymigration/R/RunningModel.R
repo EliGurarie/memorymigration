@@ -182,13 +182,13 @@ runManyRuns <- function (parameters.df, resource_param, world, resource,
                                                                M$pop[[length(M$pop)]], world), 
                           resource_param[j,],
                           resource = resource)
-        if(resource_param[1,]$beta_x != 0){ 
-          myR$SAI_total <- computeSpatialAdaptationIndex(M, resource_param[1,])
-          myR$SAI_recent <- computeSpatialAdaptationIndex(M, resource_param[1,], trim = 10)
+        if(resource_param[j,]$beta_x != 0){ 
+          myR$SAI_total <- computeSpatialAdaptationIndex(M, resource_param[j,])
+          myR$SAI_recent <- computeSpatialAdaptationIndex(M, resource_param[j,], trim = 10)
         }
-        if(resource_param[1,]$beta_t != 0){ 
-          myR$TAI_total <- computeTemporalAdaptationIndex(M, resource_param[1,])
-          myR$TAI_recent <- computeTemporalAdaptationIndex(M, resource_param[1,], trim = 10)
+        if(resource_param[j,]$beta_t != 0){ 
+          myR$TAI_total <- computeTemporalAdaptationIndex(M, resource_param[j,])
+          myR$TAI_recent <- computeTemporalAdaptationIndex(M, resource_param[j,], trim = 10)
         }
         
         newresults <- rbind(newresults, c(myR))
