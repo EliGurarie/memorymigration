@@ -125,13 +125,9 @@ df <- ccmusigma %>% subset(alpha == 100 & beta == 400 & lambda > 40)
 
 require(ggplot2); require(ggthemes)
 df %>% subset(beta_x < 0) %>% 
-  ggplot(aes(factor(kappa), annualFE)) +
-  facet_grid(beta_x~psi_x~lambda) + geom_boxplot() + theme_few() 
+  ggplot(aes(factor(kappa), avgTE, col = factor(lambda))) +
+  facet_grid(beta_x~psi_x) + geom_boxplot() + theme_few() 
 
-ccsigma %>% subset(alpha == 400) %>% 
-  ggplot(aes(lambda, avgFE, col = factor(kappa))) +
-  facet_grid(beta~psi_x) + geom_path() + theme_few() + ggtitle(expression(alpha == 100)) + 
-  ylim(c(0,1))
 
 p1 <- list()
 for(a in c(100,400)) for(b in c(100,400)){
