@@ -110,7 +110,7 @@ if(eval){
   for(i in 1:length(files)){ 
     print(files[i])
     load(paste0("results/trendstochasticity/raw/", files[i]))
-    ccmusigma <- ccmusigma %>% smartbind(newresults %>% fixTE %>% mutate(run = i))
+    ccmusigma <- ccmusigma %>% smartbind(newresults %>% mutate(run = i))
   }
   
   save(ccmusigma, file = "results/trendstochasticity/trendstochasticity.rda")
@@ -121,12 +121,33 @@ load("results/trendstochasticity/trendstochasticity.rda")
 with(ccmusigma %>% subset(alpha == 100 & beta == 400 & lambda > 40), 
      table(lambda, kappa, psi_x, beta_x))
 
-df <- ccmusigma %>% subset(alpha == 100 & beta == 400 & lambda > 40)
-
 require(ggplot2); require(ggthemes)
+ccmusigma %>% subset(beta_x < 0 & lambda == 80) %>% 
+  ggplot(aes(factor(kappa), SAI_total)) +
+  facet_grid(beta_x~psi_x) + geom_boxplot(alpha = 0.5) + theme_few() + 
+  geom_jitter(alpha = 0.5) + ylim(c(-1,1.5))
+
+
+df <- ccmusigma %>% ddply(c("lambda", "kappa", "beta_x", "psi_x"), 
+  summarize, 
+  ST_mean = mean(SAI_total), ST_sd = sd(SAI_total),
+  ST_se = sd(SAI_total)/sqrt(length(SAI_total)),
+  SR_mean = mean(SAI_recent), ST_sd = sd(SAI_recent), 
+  SR_se = sd(SAI_recent)/sqrt(length(SAI_recent))) %>% 
+    mutate(ST_high = ST_mean + 2*ST_se, 
+           ST_low = ST_mean - 2*ST_se,
+           SR_high = SR_mean + 2*ST_se,
+           SR_low = SR_mean - 2*ST_se)
+            
+head(df)
+
+
+
 df %>% subset(beta_x < 0) %>% 
-  ggplot(aes(factor(kappa), avgTE, col = factor(lambda))) +
-  facet_grid(beta_x~psi_x) + geom_boxplot() + theme_few() 
+  ggplot(aes(kappa, SR_mean, ymin = SR_low, ymax = SR_high, 
+             col = factor(lambda))) +
+  facet_grid(beta_x~psi_x) + theme_few() + 
+  geom_point() + geom_errorbar() + ylim(c(-1,1.5))
 
 
 p1 <- list()
