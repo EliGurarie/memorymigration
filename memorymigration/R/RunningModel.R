@@ -185,11 +185,14 @@ runManyRuns <- function (parameters.df, resource_param, world, resource,
         if(resource_param[j,]$beta_x != 0){ 
           myR$SAI_total <- computeSpatialAdaptationIndex(M, resource_param[j,])
           myR$SAI_recent <- computeSpatialAdaptationIndex(M, resource_param[j,], trim = 10)
-        }
+        } else {myR$SAI_total <- NA
+                myR$SAI_recent <- NA}
         if(resource_param[j,]$beta_t != 0){ 
           myR$TAI_total <- computeTemporalAdaptationIndex(M, resource_param[j,])
           myR$TAI_recent <- computeTemporalAdaptationIndex(M, resource_param[j,], trim = 10)
-        }
+        } else {myR$TAI_total <- NA
+        myR$TAI_recent <- NA}
+        
         
         newresults <- rbind(newresults, c(myR))
       }
