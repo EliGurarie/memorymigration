@@ -7,14 +7,20 @@ rm(list=ls())
 load("results/trendstochasticity/trendstochasticity.rda")
 
 cc.summary <- ccmusigma %>% subset(alpha == 100 & beta == 400 & beta_x == 0) %>% 
+  ddply(c("lambda", "kappa", "beta_x", "psi_x"), 
+        summarize, 
+        n = sum(!is.na(avgTE)), 
+        FE_mean = mean(avgTE, na.rm = TRUE), 
+        FE_sd = sd(avgTE, na.rm = TRUE)) %>% 
+  mutate(FE_se = FE_sd/sqrt(n),
+         FE_high = FE_mean + 2*FE_se,
+         FE_low = FE_mean - 2*FE_se)
 
-p1 <- list()
-  df %>% 
-    ggplot(aes(kappa, avgFE, col = factor(lambda))) +
-    facet_grid(.~psi_x) + geom_path() + theme_few() + 
-    ylim(c(0.5,0.75))
-print(p1[[2]])
 
+cc.summary %>% subset(lambda == 80) %>% 
+    ggplot(aes(kappa, FE_mean, col = factor(lambda), ymin = FE_low, ymax = FE_high)) +
+    facet_grid(.~psi_x) + geom_point() + theme_few() + geom_errorbar() + 
+    geom_path()
 
 
 
