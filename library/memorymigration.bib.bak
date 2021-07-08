@@ -435,7 +435,36 @@
   number    = {1746},
   pages     = {20170009},
   volume    = {373},
+  doi       = {10.1098/rstb.2017.0009},
+  file      = {:Berdahl2018_CollectiveAnimalNavigationAndMigratoryCulture.pdf:PDF},
   publisher = {The Royal Society},
+}
+
+@Article{Kauffman2021,
+  author    = {Matthew J. Kauffman and Francesca Cagnacci and Simon Chamaill{\'{e}}-Jammes and Mark Hebblewhite and J. Grant C. Hopcraft and Jerod A. Merkle and Thomas Mueller and Atle Mysterud and Wibke Peters and Christiane Roettger and Alethea Steingisser and James E. Meacham and Kasahun Abera and Jan Adamczewski and Ellen O. Aikens and Hattie Bartlam-Brooks and Emily Bennitt and Joel Berger and Charlotte Boyd and Steeve D. C{\^{o}}t{\'{e}} and Lucie Debeffe and Andrea S. Dekrout and Nandintsetseg Dejid and Emiliano Donadio and Luthando Dziba and William F. Fagan and Claude Fischer and Stefano Focardi and John M. Fryxell and Richard W. S. Fynn and Chris Geremia and Benito A. Gonz{\'{a}}lez and Anne Gunn and Elie Gurarie and Marco Heurich and Jodi Hilty and Mark Hurley and Aran Johnson and Kyle Joly and Petra Kaczensky and Corinne J. Kendall and Pavel Kochkarev and Leonid Kolpaschikov and Rafa{\l} Kowalczyk and Frank van Langevelde and Binbin V. Li and Alex L. Lobora and Anne Loison and Tinaapi H. Madiri and David Mallon and Pascal Marchand and Rodrigo A. Medellin and Erling Meisingset and Evelyn Merrill and Arthur D. Middleton and Kevin L. Monteith and Malik Morjan and Thomas A. Morrison and Steffen Mumme and Robin Naidoo and Andres Novaro and Joseph O. Ogutu and Kirk A. Olson and Alfred Oteng-Yeboah and Ramiro J. A. Ovejero and Norman Owen-Smith and Antti Paasivaara and Craig Packer and Danila Panchenko and Luca Pedrotti and Andrew J. Plumptre and Christer M. Rolandsen and Sonia Said and Albert Salemgareyev and Aleksandr Savchenko and Piotr Savchenko and Hall Sawyer and Moses Selebatso and Matthew Skroch and Erling Solberg and Jared A. Stabach and Olav Strand and Michael J. Suitor and Yasuyuki Tachiki and Anne Trainor and Arnold Tshipa and Munir Z. Virani and Carly Vynne and Stephanie Ward and George Wittemyer and Wenjing Xu and Steffen Zuther},
+  journal   = {Science},
+  title     = {Mapping out a future for ungulate migrations},
+  year      = {2021},
+  month     = {may},
+  number    = {6542},
+  pages     = {566--569},
+  volume    = {372},
+  doi       = {10.1126/science.abf0998},
+  publisher = {American Association for the Advancement of Science ({AAAS})},
+}
+
+@Article{Joly2021,
+  author    = {Kyle Joly and Eliezer Gurarie and D. Alexander Hansen and Matthew D. Cameron},
+  journal   = {Ecology and Evolution},
+  title     = {Seasonal patterns of spatial fidelity and temporal consistency in the distribution and movements of a migratory ungulate},
+  year      = {2021},
+  month     = {may},
+  number    = {12},
+  pages     = {8183--8200},
+  volume    = {11},
+  doi       = {10.1002/ece3.7650},
+  file      = {:Joly_2021 - Seasonal Patterns of Spatial Fidelity and Temporal Consistency in the Distribution and Movements of a Migratory Ungulate.pdf:PDF},
+  publisher = {Wiley},
 }
 
 @Comment{jabref-meta: databaseType:bibtex;}

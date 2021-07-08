@@ -68,7 +68,7 @@ load("results/stochasticity/stochasticity.rda")
 
 with(ccsigma, table(alpha, beta, lambda, kappa, psi_x))
 
-require(ggplot2)
+require(ggplot2); require(ggthemes)
 ccsigma %>% subset(alpha == 100) %>% 
   ggplot(aes(lambda, avgFE, col = factor(kappa))) +
   facet_grid(beta~psi_x) + geom_path() + theme_few() + ggtitle(expression(alpha == 100)) + 
@@ -110,44 +110,84 @@ if(eval){
   for(i in 1:length(files)){ 
     print(files[i])
     load(paste0("results/trendstochasticity/raw/", files[i]))
-    ccmusigma <- ccmusigma %>% smartbind(newresults %>% mutate(run = i))
+    ccmusigma <- ccmusigma %>% 
+      smartbind(newresults %>% mutate(run = i))
   }
+  
+  ccmusigma <- mutate(ccmusigma, 
+                      SAI_total = as.numeric(SAI_total),
+                      SAI_recent = as.numeric(SAI_recent))
   
   save(ccmusigma, file = "results/trendstochasticity/trendstochasticity.rda")
 }
 
 load("results/trendstochasticity/trendstochasticity.rda")
 
-with(ccmusigma %>% subset(alpha == 100 & beta == 400 & lambda > 40), 
-     table(lambda, kappa, psi_x, beta_x))
+with(ccmusigma %>% subset(alpha == 100 & beta == 400 & lambda == 80), 
+     table(kappa, psi_x, beta_x))
 
 require(ggplot2); require(ggthemes)
-ccmusigma %>% subset(beta_x < 0 & lambda == 80) %>% 
-  ggplot(aes(factor(kappa), SAI_total)) +
+
+ccmusigma %>% subset(beta_x < 0) %>% 
+  subset(alpha == 100 & beta == 400) %>% 
+  ggplot(aes(factor(kappa), SAI_total, col = factor(lambda))) +
   facet_grid(beta_x~psi_x) + geom_boxplot(alpha = 0.5) + theme_few() + 
   geom_jitter(alpha = 0.5) + ylim(c(-1,1.5))
 
+ccmusigma %>% subset(alpha == 100 & 
+                       beta == 400 & lambda == 80) %>% 
+  ggplot(aes(factor(kappa), avgTE)) + geom_boxplot(alpha = 0.5) + 
+  facet_grid(beta_x~psi_x) + theme_few() + 
+  geom_jitter(alpha = 0.5)
 
-df <- ccmusigma %>% ddply(c("lambda", "kappa", "beta_x", "psi_x"), 
+
+
+df <- ccmusigma %>% subset(alpha == 100 & beta == 400 & lambda == 80) %>% 
+  ddply(c("lambda", "kappa", "beta_x", "psi_x"), 
   summarize, 
   ST_mean = mean(SAI_total), ST_sd = sd(SAI_total),
   ST_se = sd(SAI_total)/sqrt(length(SAI_total)),
-  SR_mean = mean(SAI_recent), ST_sd = sd(SAI_recent), 
+  SR_mean = mean(SAI_recent), SR_sd = sd(SAI_recent), 
   SR_se = sd(SAI_recent)/sqrt(length(SAI_recent))) %>% 
     mutate(ST_high = ST_mean + 2*ST_se, 
            ST_low = ST_mean - 2*ST_se,
-           SR_high = SR_mean + 2*ST_se,
-           SR_low = SR_mean - 2*ST_se)
+           SR_high = SR_mean + 2*SR_se,
+           SR_low = SR_mean - 2*SR_se)
             
 head(df)
 
+ylim <- range(df[,c("ST_high", "ST_low", "SR_high", "SR_low")])
 
 
 df %>% subset(beta_x < 0) %>% 
-  ggplot(aes(kappa, SR_mean, ymin = SR_low, ymax = SR_high, 
-             col = factor(lambda))) +
-  facet_grid(beta_x~psi_x) + theme_few() + 
-  geom_point() + geom_errorbar() + ylim(c(-1,1.5))
+  ggplot(aes(kappa, ST_mean, ymin = ST_low, 
+             ymax = ST_high, col  = factor(beta_x))) +
+  facet_grid(.~psi_x) + theme_few() + 
+  geom_point() + geom_errorbar() +  geom_hline(yintercept = c(0,1)) + 
+  geom_path() + 
+  ggtitle("Adaptation - entire process") + ylim(ylim)
+  
+
+df %>% subset(beta_x < 0) %>% 
+  ggplot(aes(kappa, SR_mean, 
+             ymin = SR_low, ymax = SR_high,
+             col = factor(beta_x))) +
+  facet_grid(.~psi_x) + theme_few() + 
+  geom_point() + geom_errorbar() + geom_hline(yintercept = c(0,1)) + 
+  ggtitle("Adaptation - recent years") + ylim(ylim) +
+  geom_path()
+
+
+df %>% subset(beta_x < 0) %>% 
+  ggplot(aes(kappa, SR_mean, 
+             ymin = SR_mean - SR_sd, 
+             ymax = SR_mean + SR_sd,
+             col = factor(beta_x))) +
+  facet_grid(.~psi_x) + theme_few() + 
+  geom_point() + geom_errorbar() + geom_hline(yintercept = c(0,1)) + 
+  ggtitle("Adaptation - recent years") + ylim(ylim) +
+  geom_path()
+
 
 
 p1 <- list()

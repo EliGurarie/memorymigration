@@ -18,24 +18,41 @@ world$resource <- aaply(par0, 1, function(p) getResource_island(world, p))
 
 parameters <- c(epsilon = 4, alpha = 100, beta=400, kappa = 1, lambda = 80)
 
-sim <- runManyYears(world, parameters = parameters, n.years = 50, threshold = 1, verbose=TRUE)
-sim1 <- runManyYears(world, parameters = parameters, n.years = 50, threshold = 1, verbose=TRUE)
-sim2 <- runManyYears(world, parameters = parameters, n.years = 50, threshold = 1, verbose=TRUE)
-sim3 <- runManyYears(world, parameters = parameters, n.years = 50, threshold = 1, verbose=TRUE)
+eval <- FALSE
+if(eval){  
+  sim <- runManyYears(world, parameters = parameters, n.years = 50, threshold = 1, verbose=TRUE)
+  sim1 <- runManyYears(world, parameters = parameters, n.years = 50, threshold = 1, verbose=TRUE)
+  sim2 <- runManyYears(world, parameters = parameters, n.years = 50, threshold = 1, verbose=TRUE)
+  sim3 <- runManyYears(world, parameters = parameters, n.years = 50, threshold = 1, verbose=TRUE)
+}
 
-plotManyRuns(sim$pop, world)
+load("results/kappa06.rda")  # sim2
+load("results/kappa1.rda")  # sim3
+
+
+
 plotManyRuns(sim1$pop, world, nrow = 3)
-plotManyRuns(sim2$pop, world, nrow = 3)
 plotManyRuns(sim3$pop, world, nrow = 3)
 
 FE <- data.frame()
-for(i in 2:length(sim$pop)){
+for(i in 2:length(sim2$pop)){
 compFE <- computeEfficiency(sim2$pop[[i]], world$resource[i-1,,],world)
 FE <- rbind(FE, compFE)
 }
 
 FE2 <- data.frame()
-for(i in 2:length(sim$pop)){
+for(i in 2:length(sim2$pop)){
   compFE <- computeEfficiency(sim3$pop[[i]], world$resource[i-1,,],world)
   FE2 <- rbind(FE2, compFE)
 }
+
+plot(FE[,1], type = "o")
+lines(FE2[,1], type = "o", col = 2)
+
+
+image(sim3$pop[[50]])
+contour(world$resource[47,,], add = TRUE)
+
+
+image(sim2$pop[[50]])
+contour(world$resource[50,,], add = TRUE)

@@ -3,7 +3,6 @@ title: "Modeling memory and taxis to analyze migrations"
 author: "E. Gurarie, S. Potluri, B. Fagan, others"
 date: "`r Sys.Date()`"
 output:
-  word_document:
   html_document:
     toc: yes
     toc_float: yes
@@ -93,7 +92,7 @@ where $\Phi$ is the bivariate Gaussian distribution function, and the normalizin
 
 The drifting resource differs from the island resource in that the total amount of resource at any given time point is 1 ($\int_X h(x,t) dx = 1$).  This property is attained by distributing the resource as a re-scaled beta distribution, where the shape and scale parameters vary sinusoidally in such a way as to make the standard deviations and means match the desired values of $m_x, m_t, s_x, s_t$ (see appendix for details).  Both types of resources are illustrated in Figure 1. 
 
-Within a given year, the resource is entirely symmetric: $h_y(x,t) = h_y(-x, \tau-t)$.  However, in scenarios exploring climate change we allow the peaks to vary with drift and stochasticity according to:  $m_x(y) \sim {\cal N}(\mu_x + \beta_x\,y, \sigma_x)$ and $m_t(y) \sim {\cal N}(\mu_t + \beta_t\,y, \sigma_t)$, where the $\mu$, $\beta$ and $\sigma$ terms are the mean, slope and variance, respectively, for the location and time duration of the pulse.  Thus, if $\beta=0$ and $\sigma=0$, the conditions are constant across years, if $\beta_x > 0$ there is a drift of the resource towards extremes, if $\beta_t < 0$ there is a shift towards earlier resource pulses.  These trends mirror the pole-ward shift of peak resources and the earlier spring phenology occurring with a warming global climate.  The spatial scales ($s_x$ and $s_t$) remain constant in all of our simulations.  
+Within a given year, the resource is entirely symmetric: $h_y(x,t) = h_y(-x, \tau-t)$.  However, in scenarios exploring climate change we allow the peaks to vary with drift and stochasticity according to:  $m_x(y) \sim {N}(\mu_x + \beta_x\,y, \sigma_x)$ and $m_t(y) \sim {N}(\mu_t + \beta_t\,y, \sigma_t)$, where the $\mu$, $\beta$ and $\sigma$ terms are the mean, slope and variance, respectively, for the location and time duration of the pulse.  Thus, if $\beta=0$ and $\sigma=0$, the conditions are constant across years, if $\beta_x > 0$ there is a drift of the resource towards extremes, if $\beta_t < 0$ there is a shift towards earlier resource pulses.  These trends mirror the pole-ward shift of peak resources and the earlier spring phenology occurring with a warming global climate.  The spatial scales ($s_x$ and $s_t$) remain constant in all of our simulations.  
 
 ![](figures/ResourceExamples.png)
 
@@ -190,7 +189,7 @@ nrow(df)
 ![](figures/SpatialClimateChange.png)
 
 
-**Figure Z.** *Adaptation to a steadily drifting resource. In three scenarios, the spatial coordinates of the resource drift by 0.25, 0.5, and 1 unit per year (top to bottom, respectively).  The y-axis is the index of spatial adaptation (SA), i.e. the trend of the memory-driven migration divided by the resource drift trend.  Values near 1 indicate a behavior that keeps up with climate change, values near indicate no change in migration behavior, and negative values indicate a trend that is opposite to the climate trend. We compare across spatial scales of sociality ($\lambda$ - x-axis), for low and high values resource following ($\alpha = 400$ and $100$ - orange and blue dots) and low and high values of sociality ($\beta = 100$ and 400, left and right panels). The size of the circles is proportional to the foraging efficiency of the resulting parameter combinations.  Finally, the bottom-right boxplots indicate the final year foraging efficiency against the SA index; purple and blue boxes indicate the highest values, orange and gray lower values.*
+**Figure 5.** *Adaptation to a steadily drifting resource. In three scenarios, the spatial coordinates of the resource drift by 0.25, 0.5, and 1 unit per year (top to bottom, respectively).  The y-axis is the index of spatial adaptation (SA), i.e. the trend of the memory-driven migration divided by the resource drift trend.  Values near 1 indicate a behavior that keeps up with climate change, values near indicate no change in migration behavior, and negative values indicate a trend that is opposite to the climate trend. We compare across spatial scales of sociality ($\lambda$ - x-axis), for low and high values resource following ($\alpha = 400$ and $100$ - orange and blue dots) and low and high values of sociality ($\beta = 100$ and 400, left and right panels). The size of the circles is proportional to the foraging efficiency of the resulting parameter combinations.  Finally, the bottom-right boxplots indicate the final year foraging efficiency against the SA index; purple and blue boxes indicate the highest values, orange and gray lower values.*
 
 
 To assess the ability of the system to adapt to a trending climate, we generated scenarios with slow (0.25 units / year), medium (0.5 units / year), and fast (1 unit / year) drift outward of the two resource pulses.  We then assessed 40 parameter combinations for each of those scenarios, a high and low value of resource following ($\alpha = 400$ and $100$) crossed with a high and low value of sociality ($\beta = 400$ and $100$) crossed with 10 values of the spatial scale of sociality ($\lambda = 20$ to $200$).  The spatial and temporal scale of the resource pulses were fixed to a relatively "easy" to adapt to $\sigma_x = 12$ and $\sigma_t = 6$.  We computed the adaptation index and foraging efficiency for each of the 120 runs (figure **Z**). We were interested in the dynamics against $\lambda$ due to the uniformly high importance of this parameter for determining the success of this process to match migration in steady states.    
@@ -210,31 +209,26 @@ unique(ccspace$lambda)
 (ccspace %>% subset(alpha == 100 & beta_x == -1))$SAI_recent %>% range
 ```
 
-## Role of reference memory in adapting to stochasticity
+## Reference memory and stochasticity
 
-*This section still rough*  
+While recent memory can be helpful for adapting to a single novelty or a smoothly changing conditions, inter-annual stochasticity can 
 
 We ran simulations with various levels of stochasticity (inter-annual standard deviation in location of resource pulse 3, 6, and 12) notably against various values of reference memory $\kappa$, where $\kappa = 0$ refers to only recent memory, and $\kappa = 1$ refers to all reference memory, i.e. that never updates.  We ran simulations for 20 years with constant resource to stabilize, and then for 30 more years to let the process evolve.  In all cases, unsurprisingly, the conservative $\kappa = 1$ limit yielded the highest interannual foraging efficiency (see figure ZZ below). 
 
-```{r KappaPlot1, cache  = TRUE, message = FALSE, warning = FALSE}
-load("../results/stochasticity/stochasticity.rda")
-require(magrittr)
-require(plyr)
-require(ggplot2)
-p1 <- list()
-for(a in c(100,400)) for(b in c(100,400)){
-  p1[[length(p1)+1]] <- ccsigma %>% subset(alpha == a & beta == b & lambda > 40) %>% 
-    ggplot(aes(kappa, avgFE, col = factor(lambda))) +
-    facet_grid(.~psi_x) + geom_path() + theme_few() + ggtitle(bquote(alpha == .(a) ~ beta == .(b))) + 
-    ylim(c(0.5,0.75))
-}
-print(p1[[1]])
+
+![](figures/TrendStochasticity.png)
+
+**Figure 6**. *Role of reference memory in adaptying to climate change for increasingly stochastic resource dynamics.  We ran the model with slow (mean shift 0.25 / year; blue colors) and moderate outward trend (0.5 / year; red colors), at four levels of stochasticity (inter-annual standard deviation of resource peak 0, 3 ,6 and 12, left to right panels). For non-zero stochasticity, we ran the process 30 times and present the mean and standard error of the spatial adaptation index across various values of the reference memory parameter $\kappa$: where $\kappa = 0$, the system modifies its migration based entirely on recent experiences; at $\kappa = 1$, the memory never changes from the reference memory.  Other parameter values are resource following $\alpha = 100$, social attraction $\beta = 400$, and social spatial scale $\lambda = 80$.*
+
+
+```{r KappaPlot1, cache  = TRUE, message = FALSE, warning = FALSE, eval = FALSE}
+# **Figure ZZ.** (*to be refined*) *Results of foraging 
+# efficiency against kappa.  Higher stochasticity leads to  
+# generally lower efficiency. Higher use of reference memory 
+# leads to higher resource efficiency as well.*
+
 ```
-**Figure ZZ.** (*to be refined*) *Results of foraging efficiency against kappa.  Higher stochasticity leads to  generally lower efficiency. Higher use of reference memory leads to higher resource efficiency as well.*
 
-
-
-The final question (simulations currently runnning) is for a system to deal with BOTH trend AND stochasticity, does an intermediate blending of recent and reference memory improve the outcome?   
 
 
 
@@ -242,15 +236,15 @@ The final question (simulations currently runnning) is for a system to deal with
 
 *Highly sketchy and incomplete.  Some odd thoughts here and there.*
 
-We found that the relatively straightforward inclusion of a migration-specific memory in a social diffusion-advection framework was sufficient to capture many fundamental phenomena related to migration. In essence, our model allowed a population with a hybrid migratory and resource following behavior to adjust the migratory behavior based on recent experiences with the resource location. The model, while simple, was able to emulate the successful navigation of an environment with temporally and spatially isolated seasonal resource patches, the spontaneous emergence of a migratory behavior, and intrinsic robustness to changes in those environmental resources, whether as trends or inter-annual stochasticity.   
+We found that the relatively straightforward inclusion of a migration-specific memory in a social diffusion-advection framework was sufficient to capture many fundamental phenomena related to migration. In essence, our model allowed a population with a hybrid migratory and resource following behavior to adjust the migratory behavior based on recent experiences with the resource location. The model, while simple, was able to emulate the successful navigation of an environment with temporally and spatially isolated seasonal resource patches, the spontaneous emergence of a migratory behavior, and intrinsic robustness to changes in those environmental resources, whether as trends or inter-annual stochasticity.  Importantly, we were not interested here in a process that do *not* correspond to the "green wave surfing" mechanism, as there is very little trend to surf, but consider only a necessarily strategic, long-scaled displacements and the way those displacements are modified by experience. 
 
-Note, we are interested here in a process that do *not* correspond to the "green wave surfing" mechanism, as there is very little trend to surf, but consider only a necessarily strategic, long-scaled displacements and the way those displacements are modified by experience. 
-
-The ability to migrate depended on the nature of the resource dynamics.  In particular, the reinforcement of memory and foraging is strongest when patches are concentrated in time, but relatively large in space.  Interestingly, in most essentially stable patterns, the eventual targeted migration arrival time coincided with the *peak*, rather than the beginning, of the resource dynamic.  Ecologically, this indicates that the long-distance social migration behavior may be particularly reinforced when the targeted resource is very sudden (explosive), which is very much the case for the rapid green-up that occurs in high latitudes as the snow recedes even as day length is high, leading to a rapid and intense green-up.  
+The ability to migrate depended on the nature of the resource dynamics.  In particular, the reinforcement of memory and foraging is strongest when patches are concentrated in time, but relatively large in space.  Interestingly, in most essentially stable patterns, the eventual targeted migration arrival time coincided with the *peak*, rather than the beginning, of the resource dynamic.  Ecologically, this indicates that the long-distance social migration behavior may be particularly reinforced when the targeted resource is very sudden (explosive), which is the case for the rapid green-up that occurs in high latitudes as snow recedes in tandem with extended day lengths, leading to a rapid and intense local green-up.  
 
 It is worth considering the assumptions of our model with respect to a biological population.  The population is explicitly social and collective, and the memory is a memory that belongs to the entire population.  The importance of the spatial scale of the collective was an unexpected and very strong result, suggesting that for a population to adequately learn socially, it must have a large enough exploratory radius to find new information to adapt to, while being small enough that the entire population can then learn from this.  
 
 Our model is somewhat similar to an evolutionary individual-based model [@Anderson2013], which showed that some inherent phenotypic plasticity is required to hedge both against persistent trends and increased stochasticity of resource distributions, but at the risk of sub-optimal access to resources [@Anderson2013].  
+
+Collective knowledge has been shown to be important, if not essential, to the evolution and process of migration [@Shaw2013;@Guttal2010;@Berdahl2018].  In our model, we assume that the migration process itself is driven by a collective trigger for the timing and locations of seasonal ranges and migration behavior.  Synchrony of migration timing and high site fidelity are well documented for migratory species [@Gurarie2019;@Joly2021] **more**.
 
 
 *Some comments on systems that may or may not be more resilient to climate change based on our results*. 
