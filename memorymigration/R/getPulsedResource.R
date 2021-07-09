@@ -36,9 +36,9 @@ getCCpars <- function(mu_x0, mu_t0, sigma_x, sigma_t,
   } else pars.null <- NULL
   
   pars.cc <- cbind(x.peak = mu_x0 - beta_x*1:n.years + rnorm(n.years,sd = psi_x),
-        t.peak = mu_t0 + beta_t*1:n.years + rnorm(n.years,sd = psi_t),
-        x.sd = rep(sigma_x, n.years),
-        t.sd = rep(sigma_t, n.years))
+                   t.peak = mu_t0 + beta_t*1:n.years + rnorm(n.years,sd = psi_t),
+                   x.sd = rep(sigma_x, n.years),
+                   t.sd = rep(sigma_t, n.years))
   
   rbind(pars.null, pars.cc)
 }
@@ -149,9 +149,9 @@ getResource_island <- function(world, par){
   #x.peak.scaled <- (x.peak-world$X.min)/x.range
   
   season2 <- season1 <- sapply(t, function(t1){
-                   dmvnorm(cbind(t1,x), 
-                     mean = c(t.peak, x.peak), 
-                     sigma = diag(c(t.sd^2, x.sd^2)))}) %>% t
+    dmvnorm(cbind(t1,x), 
+            mean = c(t.peak, x.peak), 
+            sigma = diag(c(t.sd^2, x.sd^2)))}) %>% t
   
   season2[nrow(season1):1, ncol(season1):1] <- season1
   

@@ -36,8 +36,8 @@ plotManyRuns(sim3$pop, world, nrow = 3)
 
 FE <- data.frame()
 for(i in 2:length(sim2$pop)){
-compFE <- computeEfficiency(sim2$pop[[i]], world$resource[i-1,,],world)
-FE <- rbind(FE, compFE)
+  compFE <- computeEfficiency(sim2$pop[[i]], world$resource[i-1,,],world)
+  FE <- rbind(FE, compFE)
 }
 
 FE2 <- data.frame()
