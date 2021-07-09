@@ -60,7 +60,8 @@ if(eval){
     load(paste0("results/stochasticity/raw/", f))
     ccsigma <- ccsigma %>% smartbind(newresults)
   }
-  
+  ccsigma <- mutate(ccsigma, 
+         annualFE = as.numeric(annualFE))
   save(ccsigma, file = "results/stochasticity/stochasticity.rda")
 }
 
@@ -116,7 +117,8 @@ if(eval){
   
   ccmusigma <- mutate(ccmusigma, 
                       SAI_total = as.numeric(SAI_total),
-                      SAI_recent = as.numeric(SAI_recent))
+                      SAI_recent = as.numeric(SAI_recent),
+                      annualFE = as.numeric(annualFE))
   
   save(ccmusigma, file = "results/trendstochasticity/trendstochasticity.rda")
 }

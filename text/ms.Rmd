@@ -211,23 +211,50 @@ unique(ccspace$lambda)
 
 ## Reference memory and stochasticity
 
-While recent memory can be helpful for adapting to a single novelty or a smoothly changing conditions, inter-annual stochasticity can 
+While recent memory can be helpful for adapting to a single novelty or a smoothly changing conditions, we hypothesized that more conservative approach, relying on a "reference memory" may be more beneficial when conditions change stochastically.  We tested this hypothesis by solving a set of models across a range of $\kappa$ values fom 0 (all recent memory) to 1 (all reference memory).  In these scenarios, we ran the system for as many years as needed with no stochasticity to acquire a stationary state (i.e. similarity index greater than 0.9999), used the stationary state to define the reference migration memory, and then ran the process for an additional 50 years with a stochasticity (i.e. standard deviation in peak location of the resource) ranging from 0 to 12 units.  
 
-We ran simulations with various levels of stochasticity (inter-annual standard deviation in location of resource pulse 3, 6, and 12) notably against various values of reference memory $\kappa$, where $\kappa = 0$ refers to only recent memory, and $\kappa = 1$ refers to all reference memory, i.e. that never updates.  We ran simulations for 20 years with constant resource to stabilize, and then for 30 more years to let the process evolve.  In all cases, unsurprisingly, the conservative $\kappa = 1$ limit yielded the highest interannual foraging efficiency (see figure ZZ below). 
-
-
-![](figures/TrendStochasticity.png)
-
-**Figure 6**. *Role of reference memory in adaptying to climate change for increasingly stochastic resource dynamics.  We ran the model with slow (mean shift 0.25 / year; blue colors) and moderate outward trend (0.5 / year; red colors), at four levels of stochasticity (inter-annual standard deviation of resource peak 0, 3 ,6 and 12, left to right panels). For non-zero stochasticity, we ran the process 30 times and present the mean and standard error of the spatial adaptation index across various values of the reference memory parameter $\kappa$: where $\kappa = 0$, the system modifies its migration based entirely on recent experiences; at $\kappa = 1$, the memory never changes from the reference memory.  Other parameter values are resource following $\alpha = 100$, social attraction $\beta = 400$, and social spatial scale $\lambda = 80$.*
+Figure 6 illustrates that, as predicted, the highest level of $\kappa$ can significantly help foraging efficiency; however this is highly sensitive to the spatial scale of sociality.  When that scale of sociality is high enough (e..g $\lambda = 120$, blue colors) there is greater probability of overlap with a stochastic resource, and a conservative, stable migratory regime is much more beneficial in the long run.   However, if that scale is too small, then - counterintuitively - the process is overly fixed on repeatability and misses the opportunity to increase its foraging by "randomizing" its migration movements via memory of improved foraging in a previous year.  Overall, as anticipated, the greater the stochasticity, the lower the foraging efficiency; and the greater the stochasticity, the greater the benefit of a conservative reference memory driven strategy. 
 
 
-```{r KappaPlot1, cache  = TRUE, message = FALSE, warning = FALSE, eval = FALSE}
-# **Figure ZZ.** (*to be refined*) *Results of foraging 
-# efficiency against kappa.  Higher stochasticity leads to  
-# generally lower efficiency. Higher use of reference memory 
-# leads to higher resource efficiency as well.*
+```{r StochasticityOnly, cache = TRUE}
+require(magrittr); require(plyr); require(ggplot2); require(ggthemes); require(gtools)
+a <- load("../results/stochasticity/stochasticity.rda")
+b <- load("../results/trendstochasticity/trendstochasticity.rda")
+
+cc <- smartbind(ccsigma, 
+                subset(ccmusigma, psi_x == 0)) %>% 
+  subset(alpha == 100 & beta == 400 & beta_x == 0)
+
+cc.summary <- cc %>% 
+  ddply(c("lambda", "kappa", "beta_x", "psi_x"), 
+        summarize, 
+        n = sum(!is.na(avgFE)), 
+        FE_mean = mean(avgFE, na.rm = TRUE), 
+        FE_sd = sd(avgFE, na.rm = TRUE)) %>% 
+  mutate(FE_se = FE_sd/sqrt(n),
+         FE_high = FE_mean + 2*FE_se,
+         FE_low = FE_mean - 2*FE_se)
+
+
+cc.summary %>% subset(lambda > 40) %>% 
+    ggplot(aes(kappa, FE_mean, col = factor(lambda), ymin = FE_low, ymax = FE_high)) +
+    facet_grid(.~psi_x) + geom_point() + theme_few() + geom_errorbar() + 
+    geom_path()
 
 ```
+
+**Figure 6** *Mean and standard error of foraging efficiency across various values of reference memory $\kappa$ (x-axis) for increasing amounts of interannual stochasticity ($\psi_x$, panels left to right), and two values of spatial scale $\lambda = 80$ and $120$.  For the stochastic processes ($\psi_x > 0$), the process was run 30 times, and the mean and standard error of the foraging efficiency over a 50 year post-stabilization period is presented (points and bars). In these scenarios, the resource following parameter $\alpha = 100$ and  social attraction $\beta = 400$.*
+
+
+
+## Balancing stochasticity with trends
+
+We added trends to the stochastic process described above, adding 30 years post-stabilization with slower (0.25 / year) and moderate (0.5 / year) shifts in the peak of resource, with the goal of assessing the ability of the process to keep up with climate change as a function of the reference memory parameter (Figure 7). Over-reliance on reference memory ($\kappa = 1$) by definition does not allow the system to keep up with climate change.  However, over-reliance on recent memory is also sub-optimal, and - in fact - a balancing of recent and reference memory (in our relatively narrow set of similutions with a $\kappa$ value between 0.8 and 0.9) helps the system keep up with climate change better than chasing each recent shift.   Note also, that at the highest levels of stochasticity ($\psi_x = 12$), the system fails completely to keep up with the climate change. The negative spatial adaptation index indicated that the migration behavior, in fact, can completely fall apart. 
+
+
+![](figures/TrendStochasticity_v2.png)
+
+**Figure 7**. *Role of reference memory in adaptying to climate change for increasingly stochastic resource dynamics.  We ran the model with slow (mean shift 0.25 / year; blue colors) and moderate outward trend (0.5 / year; red colors), at four levels of stochasticity (inter-annual standard deviation of resource peak 0, 3 ,6 and 12, left to right panels). For non-zero stochasticity, we ran the process 30 times and present the mean and standard error of the spatial adaptation index across various values of the reference memory parameter $\kappa$: where $\kappa = 0$, the system modifies its migration based entirely on recent experiences; at $\kappa = 1$, the memory never changes from the reference memory.  Other parameter values are resource following $\alpha = 100$, social attraction $\beta = 400$, and social spatial scale $\lambda = 80$.*
 
 
 
@@ -238,7 +265,7 @@ We ran simulations with various levels of stochasticity (inter-annual standard d
 
 We found that the relatively straightforward inclusion of a migration-specific memory in a social diffusion-advection framework was sufficient to capture many fundamental phenomena related to migration. In essence, our model allowed a population with a hybrid migratory and resource following behavior to adjust the migratory behavior based on recent experiences with the resource location. The model, while simple, was able to emulate the successful navigation of an environment with temporally and spatially isolated seasonal resource patches, the spontaneous emergence of a migratory behavior, and intrinsic robustness to changes in those environmental resources, whether as trends or inter-annual stochasticity.  Importantly, we were not interested here in a process that do *not* correspond to the "green wave surfing" mechanism, as there is very little trend to surf, but consider only a necessarily strategic, long-scaled displacements and the way those displacements are modified by experience. 
 
-The ability to migrate depended on the nature of the resource dynamics.  In particular, the reinforcement of memory and foraging is strongest when patches are concentrated in time, but relatively large in space.  Interestingly, in most essentially stable patterns, the eventual targeted migration arrival time coincided with the *peak*, rather than the beginning, of the resource dynamic.  Ecologically, this indicates that the long-distance social migration behavior may be particularly reinforced when the targeted resource is very sudden (explosive), which is the case for the rapid green-up that occurs in high latitudes as snow recedes in tandem with extended day lengths, leading to a rapid and intense local green-up.  
+The ability to migrate depended on the nature of the resource dynamics.  In particular, the reinforcement of memory and foraging is strongest when patches are concentrated in time, but relatively large in space.  Interestingly, in most essentially stable patterns, the eventual targeted migration arrival time coincided with the *peak*, rather than the beginning, of the resource dynamic.  Ecologically, this indicates that the long-distance social migration behavior may be particularly reinforced when the targeted resource is very sudden (explosive), which is the case for the rapid green-up that occurs in high latitudes as snow recedes in tandem with extended day lengths, leading to a rapid and intense local green-up. 
 
 It is worth considering the assumptions of our model with respect to a biological population.  The population is explicitly social and collective, and the memory is a memory that belongs to the entire population.  The importance of the spatial scale of the collective was an unexpected and very strong result, suggesting that for a population to adequately learn socially, it must have a large enough exploratory radius to find new information to adapt to, while being small enough that the entire population can then learn from this.  
 
