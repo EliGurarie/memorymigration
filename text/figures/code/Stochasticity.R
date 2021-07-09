@@ -4,25 +4,31 @@ require(ggplot2)
 require(ggthemes)
 
 rm(list=ls())
-load("results/trendstochasticity/trendstochasticity.rda")
+a <- load("results/stochasticity/stochasticity.rda")
+b <- load("results/trendstochasticity/trendstochasticity.rda")
 
-cc.summary <- ccmusigma %>% subset(alpha == 100 & beta == 400 & beta_x == 0) %>% 
+cc <- smartbind(ccsigma, 
+                subset(ccmusigma, psi_x == 0)) %>% 
+  subset(alpha == 100 & beta == 400 & beta_x == 0)
+
+
+cc.summary <- cc %>% 
   ddply(c("lambda", "kappa", "beta_x", "psi_x"), 
         summarize, 
-        n = sum(!is.na(avgTE)), 
-        FE_mean = mean(avgTE, na.rm = TRUE), 
-        FE_sd = sd(avgTE, na.rm = TRUE)) %>% 
+        n = sum(!is.na(avgFE)), 
+        FE_mean = mean(avgFE, na.rm = TRUE), 
+        FE_sd = sd(avgFE, na.rm = TRUE)) %>% 
   mutate(FE_se = FE_sd/sqrt(n),
          FE_high = FE_mean + 2*FE_se,
          FE_low = FE_mean - 2*FE_se)
 
 
-cc.summary %>% subset(lambda == 80) %>% 
+cc.summary %>% subset(lambda %in% c(80,120)) %>% 
     ggplot(aes(kappa, FE_mean, col = factor(lambda), ymin = FE_low, ymax = FE_high)) +
     facet_grid(.~psi_x) + geom_point() + theme_few() + geom_errorbar() + 
     geom_path()
 
-
+with(cc.summary, table(lambda, n))
 
 rm(list=ls())
 
@@ -65,6 +71,18 @@ cc.summary %>% subset(psi_x == 0)
 df <- subset(cc.summary, psi_x == 3)
 cols <-  c("red", "blue")
 
+
+plotSR <- function(df, ...){
+  plot(c(0,1), ylim, type = "n", xlab = "", ylab = "")
+  abline(h = c(0,1), lty = c(1,3), lwd = 3, col = "grey", xpd = FALSE)
+  with(df, {
+    points(kappa, ST_mean, col = cols[factor(beta_x)], pch = 19, ...)
+    segments(kappa, ST_low, kappa, ST_high, col = cols[factor(beta_x)])
+    lines(kappa[beta_x == -.25], ST_mean[beta_x == -.25], col = cols[2])
+    lines(kappa[beta_x == -.5], ST_mean[beta_x == -.5], col = cols[1])
+  })
+  box(bty = "l")
+}
 
 plotSR <- function(df, ...){
   plot(c(0,1), ylim, type = "n", xlab = "", ylab = "")

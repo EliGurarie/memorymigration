@@ -58,7 +58,7 @@ if(eval){
   for(f in files[grepl("rda", files)]){ 
     print(f)
     load(paste0("results/stochasticity/raw/", f))
-    ccsigma <- ccsigma %>% smartbind(newresults %>% fixTE)
+    ccsigma <- ccsigma %>% smartbind(newresults)
   }
   
   save(ccsigma, file = "results/stochasticity/stochasticity.rda")

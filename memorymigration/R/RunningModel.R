@@ -1,3 +1,37 @@
+
+#' @export
+
+runManyYearsWithStabilization <- function(world, parameters, 
+                                          n.years = dim(world$resource)[1], 
+                                          threshold = 0.9999, 
+                                          verbose = FALSE, m0 = world$m0,
+                                          n.years.null = 20, resource.null){
+  
+  # run to stabilizatoin
+  cat("Stabilization run:\n")
+  world.null <- world
+  world.null$resource <- resource.null
+  parameters.null <- parameters
+  parameters.null['kappa'] <- 0
+  sim.null <- runManyYears(world.null, parameters = parameters.null, 
+                           n.years = n.years.null, threshold = 0.9999, 
+                           verbose = verbose, m0 = world$m0)
+  
+  # extract pieces to run for the remainder
+  
+  cat("Dynamic resource run:\n")
+  
+  world$m0 <-  (sim.null$migration.hat[nrow(sim.null$migration.hat),1:6] %>% 
+                  as.matrix)[1,]
+  world$pop <- sim.null$pop[[length(sim.null$pop)]]
+  sim <- runManyYears(world, parameters = parameters, 
+                      n.years = n.years, threshold = 1, 
+                      verbose = verbose, m0 = world$m0)
+  return(sim)
+}
+
+
+
 #' Run Many Years 
 #' 
 #' Based on a migratory population's set up (the World) and the values \code{alpha},
@@ -147,7 +181,7 @@ runManyRuns <- function (parameters.df, resource_param, world, resource,
                              sigma_t = sigma_t[j],
                              psi_x = psi_x[j], 
                              psi_t = psi_t[j],
-                            n.years.null = n.years.null[j]))
+                             n.years.null = n.years.null[j]))
       
       if(resource == "drifting")
         world$resource <- aaply(par0, 1, function(p) getResource_drifting(world, p, x.null=50)) 
@@ -166,7 +200,7 @@ runManyRuns <- function (parameters.df, resource_param, world, resource,
       
       M <- try(runManyYears(world, parameters = myparams, 
                             n.years = 50, threshold = 1))
-
+      
       if(!inherits(M, "try-error")){
         myFE <- computeAnnualEfficiency(M$pop, world$resource, world)
         FE.matrix[nrow(newresults)+1, 1:length(myFE)] <- myFE
@@ -186,7 +220,7 @@ runManyRuns <- function (parameters.df, resource_param, world, resource,
           myR$SAI_total <- computeSpatialAdaptationIndex(M, resource_param[j,])
           myR$SAI_recent <- computeSpatialAdaptationIndex(M, resource_param[j,], trim = 10)
         } else {myR$SAI_total <- NA
-                myR$SAI_recent <- NA}
+        myR$SAI_recent <- NA}
         if(resource_param[j,]$beta_t != 0){ 
           myR$TAI_total <- computeTemporalAdaptationIndex(M, resource_param[j,])
           myR$TAI_recent <- computeTemporalAdaptationIndex(M, resource_param[j,], trim = 10)
