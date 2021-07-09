@@ -1,0 +1,20 @@
+---
+title: "Tables"
+author: "Elie"
+date: "7/9/2021"
+output: html_document
+---
+
+
+**Memory migration model**
+
+| Parameter   | | Description  
+| ----------- | ----------- | 
+| $\alpha$  | Forage following | 
+| $\beta$  | Strength of sociality |
+| $\lambda$  | Spatial scale of sociality |
+
+
+**Resource**
+
+**Metrics**
