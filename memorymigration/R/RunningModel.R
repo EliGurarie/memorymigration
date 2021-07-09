@@ -14,7 +14,7 @@ runManyYearsWithStabilization <- function(world, parameters,
   parameters.null <- parameters
   parameters.null['kappa'] <- 0
   sim.null <- runManyYears(world.null, parameters = parameters.null, 
-                           n.years = n.years.null, threshold = threshold, 
+                           n.years = n.years.null, threshold = 0.9999, 
                            verbose = verbose, m0 = world$m0)
   
   # extract pieces to run for the remainder
