@@ -47,7 +47,7 @@ ccspace %>%
 
 
 #  Climate change stochasticity --------
-
+require(memorymigration)
 eval <- FALSE
 if(eval){
   require(gtools)
@@ -61,7 +61,9 @@ if(eval){
     ccsigma <- ccsigma %>% smartbind(newresults)
   }
   ccsigma <- mutate(ccsigma, 
-         annualFE = as.numeric(annualFE))
+         annualFE = as.numeric(annualFE), 
+         SAI_total = NULL, SAI_recent = NULL, 
+         TAI_total = NULL, TAI_recent = NULL)
   save(ccsigma, file = "results/stochasticity/stochasticity.rda")
 }
 

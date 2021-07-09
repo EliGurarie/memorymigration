@@ -236,7 +236,7 @@ cc.summary <- cc %>%
          FE_low = FE_mean - 2*FE_se)
 
 
-cc.summary %>% subset(lambda > 40) %>% 
+cc.summary %>% subset(lambda > 40 & psi_x > 0) %>% 
     ggplot(aes(kappa, FE_mean, col = factor(lambda), ymin = FE_low, ymax = FE_high)) +
     facet_grid(.~psi_x) + geom_point() + theme_few() + geom_errorbar() + 
     geom_path()

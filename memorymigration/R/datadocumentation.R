@@ -1,3 +1,19 @@
+#' Climate change worlds
+#'
+#' memorymigration set up for running climate change models.  Contains two worlds: 
+#' world_cclambda80 and world_cclambda120.
+#' 
+#' These worlds are "stabilized" at precision 1e-6.  
+#' See generating code for other parameter values. 
+#'
+#' @usage
+#' data(world_cc)
+#'
+#' @example examples/creatingClimateChangeWorlds.R
+#' @keywords data
+#' @export
+NULL
+
 #' Basic World object
 #'
 #' memorymigration set up for running models
