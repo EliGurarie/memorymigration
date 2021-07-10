@@ -109,18 +109,18 @@ if(eval){
   require(gtools)
   
   files <- list.files("results/trendstochasticity/raw/")
-  ccmusigma <- data.frame()
+  ccmusigma_compiled <- data.frame()
   for(i in 1:length(files)){ 
     print(files[i])
     load(paste0("results/trendstochasticity/raw/", files[i]))
-    ccmusigma <- ccmusigma %>% 
-      smartbind(newresults %>% mutate(run = i))
+    ccmusigma_compiled <- ccmusigma_compiled %>% 
+      smartbind(ccmusigma %>% mutate(run = i))
   }
   
-  ccmusigma <- mutate(ccmusigma, 
+  ccmusigma <- mutate(ccmusigma_compiled, 
                       SAI_total = as.numeric(SAI_total),
                       SAI_recent = as.numeric(SAI_recent),
-                      annualFE = as.numeric(annualFE))
+                      annualFE = as.numeric(annualFE)) %>% unique
   
   save(ccmusigma, file = "results/trendstochasticity/trendstochasticity.rda")
 }

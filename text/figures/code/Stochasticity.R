@@ -4,10 +4,9 @@ require(ggplot2)
 require(ggthemes)
 
 rm(list=ls())
-a <- load("results/stochasticity/stochasticity.rda")
 b <- load("results/trendstochasticity/trendstochasticity.rda")
 
-cc <- smartbind(ccsigma, 
+cc <- smartbind(ccmusigma, 
                 subset(ccmusigma, psi_x == 0)) %>% 
   subset(alpha == 100 & beta == 400 & beta_x == 0)
 
