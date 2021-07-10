@@ -245,27 +245,52 @@ computeAvgTotalError <- function(sim, world, par0){
   tau <- world$tau
   average <- data.frame()
   
-  for(i in 30:length(sim$pop)){
-    par <- par0[i,]
-    m.hat <- sim$migration.hat[i,]
-    if(par["t.peak"] < m.hat$t1 | par["t.peak"] > m.hat$t1 + m.hat$dt1)
-      t1.error <- min( abs(par["t.peak"] - m.hat$t1), 
-                       abs(par["t.peak"] - m.hat$t1  - m.hat$dt1)) else 
-                         t1.error = 0
-    
-    if(world$tau - par["t.peak"] < m.hat$t2 | 
-       world$tau - par["t.peak"] > m.hat$t2 + m.hat$dt2)
-      t2.error <- min( abs(world$tau - par["t.peak"] - m.hat$t2), 
-                       abs( world$tau - par["t.peak"] - m.hat$t2  - m.hat$dt2)) else 
-                         t2.error = 0
-    
-    x1.error <- par["x.peak"] - m.hat$x1
-    x2.error <- - par["x.peak"] - m.hat$x2
-    
-   error <- abs(t1.error) + abs(t2.error) + abs(x1.error) + abs(x1.error)
-    
-   average <- rbind(average, error)
-  }
+  if (length(sim) <= 20){
+    for(i in 2:length(sim)){
+      par <- par0[i,]
+      m.hat <- sim$migration.hat[i,]
+      if(par["t.peak"] < m.hat$t1 | par["t.peak"] > m.hat$t1 + m.hat$dt1)
+        t1.error <- min( abs(par["t.peak"] - m.hat$t1), 
+                         abs(par["t.peak"] - m.hat$t1  - m.hat$dt1)) else 
+                           t1.error = 0
+      
+      if(world$tau - par["t.peak"] < m.hat$t2 | 
+         world$tau - par["t.peak"] > m.hat$t2 + m.hat$dt2)
+        t2.error <- min( abs(world$tau - par["t.peak"] - m.hat$t2), 
+                         abs( world$tau - par["t.peak"] - m.hat$t2  - m.hat$dt2)) else 
+                           t2.error = 0
+      
+      x1.error <- par["x.peak"] - m.hat$x1
+      x2.error <- - par["x.peak"] - m.hat$x2
+      
+      error <- abs(t1.error) + abs(t2.error) + abs(x1.error) + abs(x1.error)
+      
+      average <- rbind(average, error)
+    }}
+  
+  if (length(sim) > 20){
+    for(i in 30:length(sim$pop)){
+      par <- par0[i,]
+      m.hat <- sim$migration.hat[i,]
+      if(par["t.peak"] < m.hat$t1 | par["t.peak"] > m.hat$t1 + m.hat$dt1)
+        t1.error <- min( abs(par["t.peak"] - m.hat$t1), 
+                         abs(par["t.peak"] - m.hat$t1  - m.hat$dt1)) else 
+                           t1.error = 0
+      
+      if(world$tau - par["t.peak"] < m.hat$t2 | 
+         world$tau - par["t.peak"] > m.hat$t2 + m.hat$dt2)
+        t2.error <- min( abs(world$tau - par["t.peak"] - m.hat$t2), 
+                         abs( world$tau - par["t.peak"] - m.hat$t2  - m.hat$dt2)) else 
+                           t2.error = 0
+      
+      x1.error <- par["x.peak"] - m.hat$x1
+      x2.error <- - par["x.peak"] - m.hat$x2
+      
+      error <- abs(t1.error) + abs(t2.error) + abs(x1.error) + abs(x1.error)
+      
+      average <- rbind(average, error)
+    }}
+  
   mean(average[,1])
   }
 

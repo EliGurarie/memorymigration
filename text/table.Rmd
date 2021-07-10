@@ -8,13 +8,41 @@ output: html_document
 
 **Memory migration model**
 
-| Parameter   | | Description  
-| ----------- | ----------- | 
+| Parameter   | | Description |
+| ----------- | ----------- |
+| $\epsilon$  | Diffusion | 
 | $\alpha$  | Forage following | 
 | $\beta$  | Strength of sociality |
 | $\lambda$  | Spatial scale of sociality |
+| $\kappa$  | Proportion of reference versus working memory |
 
 
 **Resource**
+| Parameter   | | Description |
+| ----------- | ----------- |
+| $h$  | Dynamic resource | 
+| $\tau$  | Periodicity | 
+| $M_x$  | Spatial coordinate of resource peak for the summer season | 
+| $-m_x$  | Spatial coordinate of resource peak for the winter season |
+| $m_t$  | Timing of resource peak for the summer season | 
+| $\tau - m_t$ | Timing of resource peak for the summer season | 
+| $s_t$  | Time scale of duration of resource pulse | 
+| $s_x$  | Spatial scale of extent of resource pulse | 
+
+**Population**
+| Parameter   | | Description |
+| ----------- | ----------- |
+| $t_1$  | Timing of the summer season | 
+| $dt_1$  | Duration of the summer season | 
+| $t_2$  | Timing of the winter season | 
+| $dt_2$  | Duration of the winter season | 
+| $x_1$  |  Spatial coordinate of the population centroid for the summer season | 
+| $x_2$  |Spatial coordinate of the population centroid for the winter season | 
 
 **Metrics**
+| Parameter   | | Description |
+| ----------- | ----------- |
+| $MM_x$  | Spatial migration mismatch |
+| $MM_t$  | Temporal migration mismatch |
+| $FE$  | Foraging efficiency |
+| $SA$  | Spatial adaptation |

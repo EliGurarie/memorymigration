@@ -20,16 +20,16 @@ ui <- fluidPage(
                         value = 100, min = 0, step = 1),
            numericInput(inputId = "beta",
                         label = "Strength of Sociality - Beta",
-                        value = 100, min = 0, step = 1),
+                        value = 400, min = 0, step = 50),
            sliderInput(inputId = "kappa",
                        label = "Proportion reference vs. working memory - Kappa",
                        value = 0, min = 0, max = 1),
            numericInput(inputId = "lambda",
                         label = "Spatial Scale of Sociality - Lambda",
-                        value = 20, min = 0, step = 1),
+                        value = 80, min = 0, step = 1),
            numericInput(inputId = "epsilon",
                         label = "Diffusion Parameter - Epsilon",
-                        value = 1, min = 0, step = 1)
+                        value = 4, min = 0, step = 1)
            ),
     column(6,
            h3("Migratory Population"),
@@ -47,17 +47,18 @@ ui <- fluidPage(
                         label = "View Resource"),
            sliderInput(inputId = "x.sd",
                        label = "Resource Space Distribution",
-                       value = 5, min = 0, max = 15),
+                       value = 12, min = 0, max = 15),
            sliderInput(inputId = "t.sd",
                        label = "Resource Time Distribution",
-                       value = 12, min = 0, max = 15),
-           numericInput(inputId = "mu.x0", label = "Initial Resource Position in Space", value = 40, step = 1),
+                       value = 6, min = 0, max = 15),
+           numericInput(inputId = "mu.x0", label = "Initial Resource Position in Space", value = 30, step = 1),
            numericInput(inputId = "mu.t0", label = "Initial Resource Position in Time", value = 25, step = 1),
            numericInput(inputId = "beta.x", label = "Resource Change in Space", value = 0, step = 1),
            numericInput(inputId = "beta.t", label = "Resource Change in Time ", value = 0, step = 1),
            numericInput(inputId = "psi_x", label = "Stochasticity in Space", value = 0, step = 1),
            numericInput(inputId = "psi_t", label = "Stochasticity in Time ", value = 0, step = 1),
            numericInput(inputId = "x_null", label = "Constraint in Space ", value = 50, step = 1),
+           numericInput(inputId = "n_years_null", label = "Years of Stable Resource ", value = 0, step = 1),
            radioButtons(inputId = "resource",
                         label = "Type of resource", 
                         choices = c("Island" = "resources_island", "Drifting" = "resources_drifting"), inline = TRUE)
@@ -104,7 +105,8 @@ server <- function(input, output, session) {
                           sigma_x = as.numeric(input$x.sd),
                           sigma_t = as.numeric(input$t.sd),
                           psi_x = as.numeric(input$psi_x), 
-                          psi_t = as.numeric(input$psi_t))
+                          psi_t = as.numeric(input$psi_t),
+                          n.years.null = as.numeric(input$n_years_null))
         if(input$resource == "resources_island"){ 
         Resource.CC <- aaply(par0, 1, function(p) getResource_island(world, p))
         world$resource <- Resource.CC
@@ -114,7 +116,7 @@ server <- function(input, output, session) {
         Resource.CC <- aaply(par0, 1, function(p) getResource_drifting(world, p, as.numeric(input$x_null)))
         world$resource <- Resource.CC
       }
-      
+        attr(world$resource, "par") <- par0[nrow(par0),]
     resource_param <- data.frame(mu_x0 = as.numeric(input$mu.x0), 
                                  mu_t0 = as.numeric(input$mu.t0),
                                  beta_x = as.numeric(input$beta.x),
@@ -124,6 +126,7 @@ server <- function(input, output, session) {
                                  sigma_t = as.numeric(input$t.sd),
                                  psi_x = as.numeric(input$psi_x), 
                                  psi_t = as.numeric(input$psi_t),
+                                 n.years.null = as.numeric(input$n_years_null),
                                  world = input$world,
                                  resource = input$resource) 
     
@@ -150,11 +153,17 @@ server <- function(input, output, session) {
     indices <- data.frame(computeIndices(sim$pop[[length(sim)]], 
                                          world$resource[length(sim$pop)-1,,], world),
                           avgFE = computeAvgEfficiency(sim$pop, world$resource, world),
+                          TE = computeTotalError(sim, world),
+                          avgTE = computeAvgTotalError(sim, world, par0),
                           final_similarity = computeEfficiency(sim$pop[[length(sim$pop)-1]], 
                                                                sim$pop[[length(sim$pop)]], world), 
                           n.runs = length(sim$pop) - 1,
                           resource_param, param.df)
-    
+    if(as.numeric(input$beta.x) != 0){ 
+      indices$SA_total <- computeSpatialAdaptationIndex(sim, resource_param)
+    }else {indices$SA_total <- NA}
+
+
     #parameters.df <- ldply (parameters, data.frame)
     indices <- format(indices, digits=4)
 
@@ -177,7 +186,6 @@ server <- function(input, output, session) {
                              x.sd=as.numeric(input$x.sd), 
                              t.sd=as.numeric(input$t.sd))
     }
-    
     if(input$world == "world_nonmigratory"){
       world <- getSinePop(tau = 100, peak.max = 1, peak.min = -1, sd = 10)
     }
@@ -193,21 +201,26 @@ server <- function(input, output, session) {
                       sigma_x = as.numeric(input$x.sd),
                       sigma_t = as.numeric(input$t.sd),
                       psi_x = as.numeric(input$psi_x), 
-                      psi_t = as.numeric(input$psi_t))
-    if(input$resource == "resources_island"){
-      
+                      psi_t = as.numeric(input$psi_t),
+                      n.years.null = as.numeric(input$n_years_null))
+    if(input$resource == "resources_island"){ 
       Resource.CC <- aaply(par0, 1, function(p) getResource_island(world, p))
+      world$resource <- Resource.CC
     }
     
     if(input$resource == "resources_drifting"){
-      Resource.CC <- aaply(par0, 1, function(p) getResource_drifting(world, p, x.null = 50))
+      Resource.CC <- aaply(par0, 1, function(p) getResource_drifting(world, p, as.numeric(input$x_null)))
+      world$resource <- Resource.CC
     }
+    attr(world$resource, "par") <- par0[nrow(par0),]
+  
+    
     
     par(mfrow = c(ceiling(min(dim(Resource.CC))/5), 5), mar = c(0,0,1,0), oma = c(2,2,0,2), tck = 0.01)
     for (i in 1:min(dim(Resource.CC))) image(Resource.CC[i,,], main = paste("year", i-1), yaxt = "n", xaxt = "n")
-    
+
   })
-  
+
    output$Image <- renderPlot({
      
      
@@ -225,7 +238,7 @@ server <- function(input, output, session) {
     }, res = 150)
     
    output$Indices <- renderTable({
-     simulation()[[2]][,1:6]
+     simulation()[[2]][c("FE", "avgFE", "TE", "avgTE", "SA_total", "final_similarity", "n.runs" )]
   
    }, digits = 3)
    
