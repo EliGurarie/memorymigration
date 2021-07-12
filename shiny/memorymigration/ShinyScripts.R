@@ -1,6 +1,6 @@
 # Setting up Input Interface --------------------------
 ui <- fluidPage(
-  
+  theme = shinytheme("darkly"),
   h1("Memory Migration model"),
   fluidRow(
     column(3,
