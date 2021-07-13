@@ -56,9 +56,9 @@ png("text/figures/SpatialClimateChange.png", width = 3000, height = 2400, res = 
       mtext(side = 3, bquote(beta == .(b)), cex = 1.2)
     }
     if(b == 400){
-      if(dx == -.25) rightlabel("slow (dx = 0.25)")
-      if(dx == -.5) rightlabel("medium (dx = 0.5)")
-      if(dx == -1) rightlabel("rapid (dx = 1)")
+      if(dx == -.25) rightlabel(expression("slow"~ (gamma[x]== 0.25)))
+      if(dx == -.5) rightlabel(expression("moderate"~ (gamma[x]== 0.5)))
+      if(dx == -1) rightlabel(expression("rapid"~ (gamma[x]==1)))
     }
     if(b == 100){
       axis(2)
