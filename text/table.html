@@ -171,29 +171,123 @@ pre code {
 </div>
 
 
-<p><strong>Memory migration model</strong></p>
+<p><em>Memory advection-diffusion PDE</em></p>
 <table>
+<colgroup>
+<col width="50%" />
+<col width="50%" />
+</colgroup>
 <thead>
 <tr class="header">
 <th>Parameter</th>
-<th></th>
 <th>Description</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td><span class="math inline">\(\alpha\)</span> :</td>
-<td>: Forage following</td>
-<td></td>
+<td><span class="math inline">\(\epsilon\)</span></td>
+<td>Diffusion</td>
 </tr>
 <tr class="even">
-<td><span class="math inline">\(\beta\)</span> :</td>
-<td>: Text</td>
-<td></td>
+<td><span class="math inline">\(\alpha\)</span></td>
+<td>Forage following</td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(\beta\)</span></td>
+<td>Strength of sociality</td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(\lambda\)</span></td>
+<td>Spatial scale of sociality</td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(\kappa\)</span></td>
+<td>Proportion of reference versus working memory</td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(x_1\)</span>, <span class="math inline">\(x_2\)</span></td>
+<td>location of population centroids in summer and winter</td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(t_1\)</span>, <span class="math inline">\(dt_1\)</span></td>
+<td>start and duration of summer season</td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(t_2\)</span>, <span class="math inline">\(dt_2\)</span></td>
+<td>start and duration of winter season</td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(\kappa\)</span></td>
+<td>proportion memory allocated to reference (long-term) memory vs. short-term memory</td>
 </tr>
 </tbody>
 </table>
-<p><strong>Resource</strong></p>
+<p><em>Resource dynamics</em></p>
+<table>
+<thead>
+<tr class="header">
+<th>Parameter</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><span class="math inline">\(\tau\)</span></td>
+<td>duration of period (year)</td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(m_x\)</span>, <span class="math inline">\(-m_x\)</span></td>
+<td>spatial coordinate of resource peak for summer and winter</td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(m_t\)</span>, <span class="math inline">\(\tau - m_t\)</span></td>
+<td>timing of resource peak for the summer and winter</td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(\sigma_x\)</span>, <span class="math inline">\(\sigma_t\)</span></td>
+<td>time duration and and spatial scale of resource pulse</td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(dx\)</span>, <span class="math inline">\(dt\)</span></td>
+<td>rate of change of peak locaton and timing of resource</td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(\psi_x\)</span>, <span class="math inline">\(\psi_t\)</span></td>
+<td>standard deviation of peak location and timing</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Metrics</strong></p>
+<table>
+<thead>
+<tr class="header">
+<th>Parameter</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><span class="math inline">\(MM_x\)</span></td>
+<td>spatial migration mismatch</td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(MM_t\)</span></td>
+<td>temporal migration mismatch</td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(TE\)</span></td>
+<td>total mismatch</td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(FE\)</span></td>
+<td>foraging efficiency</td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(SA\)</span></td>
+<td>spatial adaptation index</td>
+</tr>
+</tbody>
+</table>
 
 
 

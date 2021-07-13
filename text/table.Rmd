@@ -6,43 +6,37 @@ output: html_document
 ---
 
 
-**Memory migration model**
+*Memory advection-diffusion PDE*
 
-| Parameter   | | Description |
+| Parameter   | Description |
 | ----------- | ----------- |
 | $\epsilon$  | Diffusion | 
 | $\alpha$  | Forage following | 
 | $\beta$  | Strength of sociality |
 | $\lambda$  | Spatial scale of sociality |
 | $\kappa$  | Proportion of reference versus working memory |
+| $x_1$, $x_2$  | location of population centroids in summer and winter| 
+| $t_1$, $dt_1$  | start and duration of summer season |
+| $t_2$, $dt_2$  | start and duration of winter season | 
+| $\kappa$ | proportion memory allocated to reference (long-term) memory vs. short-term memory|
 
+*Resource dynamics*
 
-**Resource**
-| Parameter   | | Description |
+| Parameter   | Description |
 | ----------- | ----------- |
-| $h$  | Dynamic resource | 
-| $\tau$  | Periodicity | 
-| $M_x$  | Spatial coordinate of resource peak for the summer season | 
-| $-m_x$  | Spatial coordinate of resource peak for the winter season |
-| $m_t$  | Timing of resource peak for the summer season | 
-| $\tau - m_t$ | Timing of resource peak for the summer season | 
-| $s_t$  | Time scale of duration of resource pulse | 
-| $s_x$  | Spatial scale of extent of resource pulse | 
-
-**Population**
-| Parameter   | | Description |
-| ----------- | ----------- |
-| $t_1$  | Timing of the summer season | 
-| $dt_1$  | Duration of the summer season | 
-| $t_2$  | Timing of the winter season | 
-| $dt_2$  | Duration of the winter season | 
-| $x_1$  |  Spatial coordinate of the population centroid for the summer season | 
-| $x_2$  |Spatial coordinate of the population centroid for the winter season | 
+| $\tau$  | duration of period (year) | 
+| $m_x$, $-m_x$  | spatial coordinate of resource peak for summer and winter | 
+| $m_t$, $\tau - m_t$  | timing of resource peak for the summer and winter | 
+| $\sigma_x$, $\sigma_t$   | time duration and and spatial scale of resource pulse | 
+| $dx$, $dt$  | rate of change of peak locaton and timing of resource | 
+| $\psi_x$, $\psi_t$  | standard deviation of peak location and timing | 
 
 **Metrics**
-| Parameter   | | Description |
+
+| Parameter   | Description |
 | ----------- | ----------- |
-| $MM_x$  | Spatial migration mismatch |
-| $MM_t$  | Temporal migration mismatch |
-| $FE$  | Foraging efficiency |
-| $SA$  | Spatial adaptation |
+| $MM_x$  | spatial migration mismatch |
+| $MM_t$  | temporal migration mismatch |
+| $TE$  | total mismatch |
+| $FE$  | foraging efficiency |
+| $SA$  | spatial adaptation index |

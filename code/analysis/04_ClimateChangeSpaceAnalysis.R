@@ -109,18 +109,20 @@ if(eval){
   require(gtools)
   
   files <- list.files("results/trendstochasticity/raw/")
-  ccmusigma_compiled <- data.frame()
+  ccmusigma <- data.frame()
   for(i in 1:length(files)){ 
     print(files[i])
-    load(paste0("results/trendstochasticity/raw/", files[i]))
-    ccmusigma_compiled <- ccmusigma_compiled %>% 
-      smartbind(ccmusigma %>% mutate(run = i))
+    a <- load(paste0("results/trendstochasticity/raw/", files[i]))
+    print(a)
+    ccmusigma <- ccmusigma %>% 
+      smartbind(get(a) %>% mutate(run = i))
   }
   
-  ccmusigma <- mutate(ccmusigma_compiled, 
+  
+  ccmusigma <- mutate(ccmusigma, 
                       SAI_total = as.numeric(SAI_total),
                       SAI_recent = as.numeric(SAI_recent),
-                      annualFE = as.numeric(annualFE)) %>% unique
+                      annualFE = as.numeric(avgFE)) %>% unique
   
   save(ccmusigma, file = "results/trendstochasticity/trendstochasticity.rda")
 }
@@ -232,3 +234,35 @@ df %>% ggplot(aes(avgFE, SAI_recent)) +
   geom_hline(yintercept = 0, col = "grey") +
   facet_grid(beta_x~psi_x) + geom_path(col = "grey") + theme_few() +
   geom_point(aes( col = factor(kappa)))
+
+
+
+#  Beta_x 0
+
+
+require(memorymigration)
+eval <- FALSE
+if(eval){
+  require(gtools)
+  
+  files <- list.files("results/trendstochasticity/betax0/")
+  ccsigma <- data.frame()
+  for(i in 1:length(files)){ 
+    print(files[i])
+    a <- load(paste0("results/trendstochasticity/betax0/", files[i]))
+    
+    df <- get(a)
+    df$avgFE <- apply(df$annualFE, 1, mean, na.rm = TRUE)
+    ccsigma <- ccsigma %>% 
+      smartbind(df %>% mutate(run = i))
+  }
+  
+  
+  ccsigma <- mutate(ccsigma, 
+                      SAI_total = as.numeric(SAI_total),
+                      SAI_recent = as.numeric(SAI_recent),
+                      annualFE = as.numeric(avgFE)) %>% unique
+  
+  save(ccsigma, file = "results/trendstochasticity/betax0.rda")
+}
+
