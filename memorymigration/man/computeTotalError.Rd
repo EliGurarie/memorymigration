@@ -6,6 +6,18 @@
 \usage{
 computeTotalError(sim, world)
 }
+\arguments{
+\item{sim}{A simulation run from runManyYears.}
+
+\item{world}{world object; list of 7: a population distribution across the time period in a T x X matrix,
+a vector with midpoint X-values, the time points for the population as integers 1:tau, the minimum value of population distribution
+(X.min), the maximum value of population distribution (X.max),
+the dx value and the tau value. Can incorporate resource attribute into the world to make a list of 8.
+Set up by the getSinePop/getOptimal function. 
+@return a single total mismatch (TE) index
+@seealso \link{computeAvgTotalError}, \link{computeMigrationIndices}
+@example examples/indices_examples.R}
+}
 \description{
-Computing Total Mismatch
+Computes the total mismatch (TE) of a migratory population and a drifting/stochastic resource
 }

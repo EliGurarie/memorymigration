@@ -13,10 +13,12 @@ ForagingWithMemory(t, pop, parms, v.memory, dh, dp, dx = dx)
 across the time period.}
 
 \item{parms}{named vector of parameters. These are \code{epsilon} - diffusion coefficient; 
-\code{alpha} - resource following coefficient; \code{beta} - spatial scale of sociality; \code{kappa} - 
-memory following coefficient; \code{lambda} - maximum speed}
+\code{alpha} - forage following coefficient; \code{beta} - strength of sociality; \code{lambda} - 
+spatial sclae of sociality; \code{kappa} - propotion of reference versus working memory}
 
 \item{dh}{a row of a resource matrix (a T x X distribution of the (potentially) dynamic resource.)}
+
+\item{dp}{memory contribution}
 
 \item{dx}{time step}
 

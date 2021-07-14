@@ -1,24 +1,23 @@
-#' Get Pulsed Resource
+#' Get Climate Parameters
 #' 
-#' This function generates a a seasonal resource function with the following properties:
-#' 1. The total amount of resource across space is constant throughout the year.
-#' 2. At the beginning, middle, and end of the year the resource is uniformly distributed. 
-#' 3. At some peak time $t_r < tau/2$, the resource concentrates at a location $x_r < chi/2$
-#'  with a spatial deviation $sigma_x$ and a temporal deviation $sigma_t$ (where $tau$ 
-#'  is the length of the year and $chi$ is the extent of the spatial domain).
-#' 4. The resource peaks exactly symmetrically at time $tau - t_r$ and location 
-#' $chi - x_r$ with the same variance $sigma_r$.
+#' Creates a data frame of resource parameters to create an island or drifigng resource
 #' 
-#' To generate a resource with these properties, we distributing the resource in 
-#' space as a beta distribution, where the two shape and scale parameters vary 
-#' sinusoidally in such a way as to fulfill the criteria above. 
+
 #' 
-#' @param world object (e.g. from getSinePop) containing at minimum tau, X and X.max
-#' @param par vector with four values: t.peak (which is the maximum peak of t), 
+#' @param mu_x0 spatial coordinate of resource peark for summer
+#' @param mu_t0 timing of 
+#' resource peak for the summer
+#' @param beta_x rate of change of peak location
+#' @param beta_t rate of change of peak timing
+#' @param n.years how many years the resource should be created
+#' @param sigma_x spatial scale of resource pulse 
+#' @param sigma_t time duration of resource pulse
+#' @param psi_x standard deviation of peak location  
+#' @param psi_t standard deviation of peak timing
+#' @param n.years.null how many years the resource remains stable i.e. no drift or stochasticity
+#' @return A data frame containing values of t.peak (which is the maximum peak of t), 
 #' t.sd (which is the standard deviation of t), x.peak (which is the maximum peak of x),
-#' and x.sd (which is the standard deviation of x), psi_x (psochasticity in spatial peak), 
-#' psi_t (psochasticity in temporal peak). can be created by getCCpars for multiple years
-#' @return A X x X matrix containing values of the resource distribution
+#' and x.sd (which is the standard deviation of x)
 #' @example examples/WorldsandResources.R
 #' @export
 #' @seealso \link{getResource_island}, \link{getResource_drifting}
@@ -63,9 +62,15 @@ getCCpars <- function(mu_x0, mu_t0, sigma_x, sigma_t,
 #'  a vector with midpoint X-values, the time points for the population as integers 1:tau, the minimum value of population distribution
 #'  (X.min), the maximum value of population distribution (X.max),
 #'  the dx value and the tau value. Can incorporate resource attribute into the world to make a list of 8.
-#' @param par vector with four values: t.peak (which is the maximum peak of t), 
+#'  @param par vector with four values: t.peak (which is the maximum peak of t), 
 #' t.sd (which is the standard deviation of t), x.peak (which is the maximum peak of x),
-#' and x.sd (which is the standard deviation of x).
+#' and x.sd (which is the standard deviation of x). Can be created by getCCpars for multiple years from 
+#' using mu_x0 (spatial coordinate of resource peark for summer), mu_t0 (timing of 
+#' resource peak for the summer), beta_x (rate of change of peak location), beta_t (rate of change of peak timing), 
+#' n.years (how many years the resource should be created), sigma_x (spatial scale of resource pulse), 
+#' sigma_t (time duration of resource pulse), psi_x (standard deviation of peak location),  
+#' psi_t (standard deviation of peak timing), n.years.null (how many years the resource remains stable i.e.
+#' no drift or stochasticity).
 #' @param x.null extent of "dead area" - needed to keep the process from extending too far beyond the limits of the range.
 #' @return A X x X matrix containing values of the resource distribution
 #' @example examples/WorldsandResources.R
@@ -127,7 +132,13 @@ getResource_drifting <- function(world, par, x.null = 0){
 #'  the dx value and the tau value. Can incorporate resource attribute into the world to make a list of 8.
 #' @param par vector with four values: t.peak (which is the maximum peak of t), 
 #' t.sd (which is the standard deviation of t), x.peak (which is the maximum peak of x),
-#' and x.sd (which is the standard deviation of x). can be created by getCCpars for multiple years
+#' and x.sd (which is the standard deviation of x). Can be created by getCCpars for multiple years from 
+#' using mu_x0 (spatial coordinate of resource peark for summer), mu_t0 (timing of 
+#' resource peak for the summer), beta_x (rate of change of peak location), beta_t (rate of change of peak timing), 
+#' n.years (how many years the resource should be created), sigma_x (spatial scale of resource pulse), 
+#' sigma_t (time duration of resource pulse), psi_x (standard deviation of peak location),  
+#' psi_t (standard deviation of peak timing), n.years.null (how many years the resource remains stable i.e.
+#' no drift or stochasticity).
 #' @return A X x X matrix containing values of the resource distribution
 #' @example examples/WorldsandResources.R
 #' @export

@@ -16,6 +16,16 @@ plotManyRuns(
   ...
 )
 }
+\arguments{
+\item{sim}{A simulation run from runManyYears. Use sim$pop for the population.}
+
+\item{world}{world object; list of 7: a population distribution across the time period in a T x X matrix,
+a vector with midpoint X-values, the time points for the population as integers 1:tau, the minimum value of population distribution
+(X.min), the maximum value of population distribution (X.max),
+the dx value and the tau value. Can incorporate resource attribute into the world to make a list of 8.
+Set up by the getSinePop/getOptimal function. 
+@example examples/plotting_examples.R}
+}
 \description{
-Plotting simulation results
+This function plots the migratoriness population distribution over a time period.
 }

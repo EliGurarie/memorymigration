@@ -1,5 +1,30 @@
 
-#' @export
+#' Run Many Years with Stabilization
+#' 
+#' A simulation run to reach a until a quasi-equilibrium
+#' state was achieved, i.e. where the Bhattacharya index of the population distribution
+#' across subsequent years reached a value of 1-1e-5
+#' 
+#' @param World world object; list of 7: a population distribution across the time period in a T x X matrix,
+#'  a vector with midpoint X-values, the time points for the population as integers 1:tau, the minimum value of population distribution
+#'  (X.min), the maximum value of population distribution (X.max),
+#'  the dx value and the tau value. Can incorporate resource attribute into the world to make a list of 8.
+#'  Set up by the getSinePop/getOptimal function. 
+#' @param Parameters named vector of parameters. These are \code{epsilon} - diffusion coefficient; 
+#' \code{alpha} - forage following coefficient; \code{beta} - strength of sociality; \code{lambda} - 
+#' spatial sclae of sociality; \code{kappa} - propotion of reference versus working memory
+#' @param n.years number of years the population migrates 
+#' @param threshold the threshold for the social cohesion between two population 
+#' distributions from two consecutive years. This is a number between 0 and 1. 
+#' @param m0 the inital migration estimates for the population; created by fitMigration function
+#' @param n.years.null number of years the population should stabilize for 
+#' @param resource.null Data frame containing the stable resource peak timing and space
+#'  information of x.peak, t.peak, x.sd and t.sd
+#' @return a list of n.years containing T x X matrices describing the population 
+#' distribution for each year after initial population
+#' @seealso \link{getSinePop},\link{getOptimalPop}, \link{runNextYear}, \link{runManyYears}, \link{fitMigration}
+#' @example examples/creatingClimateChangeWorlds.R
+#'  @export
 
 runManyYearsWithStabilization <- function(world, parameters, 
                                           n.years = dim(world$resource)[1], 
@@ -34,7 +59,7 @@ runManyYearsWithStabilization <- function(world, parameters,
 #' Run Many Years 
 #' 
 #' Based on a migratory population's set up (the World) and the values \code{alpha},
-#'\code{beta0} and \code{beta1}, this function determines the population 
+#'\code{beta}, \code{epsilon}, \code{lambda} and \code{kappa} this function determines the population 
 #'distribution after several years. 
 #'
 #' @param World world object; list of 7: a population distribution across the time period in a T x X matrix,
@@ -43,12 +68,12 @@ runManyYearsWithStabilization <- function(world, parameters,
 #'  the dx value and the tau value. Can incorporate resource attribute into the world to make a list of 8.
 #'  Set up by the getSinePop/getOptimal function. 
 #' @param Parameters named vector of parameters. These are \code{epsilon} - diffusion coefficient; 
-#' \code{alpha} - resource 
-#' following coefficient; \code{beta0} - social cohesion coefficient; \code{beta1} - 
-#' memory coefficient
+#' \code{alpha} - forage following coefficient; \code{beta} - strength of sociality; \code{lambda} - 
+#' spatial sclae of sociality; \code{kappa} - propotion of reference versus working memory
 #' @param n.years number of years the population migrates 
 #' @param threshold the threshold for the social cohesion between two population 
 #' distributions from two consecutive years. This is a number between 0 and 1. 
+#' @param m0 the inital migration estimates for the population; created by fitMigration function
 #' @return a list of n.years containing T x X matrices describing the population 
 #' distribution for each year after initial population
 #' @seealso \link{getSinePop},\link{getOptimalPop}, \link{runNextYear}
@@ -150,16 +175,25 @@ buildOnRuns <- function(M, world, ...){
 #'distribution after several years for many runs of the population and the resource.
 #'
 #'
-#'@param parameters.df list of data frames with values of parameters. These are \code{epsilon} - diffusion coefficient; 
-#' \code{alpha} - resource following coefficient; \code{beta} - spatial scale of sociality; \code{kappa} - 
-#' memory following coefficient; \code{lambda} - maximum speed
+#'@param parameters.df data frame with combination values of parameters. These are \code{epsilon} - diffusion coefficient; 
+#' \code{alpha} - forage following coefficient; \code{beta} - strength of sociality; \code{lambda} - 
+#' spatial sclae of sociality; \code{kappa} - propotion of reference versus working memory
+#' @param resource_param data frame with combination values of parameters for resource. These values will be passed through 
+#' the getCCPars function. These are mu_x0 (spatial coordinate of resource peark for summer), mu_t0 (timing of 
+#' resource peak for the summer), beta_x (rate of change of peak location), beta_t (rate of change of peak timing), 
+#' n.years (how many years the resource should be created), sigma_x (spatial scale of resource pulse), 
+#' sigma_t (time duration of resource pulse), psi_x (standard deviation of peak location),  
+#' psi_t (standard deviation of peak timing), n.years.null (how many years the resource remains stable i.e.
+#' no drift or stochasticity).
 #'@param world world object; list of 7: a population distribution across the time period in a T x X matrix,
 #'  a vector with midpoint X-values, the time points for the population as integers 1:tau, the minimum value of population distribution
 #'  (X.min), the maximum value of population distribution (X.max),
 #'  the dx value and the tau value. Can incorporate resource attribute into the world to make a list of 8.
-#'  Set up by the getSinePop/getOptimal function.  
+#'  Set up by the getSinePop/getOptimal function. 
+#'  @param resource string of either "island" or "drifting" to indicate the type of resource 
 #' @param filename string containing base name of the file to be created 
 #' @param results.dir string containing directory of where results from the R scripts will be stored
+#' @return data frame of indices and information about each simulation run
 #' @export
 #' 
 #' 
@@ -241,7 +275,27 @@ runManyRuns <- function (parameters.df, resource_param, world, resource,
 
 #' Run Many Runs Resource
 #' 
-#' Running on server for optimal population to match resource
+#' Running many runs of simulation that starts with an optimal initial population state which matches the resource
+#'@param parameters.df data frame with combination values of parameters. These are \code{epsilon} - diffusion coefficient; 
+#' \code{alpha} - forage following coefficient; \code{beta} - strength of sociality; \code{lambda} - 
+#' spatial sclae of sociality; \code{kappa} - propotion of reference versus working memory
+#' @param resource_param data frame with combination values of parameters for resource. These values will be passed through 
+#' the getCCPars function. These are mu_x0 (spatial coordinate of resource peark for summer), mu_t0 (timing of 
+#' resource peak for the summer), beta_x (rate of change of peak location), beta_t (rate of change of peak timing), 
+#' n.years (how many years the resource should be created), sigma_x (spatial scale of resource pulse), 
+#' sigma_t (time duration of resource pulse), psi_x (standard deviation of peak location),  
+#' psi_t (standard deviation of peak timing), n.years.null (how many years the resource remains stable i.e.
+#' no drift or stochasticity).
+#'@param world world object; list of 7: a population distribution across the time period in a T x X matrix,
+#'  a vector with midpoint X-values, the time points for the population as integers 1:tau, the minimum value of population distribution
+#'  (X.min), the maximum value of population distribution (X.max),
+#'  the dx value and the tau value. Can incorporate resource attribute into the world to make a list of 8.
+#'  Set up by the getSinePop/getOptimal function. 
+#'  @param resource string of either "island" or "drifting" to indicate the type of resource 
+#' @param filename string containing base name of the file to be created 
+#' @param results.dir string containing directory of where results from the R scripts will be stored
+#' @return data frame of indices and information about each simulation run
+#' 
 #' @export
 #' 
 runManyRuns_res <- function (world_param, parameters.df, resource_param, world, resource, 

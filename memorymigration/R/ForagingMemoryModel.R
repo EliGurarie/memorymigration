@@ -64,10 +64,11 @@ runFWM <- function(world, parameters, pop.lastyear, Year, m.hat = world$m0){
 #' @param pop a T x X matrix describing the population distribution 
 #' across the time period.
 #' @param parms named vector of parameters. These are \code{epsilon} - diffusion coefficient; 
-#' \code{alpha} - resource following coefficient; \code{beta} - spatial scale of sociality; \code{kappa} - 
-#' memory following coefficient; \code{lambda} - maximum speed
+#' \code{alpha} - forage following coefficient; \code{beta} - strength of sociality; \code{lambda} - 
+#' spatial sclae of sociality; \code{kappa} - propotion of reference versus working memory
 #' @param memory the memory score
 #' @param dh a row of a resource matrix (a T x X distribution of the (potentially) dynamic resource.)
+#' @param dp memory contribution
 #' @param dx time step
 #' @return Model setup; output of \code{\link{tran.1D}} function. 
 #' @export

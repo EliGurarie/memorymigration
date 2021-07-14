@@ -1,16 +1,31 @@
-world.R1 <- getOptimalPop(tau = 100, t.peak = 25, 
-                          x1 = 40, x2 = -40, x.sd = 5, t.sd = 12)
-world.R1$resource <- getResource_island(world.R1, 
-                                        c(t.peak = 25, t.sd = 12, x.peak = 35, x.sd = 5))
+world <- getOptimalPop(tau=100, X.min = -100, X.max = 100, dx=1, 
+                       x1 = 30, x2 = -30, t.peak=25, 
+                       x.sd=12, t.sd=6)
+world$m0 <- fitMigration(t = world$time, x = getMem(world$pop, world))
+
+par0 <- getCCpars(mu_x0 = 30, 
+                  mu_t0 = 25,
+                  beta_x = 0,
+                  beta_t = 0,
+                  n.years = 30,
+                  sigma_x = 12,
+                  sigma_t = 6,
+                  psi_x = 0, 
+                  psi_t = 0,
+                  n.years.null = 0) 
+
+world$resource <- aaply(par0, 1, function(p) getResource_island(world, p))
+attr(world$resource, "par") <- par0[nrow(par0),]
 
 #run simulation for 12 years 
 
-parameters <- c(epsilon = 5, alpha = 100, beta=50, kappa = 1, lambda = 20)
+parameters <- c(epsilon = 4, alpha = 100, beta=400, kappa = 0, lambda = 80)
 
-M <- runManyYears(world.R1, parameters = parameters, n.years = 12, threshold = 0.9999)
+sim <- runManyYears(world, parameters = parameters, n.years = 12, threshold = 0.9999)
 
-#simulation runs for 3 years since that is when threshold is hit so only 3 years are plotted
-plotManyRuns(M, world.R1)
-plotYearList(M, world.R1, tau = tau)
-plotMemories(M, world.R1)
+
+plotManyRuns(sim$pop, world)
+plotYearList(sim$pop, world, tau = tau)
+plotMemories(sim$pop, world)
+
 

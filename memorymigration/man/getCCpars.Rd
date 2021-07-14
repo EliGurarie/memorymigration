@@ -2,7 +2,7 @@
 % Please edit documentation in R/getPulsedResource.R
 \name{getCCpars}
 \alias{getCCpars}
-\title{Get Pulsed Resource}
+\title{Get Climate Parameters}
 \usage{
 getCCpars(
   mu_x0,
@@ -18,34 +18,38 @@ getCCpars(
 )
 }
 \arguments{
-\item{world}{object (e.g. from getSinePop) containing at minimum tau, X and X.max}
+\item{mu_x0}{spatial coordinate of resource peark for summer}
 
-\item{par}{vector with four values: t.peak (which is the maximum peak of t), 
-t.sd (which is the standard deviation of t), x.peak (which is the maximum peak of x),
-and x.sd (which is the standard deviation of x), psi_x (psochasticity in spatial peak), 
-psi_t (psochasticity in temporal peak). can be created by getCCpars for multiple years}
+\item{mu_t0}{timing of 
+resource peak for the summer}
+
+\item{sigma_x}{spatial scale of resource pulse}
+
+\item{sigma_t}{time duration of resource pulse}
+
+\item{n.years}{how many years the resource should be created}
+
+\item{beta_x}{rate of change of peak location}
+
+\item{beta_t}{rate of change of peak timing}
+
+\item{psi_x}{standard deviation of peak location}
+
+\item{psi_t}{standard deviation of peak timing}
+
+\item{n.years.null}{how many years the resource remains stable i.e. no drift or stochasticity}
 }
 \value{
-A X x X matrix containing values of the resource distribution
+A data frame containing values of t.peak (which is the maximum peak of t), 
+t.sd (which is the standard deviation of t), x.peak (which is the maximum peak of x),
+and x.sd (which is the standard deviation of x)
 }
 \description{
-This function generates a a seasonal resource function with the following properties:
-1. The total amount of resource across space is constant throughout the year.
-2. At the beginning, middle, and end of the year the resource is uniformly distributed. 
-3. At some peak time $t_r < tau/2$, the resource concentrates at a location $x_r < chi/2$
- with a spatial deviation $sigma_x$ and a temporal deviation $sigma_t$ (where $tau$ 
- is the length of the year and $chi$ is the extent of the spatial domain).
-4. The resource peaks exactly symmetrically at time $tau - t_r$ and location 
-$chi - x_r$ with the same variance $sigma_r$.
-}
-\details{
-To generate a resource with these properties, we distributing the resource in 
-space as a beta distribution, where the two shape and scale parameters vary 
-sinusoidally in such a way as to fulfill the criteria above.
+Creates a data frame of resource parameters to create an island or drifigng resource
 }
 \examples{
 ## Worlds
-  world_nonmigratory <- getSinePop(tau = 100, peak.max = 0, peak.min = 0, sd = 10)
+  world_nonmigratory <- getSinePop(tau = 100, peak.max = 1, peak.min = -1, sd = 10)
   world_sinusoidal <- getSinePop(tau = 100, peak.max = 40, peak.min = -40, sd = 10)
   world_optimal <- getOptimalPop(tau = 100, t.peak = 25, 
                                  x1 = 40, x2 = -40, x.sd = 5, t.sd = 12)
@@ -62,7 +66,7 @@ sinusoidally in such a way as to fulfill the criteria above.
 
   resource_drifting <- getResource_drifting(world_sinusoidal, 
                                          par = c(t.peak = 25, t.sd = 12, 
-                                                 x.peak = 40, x.sd = 5))
+                                                 x.peak = 30, x.sd = 6))
   
   with(world_sinusoidal, image.plot(time, X, resource_drifting))
   
@@ -70,22 +74,23 @@ sinusoidally in such a way as to fulfill the criteria above.
 ## Independent (Island) resource
   
   resource_island <- getResource_island(world_sinusoidal, 
-                                            par = c(t.peak = 25, t.sd = 12, 
-                                                    x.peak = 80, x.sd = 5))
+                                            par = c(t.peak = 25, t.sd = 6, 
+                                                    x.peak = 30, x.sd = 12))
   
   with(world_sinusoidal, image.plot(time, X, resource_island))
   
   
 ## Climate Change Island Resource
-  par0 <- getCCpars(mu_x0 = 80, 
+  par0 <- getCCpars(mu_x0 = 30, 
                     mu_t0 = 25,
                     beta_x = -1,
                     beta_t = 0,
                     n.years = 5,
-                    sigma_x = 5,
-                    sigma_t = 12,
+                    sigma_x = 12,
+                    sigma_t = 6,
                     psi_x = 0, 
-                    psi_t = 0)
+                    psi_t = 0,
+                    n.years.null = 0)
   world$resource <- aaply(par0, 1, function(p) getResource_island(world, p))
 
   

@@ -15,19 +15,31 @@ runManyRuns(
 )
 }
 \arguments{
-\item{parameters.df}{list of data frames with values of parameters. These are \code{epsilon} - diffusion coefficient; 
-\code{alpha} - resource following coefficient; \code{beta} - spatial scale of sociality; \code{kappa} - 
-memory following coefficient; \code{lambda} - maximum speed}
+\item{parameters.df}{data frame with combination values of parameters. These are \code{epsilon} - diffusion coefficient; 
+\code{alpha} - forage following coefficient; \code{beta} - strength of sociality; \code{lambda} - 
+spatial sclae of sociality; \code{kappa} - propotion of reference versus working memory}
+
+\item{resource_param}{data frame with combination values of parameters for resource. These values will be passed through 
+the getCCPars function. These are mu_x0 (spatial coordinate of resource peark for summer), mu_t0 (timing of 
+resource peak for the summer), beta_x (rate of change of peak location), beta_t (rate of change of peak timing), 
+n.years (how many years the resource should be created), sigma_x (spatial scale of resource pulse), 
+sigma_t (time duration of resource pulse), psi_x (standard deviation of peak location),  
+psi_t (standard deviation of peak timing), n.years.null (how many years the resource remains stable i.e.
+no drift or stochasticity).}
 
 \item{world}{world object; list of 7: a population distribution across the time period in a T x X matrix,
 a vector with midpoint X-values, the time points for the population as integers 1:tau, the minimum value of population distribution
 (X.min), the maximum value of population distribution (X.max),
 the dx value and the tau value. Can incorporate resource attribute into the world to make a list of 8.
-Set up by the getSinePop/getOptimal function.}
+Set up by the getSinePop/getOptimal function. 
+@param resource string of either "island" or "drifting" to indicate the type of resource}
 
 \item{filename}{string containing base name of the file to be created}
 
 \item{results.dir}{string containing directory of where results from the R scripts will be stored}
+}
+\value{
+data frame of indices and information about each simulation run
 }
 \description{
 Based on a migratory population's set up (the World) and the values \code{alpha},

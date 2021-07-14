@@ -6,6 +6,23 @@
 \usage{
 computeAnnualEfficiency(sim, resource, world)
 }
+\arguments{
+\item{sim}{A simulation run from runManyYears.}
+
+\item{resource}{The resource in an given cycle to compare to pop. Resource must have at least as many years as sim.}
+
+\item{world}{world object; list of 7: a population distribution across the time period in a T x X matrix,
+a vector with midpoint X-values, the time points for the population as integers 1:tau, the minimum value of population distribution
+(X.min), the maximum value of population distribution (X.max),
+the dx value and the tau value. Can incorporate resource attribute into the world to make a list of 8.
+Set up by the getSinePop/getOptimal function.}
+}
+\value{
+a data frame with the foraging efficiecy (FE) index for each year of the simulation
+}
 \description{
-Compute Annual Efficiency
+Computes the foraging efficiency of a simulation for each population year with its respective resource.
+}
+\seealso{
+\link{computeEfficiency}
 }
