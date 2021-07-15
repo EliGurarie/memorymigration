@@ -750,9 +750,6 @@
   publisher = {Wiley},
 }
 
-@Article{,
-}
-
 @Article{Bauer2020,
   author    = {Silke Bauer and John M. McNamara and Zoltan Barta},
   journal   = {Proceedings of the Royal Society B: Biological Sciences},
@@ -776,6 +773,7 @@
   number    = {4},
   volume    = {102},
   doi       = {10.1002/ecy.3293},
+  file      = {:Xu2021.pdf:PDF},
   publisher = {Wiley},
 }
 
