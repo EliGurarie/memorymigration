@@ -663,7 +663,7 @@
   publisher = {Proceedings of the National Academy of Sciences},
 }
 
-@Article{Blackburn 2013,
+@Article{Blackburn2013,
   author    = {Jason K. Blackburn and Douglas G. Goodin},
   journal   = {Journal of Wildlife Diseases},
   title     = {Differentiation of Springtime Vegetation Indices Associated with Summer Anthrax Epizootics in West Texas, {USA}, Deer},
@@ -732,6 +732,21 @@
   volume    = {26},
   doi       = {10.1111/gcb.15322},
   file      = {:Park2020_AcceleratedRateVegetation.pdf:PDF},
+  publisher = {Wiley},
+}
+
+@Article{Merkle2019,
+  author    = {Jerod A. Merkle and Hall Sawyer and Kevin L. Monteith and Samantha P. H. Dwinnell and Gary L. Fralick and Matthew J. Kauffman},
+  journal   = {Ecology Letters},
+  title     = {Spatial memory shapes migration and its benefits: evidence from a large herbivore},
+  year      = {2019},
+  month     = {aug},
+  number    = {11},
+  pages     = {1797--1805},
+  volume    = {22},
+  doi       = {10.1111/ele.13362},
+  editor    = {Jean-Michel Gaillard},
+  file      = {:Merkle2019:PDF},
   publisher = {Wiley},
 }
 
