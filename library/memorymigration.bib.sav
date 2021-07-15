@@ -690,7 +690,10 @@
   publisher = {The Royal Society},
 }
 
-@Article{Renner2018,
+@Article{,
+}
+
+@Article{Renner and Zohner 2018,
   author    = {Susanne S. Renner and Constantin M. Zohner},
   journal   = {Annual Review of Ecology, Evolution, and Systematics},
   title     = {Climate Change and Phenological Mismatch in Trophic Interactions Among Plants, Insects, and Vertebrates},
@@ -700,10 +703,11 @@
   pages     = {165--182},
   volume    = {49},
   doi       = {10.1146/annurev-ecolsys-110617-062535},
+  file      = {:/Users/sriyapotluri/Downloads/Renner2018.pdf:PDF;:Renner-Zohner2018.pdf:PDF},
   publisher = {Annual Reviews},
 }
 
-@Article{Santangeli2016,
+@Article{Santangeli 2016,
   author    = {Andrea Santangeli and Ari Rajasärkkä and Aleksi Lehikoinen},
   journal   = {Global Change Biology},
   title     = {Effects of high latitude protected areas on bird communities under rapid climate change},
@@ -717,8 +721,8 @@
   publisher = {Wiley},
 }
 
-@Article{Park2020,
-  author    = {Hoonyoung Park and Sujong Jeong and Josep Peñuelas},
+@Article{Park 2020,
+  author    = {Hoonyoung Park and Sujong Jeong and Josep Pe{\~{n}}uelas},
   journal   = {Global Change Biology},
   title     = {Accelerated rate of vegetation green-up related to warming at northern high latitudes},
   year      = {2020},
@@ -731,17 +735,46 @@
   publisher = {Wiley},
 }
 
-@Article{Post2007,
-  author    = {Eric Post and Mads C Forchhammer},
-  journal   = {Philosophical Transactions of the Royal Society B: Biological Sciences},
-  title     = {Climate change reduces reproductive success of an Arctic herbivore through trophic mismatch},
-  year      = {2007},
-  month     = {nov},
-  number    = {1501},
-  pages     = {2367--2373},
-  volume    = {363},
-  doi       = {10.1098/rstb.2007.2207},
+@Article{Merkle2019,
+  author    = {Jerod A. Merkle and Hall Sawyer and Kevin L. Monteith and Samantha P. H. Dwinnell and Gary L. Fralick and Matthew J. Kauffman},
+  journal   = {Ecology Letters},
+  title     = {Spatial memory shapes migration and its benefits: evidence from a large herbivore},
+  year      = {2019},
+  month     = {aug},
+  number    = {11},
+  pages     = {1797--1805},
+  volume    = {22},
+  doi       = {10.1111/ele.13362},
+  editor    = {Jean-Michel Gaillard},
+  file      = {:Merkle2019:PDF},
+  publisher = {Wiley},
+}
+
+@Article{Bauer2020,
+  author    = {Silke Bauer and John M. McNamara and Zoltan Barta},
+  journal   = {Proceedings of the Royal Society B: Biological Sciences},
+  title     = {Environmental variability, reliability of information and the timing of migration},
+  year      = {2020},
+  month     = {may},
+  number    = {1926},
+  pages     = {20200622},
+  volume    = {287},
+  doi       = {10.1098/rspb.2020.0622},
+  file      = {:Bauer2020:PDF},
   publisher = {The Royal Society},
+}
+
+@Article{Xu2021,
+  author    = {Wenjing Xu and Kristin Barker and Avery Shawler and Amy Van Scoyoc and Justine A. Smith and Thomas Mueller and Hall Sawyer and Chelsea Andreozzi and Owen R. Bidder and Harshad Karandikar and Steffen Mumme and Elizabeth Templin and Arthur D. Middleton},
+  journal   = {Ecology},
+  title     = {The plasticity of ungulate migration in a changing world},
+  year      = {2021},
+  month     = {mar},
+  number    = {4},
+  volume    = {102},
+  doi       = {10.1002/ecy.3293},
+  file      = {:Xu2021.pdf:PDF},
+  publisher = {Wiley},
 }
 
 @Comment{jabref-meta: databaseType:bibtex;}
