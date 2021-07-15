@@ -676,7 +676,7 @@
   publisher = {Wildlife Disease Association},
 }
 
-@Article{Merkle 2016,
+@Article{Merkle2016,
   author    = {Jerod A. Merkle and Kevin L. Monteith and Ellen O. Aikens and Matthew M. Hayes and Kent R. Hersey and Arthur D. Middleton and Brendan A. Oates and Hall Sawyer and Brandon M. Scurlock and Matthew J. Kauffman},
   journal   = {Proceedings of the Royal Society B: Biological Sciences},
   title     = {Large herbivores surf waves of green-up during spring},
@@ -703,7 +703,7 @@
   pages     = {165--182},
   volume    = {49},
   doi       = {10.1146/annurev-ecolsys-110617-062535},
-  file      = {:/Users/sriyapotluri/Downloads/Renner2018.pdf:PDF},
+  file      = {:/Users/sriyapotluri/Downloads/Renner2018.pdf:PDF;:Renner-Zohner2018.pdf:PDF},
   publisher = {Annual Reviews},
 }
 
@@ -718,6 +718,20 @@
   volume    = {23},
   doi       = {10.1111/gcb.13518},
   file      = {:Santangeli2017_HighLattitude.pdf:PDF},
+  publisher = {Wiley},
+}
+
+@Article{Park 2020,
+  author    = {Hoonyoung Park and Sujong Jeong and Josep Pe{\~{n}}uelas},
+  journal   = {Global Change Biology},
+  title     = {Accelerated rate of vegetation green-up related to warming at northern high latitudes},
+  year      = {2020},
+  month     = {sep},
+  number    = {11},
+  pages     = {6190--6202},
+  volume    = {26},
+  doi       = {10.1111/gcb.15322},
+  file      = {:Park2020_AcceleratedRateVegetation.pdf:PDF},
   publisher = {Wiley},
 }
 
