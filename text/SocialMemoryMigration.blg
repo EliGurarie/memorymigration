@@ -1,57 +1,60 @@
-This is BibTeX, Version 0.99d
+This is BibTeX, Version 0.99d (TeX Live 2019/Debian)
 Capacity: max_strings=200000, hash_size=200000, hash_prime=170003
 The top-level auxiliary file: SocialMemoryMigration.aux
-Reallocating 'name_of_file' (item size: 1) to 8 items.
 The style file: ecology.bst
-Reallocating 'name_of_file' (item size: 1) to 31 items.
 Database file #1: ../library/memorymigration.bib
-Repeated entry---line 538 of file ../library/memorymigration.bib
+Repeated entry---line 551 of file ../library/memorymigration.bib
  : @article{Gurarie2017
  :                     ,
 I'm skipping whatever remains of this entry
-Repeated entry---line 614 of file ../library/memorymigration.bib
+Repeated entry---line 638 of file ../library/memorymigration.bib
  : @article{Wilcove2008
  :                     ,
 I'm skipping whatever remains of this entry
-You've used 40 entries,
+Repeated entry---line 701 of file ../library/memorymigration.bib
+ : @article{Fagan2019
+ :                   ,
+I'm skipping whatever remains of this entry
+Warning--I didn't find a database entry for "Fagan2019b"
+You've used 42 entries,
             2788 wiz_defined-function locations,
-            853 strings with 14524 characters,
-and the built_in function-call counts, 32375 in all, are:
-= -- 2333
-> -- 2509
-< -- 18
-+ -- 841
-- -- 789
-* -- 2646
-:= -- 5198
-add.period$ -- 160
-call.type$ -- 40
-change.case$ -- 421
-chr.to.int$ -- 40
-cite$ -- 40
-duplicate$ -- 2148
-empty$ -- 1794
-format.name$ -- 913
-if$ -- 6191
+            868 strings with 14851 characters,
+and the built_in function-call counts, 33322 in all, are:
+= -- 2422
+> -- 2531
+< -- 20
++ -- 849
+- -- 795
+* -- 2697
+:= -- 5357
+add.period$ -- 168
+call.type$ -- 42
+change.case$ -- 431
+chr.to.int$ -- 42
+cite$ -- 42
+duplicate$ -- 2220
+empty$ -- 1871
+format.name$ -- 921
+if$ -- 6379
 int.to.chr$ -- 1
 int.to.str$ -- 1
-missing$ -- 499
-newline$ -- 247
-num.names$ -- 160
-pop$ -- 951
+missing$ -- 513
+newline$ -- 259
+num.names$ -- 168
+pop$ -- 973
 preamble$ -- 1
-purify$ -- 421
+purify$ -- 431
 quote$ -- 0
-skip$ -- 510
+skip$ -- 536
 stack$ -- 0
-substring$ -- 1314
-swap$ -- 1091
+substring$ -- 1377
+swap$ -- 1121
 text.length$ -- 0
 text.prefix$ -- 0
 top$ -- 0
-type$ -- 351
+type$ -- 369
 warning$ -- 0
-while$ -- 184
+while$ -- 194
 width$ -- 0
-write$ -- 563
-(There were 2 error messages)
+write$ -- 591
+(There were 3 error messages)

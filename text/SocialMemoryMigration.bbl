@@ -1,4 +1,4 @@
-\begin{thebibliography}{40}
+\begin{thebibliography}{42}
 \expandafter\ifx\csname natexlab\endcsname\relax\def\natexlab#1{#1}\fi
 \expandafter\ifx\csname url\endcsname\relax
   \def\url#1{{\tt #1}}\fi
@@ -127,6 +127,13 @@ Fryxell, J.~M., J.~Greever, and A.~Sinclair.
 \newblock Why are migratory ungulates so abundant?
 \newblock The American Naturalist {\bf 131}:781--798.
 
+\bibitem[{Grünbaum(1994)}]{Gruenbaum1994}
+Grünbaum, D.
+\newblock 1994.
+\newblock Translating stochastic density-dependent individual behavior with
+  sensory constraints to an Eulerian model of animal swarming.
+\newblock Journal of Mathematical Biology {\bf 33}:139--161.
+
 \bibitem[{Gurarie et~al.(2009)Gurarie, Anderson, and Zabel}]{Gurarie2009}
 Gurarie, E., J.~J. Anderson, and R.~W. Zabel.
 \newblock 2009.
@@ -252,6 +259,13 @@ Mogilner, A., and L.~Edelstein-Keshet.
 \newblock 1999.
 \newblock A non-local model for a swarm.
 \newblock Journal of Mathematical Biology {\bf 38}:534--570.
+
+\bibitem[{Okubo(1986)}]{Okubo1986}
+Okubo, A.
+\newblock 1986.
+\newblock Dynamical aspects of animal grouping: Swarms, schools, flocks, and
+  herds.
+\newblock Advances in Biophysics {\bf 22}:1--94.
 
 \bibitem[{Okubo and Levin(2001)}]{Okubo2001}
 Okubo, A., and S.~Levin.

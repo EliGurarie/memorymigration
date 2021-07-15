@@ -25,7 +25,7 @@
 }
 
 @Article{Fagan2019,
-  author       = {WF Fagan and T Hoffman and D Dahiya and \textbf{E Gurarie} and RS Cantrell and C Cosner},
+  author       = {WF Fagan and T Hoffman and D Dahiya and E Gurarie and RS Cantrell and C Cosner},
   journal      = {Theoretical Ecology},
   title        = {Improved foraging by switching between diffusion and advection: benefits from movement that depends on spatial context},
   year         = {2019},
@@ -39,7 +39,7 @@
 }
 
 @Article{Fagan2017,
-  author       = {WF Fagan and \textbf{E Gurarie} and S Bewick and A Howard and RS Cantrell and C Cosner},
+  author       = {WF Fagan and E Gurarie and S Bewick and A Howard and RS Cantrell and C Cosner},
   journal      = {The American Naturalist},
   title        = {Perceptual ranges, information gathering, and foraging success in dynamic landscapes},
   year         = {2017},
@@ -302,17 +302,6 @@
   pages     = {e02971},
   volume    = {10},
   publisher = {Wiley Online library},
-}
-
-@Article{Gurarie2017,
-  author    = {Gurarie, Eliezer and Cagnacci, Francesca and Peters, Wibke and Fleming, Christen H and Calabrese, Justin M and Mueller, Thomas and Fagan, William F},
-  journal   = {Journal of Animal Ecology},
-  title     = {A framework for modelling range shifts and migrations: asking when, whither, whether and will it return},
-  year      = {2017},
-  number    = {4},
-  pages     = {943--959},
-  volume    = {86},
-  publisher = {Wiley Online Library},
 }
 
 @Manual{minpack.lm,
@@ -647,6 +636,44 @@
   volume    = {5},
   doi       = {10.1007/s12080-011-0124-2},
   publisher = {Springer Science and Business Media {LLC}},
+}
+
+@Article{Gruenbaum1994,
+  author    = {Daniel Grünbaum},
+  journal   = {Journal of Mathematical Biology},
+  title     = {Translating stochastic density-dependent individual behavior with sensory constraints to an Eulerian model of animal swarming},
+  year      = {1994},
+  month     = {dec},
+  number    = {2},
+  pages     = {139--161},
+  volume    = {33},
+  doi       = {10.1007/BF00160177},
+  file      = {:Grünbaum1994_Article_TranslatingStochasticDensity-d.pdf:PDF},
+  publisher = {Springer Science and Business Media {LLC}},
+}
+
+@Article{Okubo1986,
+  author    = {A Okubo},
+  journal   = {Advances in Biophysics},
+  title     = {Dynamical aspects of animal grouping: Swarms, schools, flocks, and herds},
+  year      = {1986},
+  pages     = {1--94},
+  volume    = {22},
+  doi       = {10.1016/0065-227X(86)90003-1},
+  publisher = {Elsevier {BV}},
+}
+
+@Article{Fagan2019b,
+  author    = {William F. Fagan},
+  journal   = {Proceedings of the National Academy of Sciences},
+  title     = {Migrating whales depend on memory to exploit reliable resources},
+  year      = {2019},
+  month     = {feb},
+  number    = {12},
+  pages     = {5217--5219},
+  volume    = {116},
+  doi       = {10.1073/pnas.1901803116},
+  publisher = {Proceedings of the National Academy of Sciences},
 }
 
 @Comment{jabref-meta: databaseType:bibtex;}

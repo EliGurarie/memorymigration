@@ -1,0 +1,47 @@
+This is BibTeX, Version 0.99d (TeX Live 2019/Debian)
+Capacity: max_strings=200000, hash_size=200000, hash_prime=170003
+The top-level auxiliary file: SocialMemoryMigration_FEE.aux
+The style file: frontiersinSCNS_ENG_HUMS.bst
+Database file #1: ../library/memorymigration.bib
+Reallocated wiz_functions (elt_size=4) to 6000 items from 3000.
+You've used 43 entries,
+            3029 wiz_defined-function locations,
+            960 strings with 16313 characters,
+and the built_in function-call counts, 30140 in all, are:
+= -- 2566
+> -- 1629
+< -- 21
++ -- 808
+- -- 442
+* -- 2196
+:= -- 4493
+add.period$ -- 104
+call.type$ -- 43
+change.case$ -- 359
+chr.to.int$ -- 44
+cite$ -- 86
+duplicate$ -- 1885
+empty$ -- 2051
+format.name$ -- 568
+if$ -- 6085
+int.to.chr$ -- 1
+int.to.str$ -- 1
+missing$ -- 447
+newline$ -- 290
+num.names$ -- 172
+pop$ -- 840
+preamble$ -- 1
+purify$ -- 319
+quote$ -- 0
+skip$ -- 1106
+stack$ -- 0
+substring$ -- 1421
+swap$ -- 935
+text.length$ -- 0
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 378
+warning$ -- 0
+while$ -- 199
+width$ -- 0
+write$ -- 650
