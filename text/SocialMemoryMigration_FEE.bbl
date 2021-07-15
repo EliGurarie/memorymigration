@@ -1,4 +1,4 @@
-\begin{thebibliography}{43}
+\begin{thebibliography}{46}
 \providecommand{\natexlab}[1]{#1}
 \expandafter\ifx\csname urlstyle\endcsname\relax
   \providecommand{\doi}[1]{doi:\discretionary{}{}{}#1}\else
@@ -256,6 +256,16 @@ Lin, H.-Y., Fagan, W.~F., and Jabin, P.-E. (2021).
 \newblock \doi{10.1016/j.jtbi.2020.110486}
 \bibAnnoteFile{Lin2021}
 
+\bibitem[{Merkle et~al.(2016)Merkle, Monteith, Aikens, Hayes, Hersey, Middleton
+  et~al.}]{Merkle2016}
+Merkle, J.~A., Monteith, K.~L., Aikens, E.~O., Hayes, M.~M., Hersey, K.~R.,
+  Middleton, A.~D., et~al. (2016).
+\newblock Large herbivores surf waves of green-up during spring.
+\newblock \emph{Proceedings of the Royal Society B: Biological Sciences} 283,
+  20160456.
+\newblock \doi{10.1098/rspb.2016.0456}
+\bibAnnoteFile{Merkle2016}
+
 \bibitem[{Mogilner and Edelstein-Keshet(1999)}]{Mogilner1999}
 Mogilner, A. and Edelstein-Keshet, L. (1999).
 \newblock A non-local model for a swarm.
@@ -276,6 +286,23 @@ Okubo, A. and Levin, S. (2001).
 \newblock \emph{{Diffusion and Ecological Problems: Modern Perspectives}} (New
   York: Springer Verlag)
 \bibAnnoteFile{Okubo2001}
+
+\bibitem[{Park et~al.(2020)Park, Jeong, and Peñuelas}]{Park2020}
+Park, H., Jeong, S., and Peñuelas, J. (2020).
+\newblock Accelerated rate of vegetation green-up related to warming at
+  northern high latitudes.
+\newblock \emph{Global Change Biology} 26, 6190--6202.
+\newblock \doi{10.1111/gcb.15322}
+\bibAnnoteFile{Park2020}
+
+\bibitem[{Post and Forchhammer(2007)}]{Post2007}
+Post, E. and Forchhammer, M.~C. (2007).
+\newblock Climate change reduces reproductive success of an arctic herbivore
+  through trophic mismatch.
+\newblock \emph{Philosophical Transactions of the Royal Society B: Biological
+  Sciences} 363, 2367--2373.
+\newblock \doi{10.1098/rstb.2007.2207}
+\bibAnnoteFile{Post2007}
 
 \bibitem[{Potts and Schlägel(2020)}]{Potts2020}
 Potts, J.~R. and Schlägel, U.~E. (2020).
