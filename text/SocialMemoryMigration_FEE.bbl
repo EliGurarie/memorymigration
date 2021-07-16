@@ -1,4 +1,4 @@
-\begin{thebibliography}{43}
+\begin{thebibliography}{50}
 \providecommand{\natexlab}[1]{#1}
 \expandafter\ifx\csname urlstyle\endcsname\relax
   \providecommand{\doi}[1]{doi:\discretionary{}{}{}#1}\else
@@ -36,6 +36,15 @@ Avgar, T., Street, G., and Fryxell, J.~M. (2014).
 \newblock \emph{Canadian Journal of Zoology} 92, 481--490.
 \newblock \doi{10.1139/cjz-2013-0076}
 \bibAnnoteFile{Avgar2014}
+
+\bibitem[{Bauer et~al.(2020)Bauer, McNamara, and Barta}]{Bauer2020}
+Bauer, S., McNamara, J.~M., and Barta, Z. (2020).
+\newblock Environmental variability, reliability of information and the timing
+  of migration.
+\newblock \emph{Proceedings of the Royal Society B: Biological Sciences} 287,
+  20200622.
+\newblock \doi{10.1098/rspb.2020.0622}
+\bibAnnoteFile{Bauer2020}
 
 \bibitem[{Berdahl et~al.(2018)Berdahl, Kao, Flack, Westley, Codling, Couzin
   et~al.}]{Berdahl2018}
@@ -144,6 +153,16 @@ Fagan, W.~F. (2019).
   5217--5219.
 \newblock \doi{10.1073/pnas.1901803116}
 \bibAnnoteFile{Fagan2019b}
+
+\bibitem[{Fagan et~al.(2011)Fagan, Cantrell, Cosner, Mueller, and
+  Noble}]{Fagan2011}
+Fagan, W.~F., Cantrell, R.~S., Cosner, C., Mueller, T., and Noble, A.~E.
+  (2011).
+\newblock Leadership, social learning, and the maintenance (or collapse) of
+  migratory populations.
+\newblock \emph{Theoretical Ecology} 5, 253--264.
+\newblock \doi{10.1007/s12080-011-0124-2}
+\bibAnnoteFile{Fagan2011}
 
 \bibitem[{Fryxell et~al.(1988)Fryxell, Greever, and Sinclair}]{Fryxell1988}
 Fryxell, J.~M., Greever, J., and Sinclair, A. (1988).
@@ -256,6 +275,26 @@ Lin, H.-Y., Fagan, W.~F., and Jabin, P.-E. (2021).
 \newblock \doi{10.1016/j.jtbi.2020.110486}
 \bibAnnoteFile{Lin2021}
 
+\bibitem[{Merkle et~al.(2016)Merkle, Monteith, Aikens, Hayes, Hersey, Middleton
+  et~al.}]{Merkle2016}
+Merkle, J.~A., Monteith, K.~L., Aikens, E.~O., Hayes, M.~M., Hersey, K.~R.,
+  Middleton, A.~D., et~al. (2016).
+\newblock Large herbivores surf waves of green-up during spring.
+\newblock \emph{Proceedings of the Royal Society B: Biological Sciences} 283,
+  20160456.
+\newblock \doi{10.1098/rspb.2016.0456}
+\bibAnnoteFile{Merkle2016}
+
+\bibitem[{Merkle et~al.(2019)Merkle, Sawyer, Monteith, Dwinnell, Fralick, and
+  Kauffman}]{Merkle2019}
+Merkle, J.~A., Sawyer, H., Monteith, K.~L., Dwinnell, S. P.~H., Fralick, G.~L.,
+  and Kauffman, M.~J. (2019).
+\newblock Spatial memory shapes migration and its benefits: evidence from a
+  large herbivore.
+\newblock \emph{Ecology Letters} 22, 1797--1805.
+\newblock \doi{10.1111/ele.13362}
+\bibAnnoteFile{Merkle2019}
+
 \bibitem[{Mogilner and Edelstein-Keshet(1999)}]{Mogilner1999}
 Mogilner, A. and Edelstein-Keshet, L. (1999).
 \newblock A non-local model for a swarm.
@@ -277,6 +316,14 @@ Okubo, A. and Levin, S. (2001).
   York: Springer Verlag)
 \bibAnnoteFile{Okubo2001}
 
+\bibitem[{Park et~al.(2020)Park, Jeong, and Pe{\~{n}}uelas}]{Park2020}
+Park, H., Jeong, S., and Pe{\~{n}}uelas, J. (2020).
+\newblock Accelerated rate of vegetation green-up related to warming at
+  northern high latitudes.
+\newblock \emph{Global Change Biology} 26, 6190--6202.
+\newblock \doi{10.1111/gcb.15322}
+\bibAnnoteFile{Park2020}
+
 \bibitem[{Potts and Schlägel(2020)}]{Potts2020}
 Potts, J.~R. and Schlägel, U.~E. (2020).
 \newblock Parametrizing diffusion-taxis equations from animal movement
@@ -284,6 +331,15 @@ Potts, J.~R. and Schlägel, U.~E. (2020).
 \newblock \emph{Methods in Ecology and Evolution} 11, 1092--1105.
 \newblock \doi{10.1111/2041-210X.13406}
 \bibAnnoteFile{Potts2020}
+
+\bibitem[{Renner and Zohner(2018)}]{Renner2018}
+Renner, S.~S. and Zohner, C.~M. (2018).
+\newblock Climate change and phenological mismatch in trophic interactions
+  among plants, insects, and vertebrates.
+\newblock \emph{Annual Review of Ecology, Evolution, and Systematics} 49,
+  165--182.
+\newblock \doi{10.1146/annurev-ecolsys-110617-062535}
+\bibAnnoteFile{Renner2018}
 
 \bibitem[{Robinson et~al.(2009)Robinson, Crick, Learmonth, Maclean, Thomas,
   Bairlein et~al.}]{Robinson2009}
@@ -349,5 +405,14 @@ Wilcove, D.~S. and Wikelski, M. (2008).
 \newblock \emph{{PLoS} Biology} 6, e188.
 \newblock \doi{10.1371/journal.pbio.0060188}
 \bibAnnoteFile{Wilcove2008}
+
+\bibitem[{Xu et~al.(2021)Xu, Barker, Shawler, Scoyoc, Smith, Mueller
+  et~al.}]{Xu2021}
+Xu, W., Barker, K., Shawler, A., Scoyoc, A.~V., Smith, J.~A., Mueller, T.,
+  et~al. (2021).
+\newblock The plasticity of ungulate migration in a changing world.
+\newblock \emph{Ecology} 102.
+\newblock \doi{10.1002/ecy.3293}
+\bibAnnoteFile{Xu2021}
 
 \end{thebibliography}
