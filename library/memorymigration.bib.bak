@@ -690,7 +690,7 @@
   publisher = {The Royal Society},
 }
 
-@Article{Renner and Zohner 2018,
+@Article{Renner2018,
   author    = {Susanne S. Renner and Constantin M. Zohner},
   journal   = {Annual Review of Ecology, Evolution, and Systematics},
   title     = {Climate Change and Phenological Mismatch in Trophic Interactions Among Plants, Insects, and Vertebrates},
@@ -704,7 +704,7 @@
   publisher = {Annual Reviews},
 }
 
-@Article{Santangeli 2016,
+@Article{Santangeli2016,
   author    = {Andrea Santangeli and Ari Rajasärkkä and Aleksi Lehikoinen},
   journal   = {Global Change Biology},
   title     = {Effects of high latitude protected areas on bird communities under rapid climate change},
@@ -718,7 +718,7 @@
   publisher = {Wiley},
 }
 
-@Article{Park 2020,
+@Article{Park2020,
   author    = {Hoonyoung Park and Sujong Jeong and Josep Pe{\~{n}}uelas},
   journal   = {Global Change Biology},
   title     = {Accelerated rate of vegetation green-up related to warming at northern high latitudes},
@@ -772,6 +772,104 @@
   doi       = {10.1002/ecy.3293},
   file      = {:Xu2021.pdf:PDF},
   publisher = {Wiley},
+}
+
+@Article{HardestyMoore2018,
+  author    = {Molly Hardesty-Moore and Stefanie Deinet and Robin Freeman and Georgia C. Titcomb and Erin M. Dillon and Keenan Stears and Maggie Klope and An Bui and Devyn Orr and Hillary S. Young and Ana Miller-ter Kuile and Lacey F. Hughey and Douglas J. McCauley},
+  journal   = {Philosophical Transactions of the Royal Society B: Biological Sciences},
+  title     = {Migration in the Anthropocene: how collective navigation, environmental system and taxonomy shape the vulnerability of migratory species},
+  year      = {2018},
+  month     = {mar},
+  number    = {1746},
+  pages     = {20170017},
+  volume    = {373},
+  doi       = {10.1098/rstb.2017.0017},
+  file      = {:HardestyMoore2017_MigrationDecline.pdf:PDF},
+  publisher = {The Royal Society},
+}
+
+@Article{FestaBianchet2011,
+  author    = {M. Festa-Bianchet and J.C. Ray and S. Boutin and S.D. Côté and A. Gunn},
+  journal   = {Canadian Journal of Zoology},
+  title     = {Conservation of caribou (\emph{Rangifer tarandus}) in Canada: an uncertain future},
+  year      = {2011},
+  month     = {may},
+  number    = {5},
+  pages     = {419--434},
+  volume    = {89},
+  doi       = {10.1139/z11-025},
+  publisher = {Canadian Science Publishing},
+}
+
+@Article{Uboni2016,
+  author    = {Alessia Uboni and Tim Horstkotte and Elina Kaarlejärvi and Anthony S{\'{e}}v{\^{e}}que and Florian Stammler and Johan Olofsson and Bruce C. Forbes and Jon Moen},
+  journal   = {{PLoS} {ONE}},
+  title     = {Long-Term Trends and Role of Climate in the Population Dynamics of Eurasian Reindeer},
+  year      = {2016},
+  month     = {jun},
+  number    = {6},
+  pages     = {e0158359},
+  volume    = {11},
+  doi       = {10.1371/journal.pone.0158359},
+  editor    = {Robert Guralnick},
+  publisher = {Public Library of Science ({PLoS})},
+}
+
+@Article{Moore2008,
+  author    = {Sue E. Moore and Henry P. Huntington},
+  journal   = {Ecological Applications},
+  title     = {ARCTIC MARINE MAMMALS AND CLIMATE CHANGE: IMPACTS AND RESILIENCE},
+  year      = {2008},
+  month     = {mar},
+  number    = {sp2},
+  pages     = {S157--S165},
+  volume    = {18},
+  doi       = {10.1890/06-0571.1},
+  publisher = {Wiley},
+}
+
+@Article{Kashetsky,
+  author  = {Tovah Kashetsky and Reuven Dukas and Tal Avgar},
+  journal = {Frontiers in Ecology and Evolution (this issue)},
+  title   = {The Cognitive Ecology of Animal Movement},
+  year    = {2021},
+}
+
+@Article{Post2007,
+  author    = {Eric Post and Mads C Forchhammer},
+  journal   = {Philosophical Transactions of the Royal Society B: Biological Sciences},
+  title     = {Climate change reduces reproductive success of an Arctic herbivore through trophic mismatch},
+  year      = {2007},
+  month     = {nov},
+  number    = {1501},
+  pages     = {2367--2373},
+  volume    = {363},
+  doi       = {10.1098/rstb.2007.2207},
+  publisher = {The Royal Society},
+}
+
+@Article{Noonan2019,
+  author    = {Noonan, Michael J and Tucker, Marlee A and Fleming, Christen H and Akre, Thomas S and Alberts, Susan C and Ali, Abdullahi H and Altmann, Jeanne and Antunes, Pamela Castro and Belant, Jerrold L and Beyer, Dean and others},
+  journal   = {Ecological Monographs},
+  title     = {A comprehensive analysis of autocorrelation and bias in home range estimation},
+  year      = {2019},
+  number    = {2},
+  pages     = {e01344},
+  volume    = {89},
+  publisher = {Wiley Online Library},
+}
+
+@Article{s,
+  author    = {Louise Riotte-Lambert and Jason Matthiopoulos},
+  journal   = {Trends in Ecology {\&} Evolution},
+  title     = {Environmental Predictability as a Cause and Consequence of Animal Movement},
+  year      = {2020},
+  month     = {feb},
+  number    = {2},
+  pages     = {163--174},
+  volume    = {35},
+  doi       = {10.1016/j.tree.2019.09.009},
+  publisher = {Elsevier {BV}},
 }
 
 @Comment{jabref-meta: databaseType:bibtex;}

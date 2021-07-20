@@ -1,4 +1,4 @@
-\begin{thebibliography}{51}
+\begin{thebibliography}{50}
 \providecommand{\natexlab}[1]{#1}
 \expandafter\ifx\csname urlstyle\endcsname\relax
   \providecommand{\doi}[1]{doi:\discretionary{}{}{}#1}\else
@@ -164,26 +164,20 @@ Fagan, W.~F., Cantrell, R.~S., Cosner, C., Mueller, T., and Noble, A.~E.
 \newblock \doi{10.1007/s12080-011-0124-2}
 \bibAnnoteFile{Fagan2011}
 
+\bibitem[{Festa-Bianchet et~al.(2011)Festa-Bianchet, Ray, Boutin, Côté, and
+  Gunn}]{FestaBianchet2011}
+Festa-Bianchet, M., Ray, J., Boutin, S., Côté, S., and Gunn, A. (2011).
+\newblock Conservation of caribou (\emph{Rangifer tarandus}) in canada: an
+  uncertain future.
+\newblock \emph{Canadian Journal of Zoology} 89, 419--434.
+\newblock \doi{10.1139/z11-025}
+\bibAnnoteFile{FestaBianchet2011}
+
 \bibitem[{Fryxell et~al.(1988)Fryxell, Greever, and Sinclair}]{Fryxell1988}
 Fryxell, J.~M., Greever, J., and Sinclair, A. (1988).
 \newblock Why are migratory ungulates so abundant?
 \newblock \emph{The American Naturalist} 131, 781--798
 \bibAnnoteFile{Fryxell1988}
-
-\bibitem[{Grünbaum(1994)}]{Gruenbaum1994}
-Grünbaum, D. (1994).
-\newblock Translating stochastic density-dependent individual behavior with
-  sensory constraints to an eulerian model of animal swarming.
-\newblock \emph{Journal of Mathematical Biology} 33, 139--161.
-\newblock \doi{10.1007/BF00160177}
-\bibAnnoteFile{Gruenbaum1994}
-
-\bibitem[{Gurarie et~al.(2009)Gurarie, Anderson, and Zabel}]{Gurarie2009}
-Gurarie, E., Anderson, J.~J., and Zabel, R.~W. (2009).
-\newblock Continuous models of population-level heterogeneity inform analysis
-  of animal dispersal and migration.
-\newblock \emph{Ecology} 90, 2233--2242
-\bibAnnoteFile{Gurarie2009}
 
 \bibitem[{Gurarie et~al.(2017)Gurarie, Cagnacci, Peters, Fleming, Calabrese,
   Mueller et~al.}]{Gurarie2017}
@@ -244,6 +238,12 @@ Joly, K., Gurarie, E., Hansen, D.~A., and Cameron, M.~D. (2021).
 \newblock \doi{10.1002/ece3.7650}
 \bibAnnoteFile{Joly2021}
 
+\bibitem[{Kashetsky et~al.(2021)Kashetsky, Dukas, and Avgar}]{Kashetsky}
+Kashetsky, T., Dukas, R., and Avgar, T. (2021).
+\newblock The cognitive ecology of animal movement.
+\newblock \emph{Frontiers in Ecology and Evolution (this issue)}
+\bibAnnoteFile{Kashetsky}
+
 \bibitem[{Kauffman et~al.(2021)Kauffman, Cagnacci, Chamaill{\'{e}}-Jammes,
   Hebblewhite, Hopcraft, Merkle et~al.}]{Kauffman2021}
 Kauffman, M.~J., Cagnacci, F., Chamaill{\'{e}}-Jammes, S., Hebblewhite, M.,
@@ -261,12 +261,6 @@ K{\"o}lzsch, A., Bauer, S., De~Boer, R., Griffin, L., Cabot, D., Exo, K.-M.,
   of phenology along different migration routes of an avian herbivore}.
 \newblock \emph{Journal of Animal Ecology} 84, 272--283
 \bibAnnoteFile{Kolzsch2015}
-
-\bibitem[{Kot et~al.(1996)Kot, Lewis, and Driessche}]{Kot1996}
-Kot, M., Lewis, M.~A., and Driessche, P. v.~d. (1996).
-\newblock Dispersal data and the spread of invading organisms.
-\newblock \emph{Ecology} 77, 2027--2042
-\bibAnnoteFile{Kot1996}
 
 \bibitem[{Lin et~al.(2021)Lin, Fagan, and Jabin}]{Lin2021}
 Lin, H.-Y., Fagan, W.~F., and Jabin, P.-E. (2021).
@@ -302,19 +296,21 @@ Mogilner, A. and Edelstein-Keshet, L. (1999).
 \newblock \doi{10.1007/s002850050158}
 \bibAnnoteFile{Mogilner1999}
 
-\bibitem[{Okubo(1986)}]{Okubo1986}
-Okubo, A. (1986).
-\newblock Dynamical aspects of animal grouping: Swarms, schools, flocks, and
-  herds.
-\newblock \emph{Advances in Biophysics} 22, 1--94.
-\newblock \doi{10.1016/0065-227X(86)90003-1}
-\bibAnnoteFile{Okubo1986}
+\bibitem[{Moore and Huntington(2008)}]{Moore2008}
+Moore, S.~E. and Huntington, H.~P. (2008).
+\newblock Arctic marine mammals and climate change: Impacts and resilience.
+\newblock \emph{Ecological Applications} 18, S157--S165.
+\newblock \doi{10.1890/06-0571.1}
+\bibAnnoteFile{Moore2008}
 
-\bibitem[{Okubo and Levin(2001)}]{Okubo2001}
-Okubo, A. and Levin, S. (2001).
-\newblock \emph{{Diffusion and Ecological Problems: Modern Perspectives}} (New
-  York: Springer Verlag)
-\bibAnnoteFile{Okubo2001}
+\bibitem[{Noonan et~al.(2019)Noonan, Tucker, Fleming, Akre, Alberts, Ali
+  et~al.}]{Noonan2019}
+Noonan, M.~J., Tucker, M.~A., Fleming, C.~H., Akre, T.~S., Alberts, S.~C., Ali,
+  A.~H., et~al. (2019).
+\newblock A comprehensive analysis of autocorrelation and bias in home range
+  estimation.
+\newblock \emph{Ecological Monographs} 89, e01344
+\bibAnnoteFile{Noonan2019}
 
 \bibitem[{Park et~al.(2020)Park, Jeong, and Pe{\~{n}}uelas}]{Park2020}
 Park, H., Jeong, S., and Pe{\~{n}}uelas, J. (2020).
@@ -323,6 +319,15 @@ Park, H., Jeong, S., and Pe{\~{n}}uelas, J. (2020).
 \newblock \emph{Global Change Biology} 26, 6190--6202.
 \newblock \doi{10.1111/gcb.15322}
 \bibAnnoteFile{Park2020}
+
+\bibitem[{Post and Forchhammer(2007)}]{Post2007}
+Post, E. and Forchhammer, M.~C. (2007).
+\newblock Climate change reduces reproductive success of an arctic herbivore
+  through trophic mismatch.
+\newblock \emph{Philosophical Transactions of the Royal Society B: Biological
+  Sciences} 363, 2367--2373.
+\newblock \doi{10.1098/rstb.2007.2207}
+\bibAnnoteFile{Post2007}
 
 \bibitem[{Potts and Schlägel(2020)}]{Potts2020}
 Potts, J.~R. and Schlägel, U.~E. (2020).
@@ -340,6 +345,14 @@ Renner, S.~S. and Zohner, C.~M. (2018).
   165--182.
 \newblock \doi{10.1146/annurev-ecolsys-110617-062535}
 \bibAnnoteFile{Renner2018}
+
+\bibitem[{Riotte-Lambert and Matthiopoulos(2020)}]{RiotteLambert2020}
+Riotte-Lambert, L. and Matthiopoulos, J. (2020).
+\newblock Environmental predictability as a cause and consequence of animal
+  movement.
+\newblock \emph{Trends in Ecology {\&} Evolution} 35, 163--174.
+\newblock \doi{10.1016/j.tree.2019.09.009}
+\bibAnnoteFile{RiotteLambert2020}
 
 \bibitem[{Robinson et~al.(2009)Robinson, Crick, Learmonth, Maclean, Thomas,
   Bairlein et~al.}]{Robinson2009}
@@ -373,19 +386,6 @@ Shaw, A.~K. and Couzin, I.~D. (2013).
 \newblock \emph{The American Naturalist} 181, 114--124
 \bibAnnoteFile{Shaw2013}
 
-\bibitem[{Skalski and Gilliam(2003)}]{Skalski2003}
-Skalski, G.~T. and Gilliam, J.~F. (2003).
-\newblock A diffusion-based theory of organism dispersal in heterogeneous
-  populations.
-\newblock \emph{The American Naturalist} 161, 441--458
-\bibAnnoteFile{Skalski2003}
-
-\bibitem[{Skellam(1951)}]{Skellam1951}
-Skellam, J.~G. (1951).
-\newblock Random dispersal in theoretical populations.
-\newblock \emph{Biometrika} 38, 196--218
-\bibAnnoteFile{Skellam1951}
-
 \bibitem[{Soetaert and Meysman(2012)}]{Soetaert2012}
 Soetaert, K. and Meysman, F. (2012).
 \newblock Reactive transport in aquatic ecosystems: Rapid model prototyping in
@@ -400,11 +400,15 @@ Soetaert, K., Petzoldt, T., and Setzer, R.~W. (2010).
 \newblock \doi{10.18637/jss.v033.i09}
 \bibAnnoteFile{Soetaert2010}
 
-\bibitem[{Turchin(1998)}]{Turchin1998}
-Turchin, P. (1998).
-\newblock \emph{Quantitative analysis of movement: measuring and modeling
-  population redistribution in animals and plants} (Sinauer Associates)
-\bibAnnoteFile{Turchin1998}
+\bibitem[{Uboni et~al.(2016)Uboni, Horstkotte, Kaarlejärvi,
+  S{\'{e}}v{\^{e}}que, Stammler, Olofsson et~al.}]{Uboni2016}
+Uboni, A., Horstkotte, T., Kaarlejärvi, E., S{\'{e}}v{\^{e}}que, A., Stammler,
+  F., Olofsson, J., et~al. (2016).
+\newblock Long-term trends and role of climate in the population dynamics of
+  eurasian reindeer.
+\newblock \emph{{PLoS} {ONE}} 11, e0158359.
+\newblock \doi{10.1371/journal.pone.0158359}
+\bibAnnoteFile{Uboni2016}
 
 \bibitem[{Wilcove and Wikelski(2008)}]{Wilcove2008}
 Wilcove, D.~S. and Wikelski, M. (2008).

@@ -2,49 +2,48 @@ This is BibTeX, Version 0.99d (TeX Live 2019/Debian)
 Capacity: max_strings=200000, hash_size=200000, hash_prime=170003
 The top-level auxiliary file: SocialMemoryMigration_FEE.aux
 The style file: frontiersinSCNS_ENG_HUMS.bst
-Database file #1: ../library/memorymigration.bib
-Warning--I didn't find a database entry for "Guttal2020"
-Warning--I didn't find a database entry for "Post2007"
+Database file #1: memorymigration.bib
+Warning--I didn't find a database entry for "HardestyMoore2017"
 Reallocated wiz_functions (elt_size=4) to 6000 items from 3000.
-You've used 51 entries,
+You've used 50 entries,
             3029 wiz_defined-function locations,
-            1023 strings with 18344 characters,
-and the built_in function-call counts, 36355 in all, are:
-= -- 3095
-> -- 2020
-< -- 23
-+ -- 1004
-- -- 547
-* -- 2666
-:= -- 5408
-add.period$ -- 128
-call.type$ -- 51
-change.case$ -- 434
-chr.to.int$ -- 52
-cite$ -- 102
-duplicate$ -- 2253
-empty$ -- 2432
-format.name$ -- 701
-if$ -- 7340
+            1018 strings with 18758 characters,
+and the built_in function-call counts, 37208 in all, are:
+= -- 3167
+> -- 2179
+< -- 20
++ -- 1092
+- -- 589
+* -- 2752
+:= -- 5501
+add.period$ -- 131
+call.type$ -- 50
+change.case$ -- 445
+chr.to.int$ -- 51
+cite$ -- 100
+duplicate$ -- 2257
+empty$ -- 2404
+format.name$ -- 750
+if$ -- 7501
 int.to.chr$ -- 1
 int.to.str$ -- 1
-missing$ -- 536
-newline$ -- 346
-num.names$ -- 204
-pop$ -- 1025
+missing$ -- 541
+newline$ -- 345
+num.names$ -- 200
+pop$ -- 1047
 preamble$ -- 1
-purify$ -- 386
+purify$ -- 396
 quote$ -- 0
-skip$ -- 1344
+skip$ -- 1418
 stack$ -- 0
-substring$ -- 1671
-swap$ -- 1123
+substring$ -- 1675
+swap$ -- 1143
 text.length$ -- 0
 text.prefix$ -- 0
 top$ -- 0
-type$ -- 450
+type$ -- 447
 warning$ -- 0
-while$ -- 233
+while$ -- 231
 width$ -- 0
-write$ -- 778
-(There were 2 warnings)
+write$ -- 773
+(There was 1 warning)

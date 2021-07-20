@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019/Debian) (preloaded format=pdflatex 2020.10.27)  15 JUL 2021 19:26
+This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019/Debian) (preloaded format=pdflatex 2020.10.27)  19 JUL 2021 16:36
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -407,6 +407,7 @@ File: microtype.cfg 2019/11/18 v2.7d microtype main configuration file (RS)
 (/usr/share/texlive/texmf-dist/tex/latex/setspace/setspace.sty
 Package: setspace 2011/12/19 v6.7a set line spacing
 )
+(/usr/share/texlive/texmf-dist/tex/latex/braket/braket.sty)
 (/usr/share/texlive/texmf-dist/tex/latex/hyperref/hyperref.sty
 Package: hyperref 2020/01/14 v7.00d Hypertext links for LaTeX
 
@@ -560,22 +561,22 @@ File: l3backend-pdfmode.def 2020-02-03 L3 backend support: PDF mode
 (./SocialMemoryMigration_FEE.aux)
 \openout1 = `SocialMemoryMigration_FEE.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 69.
-LaTeX Font Info:    ... okay on input line 69.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 69.
-LaTeX Font Info:    ... okay on input line 69.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 69.
-LaTeX Font Info:    ... okay on input line 69.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 69.
-LaTeX Font Info:    ... okay on input line 69.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 69.
-LaTeX Font Info:    ... okay on input line 69.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 69.
-LaTeX Font Info:    ... okay on input line 69.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 69.
-LaTeX Font Info:    ... okay on input line 69.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 69.
-LaTeX Font Info:    ... okay on input line 69.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 70.
+LaTeX Font Info:    ... okay on input line 70.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 70.
+LaTeX Font Info:    ... okay on input line 70.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 70.
+LaTeX Font Info:    ... okay on input line 70.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 70.
+LaTeX Font Info:    ... okay on input line 70.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 70.
+LaTeX Font Info:    ... okay on input line 70.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 70.
+LaTeX Font Info:    ... okay on input line 70.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 70.
+LaTeX Font Info:    ... okay on input line 70.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 70.
+LaTeX Font Info:    ... okay on input line 70.
 
 (/usr/share/texlive/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
@@ -591,16 +592,16 @@ LaTeX Font Info:    ... okay on input line 69.
 \makeMPintoPDFobject=\count317
 \everyMPtoPDFconversion=\toks38
 )
-Package crop Info: requested driver: `' on input line 69.
-Package crop Info: detected driver: `pdftex' on input line 69.
-Package crop Info: using `pdftex' graphics driver on input line 69.
+Package crop Info: requested driver: `' on input line 70.
+Package crop Info: detected driver: `pdftex' on input line 70.
+Package crop Info: using `pdftex' graphics driver on input line 70.
  (/usr/share/texlive/texmf-dist/tex/latex/fmtcount/fc-english.def
 File: fc-english.def 2016/01/12
 )
 Package caption Info: Begin \AtBeginDocument code.
 Package caption Info: hyperref package is loaded.
 Package caption Info: End \AtBeginDocument code.
-LaTeX Info: Redefining \microtypecontext on input line 69.
+LaTeX Info: Redefining \microtypecontext on input line 70.
 Package microtype Info: Generating PDF output.
 Package microtype Info: Character protrusion enabled (level 2),
 (microtype)             factor: 1500.
@@ -608,7 +609,7 @@ Package microtype Info: Using default protrusion set `alltext'.
 Package microtype Info: Automatic font expansion enabled (level 2),
 (microtype)             stretch: 20, shrink: 20, step: 1, non-selected.
 Package microtype Info: Using default expansion set `basictext'.
-LaTeX Info: Redefining \showhyphens on input line 69.
+LaTeX Info: Redefining \showhyphens on input line 70.
 Package microtype Info: No adjustment of tracking.
 Package microtype Info: No adjustment of interword spacing.
 Package microtype Info: No adjustment of character kerning.
@@ -618,7 +619,7 @@ File: mt-cmr.cfg 2013/05/19 v2.2 microtype config. file: Computer Modern Roman
 (RS)
 )
 \AtBeginShipoutBox=\box59
-Package hyperref Info: Link coloring ON on input line 69.
+Package hyperref Info: Link coloring ON on input line 70.
 
 (/usr/share/texlive/texmf-dist/tex/latex/hyperref/nameref.sty
 Package: nameref 2019/09/16 v2.46 Cross-referencing by name of section
@@ -631,15 +632,15 @@ Package: gettitlestring 2019/12/15 v1.6 Cleanup title references (HO)
 )
 \c@section@level=\count318
 )
-LaTeX Info: Redefining \ref on input line 69.
-LaTeX Info: Redefining \pageref on input line 69.
-LaTeX Info: Redefining \nameref on input line 69.
+LaTeX Info: Redefining \ref on input line 70.
+LaTeX Info: Redefining \pageref on input line 70.
+LaTeX Info: Redefining \nameref on input line 70.
 
 (./SocialMemoryMigration_FEE.out) (./SocialMemoryMigration_FEE.out)
 \@outlinefile=\write3
 \openout3 = `SocialMemoryMigration_FEE.out'.
 
-LaTeX Font Info:    Trying to load font information for T1+phv on input line 84
+LaTeX Font Info:    Trying to load font information for T1+phv on input line 85
 .
 
 (/usr/share/texlive/texmf-dist/tex/latex/psnfss/t1phv.fd
@@ -657,25 +658,25 @@ Package epstopdf Info: Source file: <./logo1.eps>
 (epstopdf)                    size: 27887 bytes
 (epstopdf)             Command: <repstopdf --outfile=./logo1-eps-converted-to.p
 df ./logo1.eps>
-(epstopdf)             \includegraphics on input line 84.
+(epstopdf)             \includegraphics on input line 85.
 Package epstopdf Info: Output file is already uptodate.
-<./logo1-eps-converted-to.pdf, id=68, 284.06125pt x 80.3pt>
+<./logo1-eps-converted-to.pdf, id=80, 284.06125pt x 80.3pt>
 File: ./logo1-eps-converted-to.pdf Graphic file (type pdf)
 <use ./logo1-eps-converted-to.pdf>
-Package pdftex.def Info: ./logo1-eps-converted-to.pdf  used on input line 84.
+Package pdftex.def Info: ./logo1-eps-converted-to.pdf  used on input line 85.
 (pdftex.def)             Requested size: 144.0pt x 40.70862pt.
 
-Underfull \hbox (badness 10000) detected at line 84
+Underfull \hbox (badness 10000) detected at line 85
 []
  []
 
 
-Overfull \hbox (8.53581pt too wide) in paragraph at lines 84--84
+Overfull \hbox (8.53581pt too wide) in paragraph at lines 85--85
 [][] 
  []
 
 LaTeX Font Info:    Trying to load font information for T1+lmss on input line 8
-4.
+5.
 (/usr/share/texmf/tex/latex/lm/t1lmss.fd
 File: t1lmss.fd 2009/10/30 v1.6 Font defs for Latin Modern
 )
@@ -684,36 +685,36 @@ Package microtype Info: Loading generic protrusion settings for font family
 (microtype)             For optimal results, create family-specific settings.
 (microtype)             See the microtype manual for details.
 LaTeX Font Info:    Trying to load font information for OT1+lmr on input line 8
-4.
+5.
 
 (/usr/share/texmf/tex/latex/lm/ot1lmr.fd
 File: ot1lmr.fd 2009/10/30 v1.6 Font defs for Latin Modern
 )
 LaTeX Font Info:    Trying to load font information for OML+lmm on input line 8
-4.
+5.
 
 (/usr/share/texmf/tex/latex/lm/omllmm.fd
 File: omllmm.fd 2009/10/30 v1.6 Font defs for Latin Modern
 )
 LaTeX Font Info:    Trying to load font information for OMS+lmsy on input line 
-84.
+85.
 
 (/usr/share/texmf/tex/latex/lm/omslmsy.fd
 File: omslmsy.fd 2009/10/30 v1.6 Font defs for Latin Modern
 )
 LaTeX Font Info:    Trying to load font information for OMX+lmex on input line 
-84.
+85.
 
 (/usr/share/texmf/tex/latex/lm/omxlmex.fd
 File: omxlmex.fd 2009/10/30 v1.6 Font defs for Latin Modern
 )
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <12> on input line 84.
+(Font)              <12> on input line 85.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <9> on input line 84.
+(Font)              <9> on input line 85.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <7> on input line 84.
-LaTeX Font Info:    Trying to load font information for U+msa on input line 84.
+(Font)              <7> on input line 85.
+LaTeX Font Info:    Trying to load font information for U+msa on input line 85.
 
 
 (/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsa.fd
@@ -722,7 +723,7 @@ File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 (/usr/share/texlive/texmf-dist/tex/latex/microtype/mt-msa.cfg
 File: mt-msa.cfg 2006/02/04 v1.1 microtype config. file: AMS symbols (a) (RS)
 )
-LaTeX Font Info:    Trying to load font information for U+msb on input line 84.
+LaTeX Font Info:    Trying to load font information for U+msb on input line 85.
 
 
 (/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsb.fd
@@ -731,12 +732,12 @@ File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 (/usr/share/texlive/texmf-dist/tex/latex/microtype/mt-msb.cfg
 File: mt-msb.cfg 2005/06/01 v1.0 microtype config. file: AMS symbols (b) (RS)
 )
-Underfull \hbox (badness 10000) detected at line 84
+Underfull \hbox (badness 10000) detected at line 85
 []
  []
 
 LaTeX Font Info:    Font shape `T1/lmss/b/n' in size <12> not available
-(Font)              Font shape `T1/lmss/bx/n' tried instead on input line 86.
+(Font)              Font shape `T1/lmss/bx/n' tried instead on input line 87.
 [1
 
 
@@ -744,11 +745,11 @@ LaTeX Font Info:    Font shape `T1/lmss/b/n' in size <12> not available
 {/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map} <./logo1-eps-converted-to.p
 df>]
 
-Package natbib Warning: Citation `Guttal2020' on page 2 undefined on input line
- 104.
+Package natbib Warning: Citation `HardestyMoore2017' on page 2 undefined on inp
+ut line 109.
 
 LaTeX Font Info:    Font shape `T1/phv/b/it' in size <11> not available
-(Font)              Font shape `T1/phv/b/sl' tried instead on input line 117.
+(Font)              Font shape `T1/phv/b/sl' tried instead on input line 114.
 
 Overfull \vbox (3.49998pt too high) has occurred while \output is active []
 
@@ -762,21 +763,22 @@ Overfull \vbox (3.49998pt too high) has occurred while \output is active []
 
 
 [4]
-<figures/ResourceExamples.png, id=219, 481.8pt x 289.08pt>
+<figures/ResourceExamples.png, id=241, 481.8pt x 289.08pt>
 File: figures/ResourceExamples.png Graphic file (type png)
 <use figures/ResourceExamples.png>
-Package pdftex.def Info: figures/ResourceExamples.png  used on input line 166.
+Package pdftex.def Info: figures/ResourceExamples.png  used on input line 190.
 (pdftex.def)             Requested size: 504.0pt x 302.40932pt.
-
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
 
 Overfull \vbox (3.49998pt too high) has occurred while \output is active []
 
 
-[5 <./figures/ResourceExamples.png (PNG copy)>]
-LaTeX Font Info:    Trying to load font information for T1+lmtt on input line 1
-89.
+[5]
+Overfull \vbox (3.49998pt too high) has occurred while \output is active []
+
+
+[6 <./figures/ResourceExamples.png (PNG copy)>]
+LaTeX Font Info:    Trying to load font information for T1+lmtt on input line 2
+15.
 
 (/usr/share/texmf/tex/latex/lm/t1lmtt.fd
 File: t1lmtt.fd 2009/10/30 v1.6 Font defs for Latin Modern
@@ -785,17 +787,13 @@ Package microtype Info: Loading generic protrusion settings for font family
 (microtype)             `lmtt' (encoding: T1).
 (microtype)             For optimal results, create family-specific settings.
 (microtype)             See the microtype manual for details.
-<figures/example1_adaptation.png, id=236, 722.7pt x 722.7pt>
+<figures/example1_adaptation.png, id=268, 722.7pt x 722.7pt>
 File: figures/example1_adaptation.png Graphic file (type png)
 <use figures/example1_adaptation.png>
-Package pdftex.def Info: figures/example1_adaptation.png  used on input line 23
-0.
+Package pdftex.def Info: figures/example1_adaptation.png  used on input line 25
+6.
 (pdftex.def)             Requested size: 453.59692pt x 453.59415pt.
 
-Overfull \vbox (3.49998pt too high) has occurred while \output is active []
-
-
-[6]
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
 
@@ -809,86 +807,81 @@ Underfull \vbox (badness 10000) has occurred while \output is active []
 Overfull \vbox (3.49998pt too high) has occurred while \output is active []
 
 
-[8 <./figures/example1_adaptation.png (PNG copy)>]
-<figures/StabilityResults.png, id=269, 915.42pt x 481.8pt>
-File: figures/StabilityResults.png Graphic file (type png)
-<use figures/StabilityResults.png>
-Package pdftex.def Info: figures/StabilityResults.png  used on input line 248.
-(pdftex.def)             Requested size: 504.0pt x 265.26282pt.
-<figures/ForagingEfficiency.png, id=270, 578.16pt x 216.81pt>
-File: figures/ForagingEfficiency.png Graphic file (type png)
-<use figures/ForagingEfficiency.png>
-Package pdftex.def Info: figures/ForagingEfficiency.png  used on input line 253
-.
-(pdftex.def)             Requested size: 504.0pt x 189.0003pt.
-<figures/example2_learningtomigrate.png, id=271, 722.7pt x 722.7pt>
-File: figures/example2_learningtomigrate.png Graphic file (type png)
-<use figures/example2_learningtomigrate.png>
-Package pdftex.def Info: figures/example2_learningtomigrate.png  used on input 
-line 260.
-(pdftex.def)             Requested size: 453.59692pt x 453.59415pt.
-
+[8]
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
 
 Overfull \vbox (3.49998pt too high) has occurred while \output is active []
 
 
-[9 <./figures/StabilityResults.png (PNG copy)>]
-<figures/SpatialClimateChange.png, id=280, 722.7pt x 578.16pt>
+[9 <./figures/example1_adaptation.png (PNG copy)>]
+<figures/StabilityResults.png, id=299, 915.42pt x 481.8pt>
+File: figures/StabilityResults.png Graphic file (type png)
+<use figures/StabilityResults.png>
+Package pdftex.def Info: figures/StabilityResults.png  used on input line 276.
+(pdftex.def)             Requested size: 504.0pt x 265.26282pt.
+<figures/ForagingEfficiency.png, id=300, 578.16pt x 216.81pt>
+File: figures/ForagingEfficiency.png Graphic file (type png)
+<use figures/ForagingEfficiency.png>
+Package pdftex.def Info: figures/ForagingEfficiency.png  used on input line 281
+.
+(pdftex.def)             Requested size: 504.0pt x 189.0003pt.
+<figures/example2_learningtomigrate.png, id=301, 722.7pt x 722.7pt>
+File: figures/example2_learningtomigrate.png Graphic file (type png)
+<use figures/example2_learningtomigrate.png>
+Package pdftex.def Info: figures/example2_learningtomigrate.png  used on input 
+line 288.
+(pdftex.def)             Requested size: 453.59692pt x 453.59415pt.
+
+Overfull \vbox (3.49998pt too high) has occurred while \output is active []
+
+
+[10 <./figures/StabilityResults.png (PNG copy)>]
+<figures/SpatialClimateChange.png, id=311, 722.7pt x 578.16pt>
 File: figures/SpatialClimateChange.png Graphic file (type png)
 <use figures/SpatialClimateChange.png>
-Package pdftex.def Info: figures/SpatialClimateChange.png  used on input line 2
-72.
+Package pdftex.def Info: figures/SpatialClimateChange.png  used on input line 3
+00.
 (pdftex.def)             Requested size: 504.0pt x 403.20067pt.
 
 Overfull \vbox (3.49998pt too high) has occurred while \output is active []
 
 
-[10 <./figures/ForagingEfficiency.png (PNG copy)>]
+[11 <./figures/ForagingEfficiency.png (PNG copy)>]
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
 
 Overfull \vbox (3.49998pt too high) has occurred while \output is active []
 
 
-[11 <./figures/example2_learningtomigrate.png (PNG copy)>]
+[12 <./figures/example2_learningtomigrate.png (PNG copy)>]
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
 
 Overfull \vbox (3.49998pt too high) has occurred while \output is active []
 
 
-[12 <./figures/SpatialClimateChange.png>]
-<figures/stochasticity.png, id=298, 578.16pt x 240.9pt>
+[13 <./figures/SpatialClimateChange.png>]
+<figures/stochasticity.png, id=332, 578.16pt x 240.9pt>
 File: figures/stochasticity.png Graphic file (type png)
 <use figures/stochasticity.png>
-Package pdftex.def Info: figures/stochasticity.png  used on input line 292.
+Package pdftex.def Info: figures/stochasticity.png  used on input line 320.
 (pdftex.def)             Requested size: 504.0pt x 210.00034pt.
-<figures/TrendStochasticity.png, id=300, 578.16pt x 240.9pt>
+<figures/TrendStochasticity.png, id=334, 578.16pt x 240.9pt>
 File: figures/TrendStochasticity.png Graphic file (type png)
 <use figures/TrendStochasticity.png>
-Package pdftex.def Info: figures/TrendStochasticity.png  used on input line 304
+Package pdftex.def Info: figures/TrendStochasticity.png  used on input line 332
 .
 (pdftex.def)             Requested size: 504.0pt x 210.00034pt.
 
 Overfull \vbox (3.49998pt too high) has occurred while \output is active []
 
 
-[13 <./figures/stochasticity.png (PNG copy)>]
+[14 <./figures/stochasticity.png (PNG copy)>]
 Overfull \vbox (3.49998pt too high) has occurred while \output is active []
 
 
-[14 <./figures/TrendStochasticity.png>]
-
-Package natbib Warning: Citation `Post2007' on page 15 undefined on input line 
-320.
-
-
-Overfull \vbox (3.49998pt too high) has occurred while \output is active []
-
-
-[15]
+[15 <./figures/TrendStochasticity.png>]
 Overfull \vbox (3.49998pt too high) has occurred while \output is active []
 
 
@@ -901,9 +894,6 @@ Overfull \vbox (3.49998pt too high) has occurred while \output is active []
 
 
 [18]
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
-
 Overfull \vbox (3.49998pt too high) has occurred while \output is active []
 
 
@@ -933,25 +923,25 @@ Overfull \vbox (3.49998pt too high) has occurred while \output is active []
 
 Package natbib Warning: There were undefined citations.
 
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 401.
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 401.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 439.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 439.
 (./SocialMemoryMigration_FEE.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 401.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 401.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 439.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 439.
 Package rerunfilecheck Info: File `SocialMemoryMigration_FEE.out' has not chang
 ed.
-(rerunfilecheck)             Checksum: FE7550916D7B9EF4A11B6E77BA5B2260;994.
+(rerunfilecheck)             Checksum: FF9406112B5621212932333B7171487D;1257.
  ) 
 Here is how much of TeX's memory you used:
- 12850 strings out of 483183
- 196564 string characters out of 5966291
- 516980 words of memory out of 5000000
- 27289 multiletter control sequences out of 15000+600000
- 613808 words of font info for 152 fonts, out of 8000000 for 9000
+ 12886 strings out of 483183
+ 197051 string characters out of 5966291
+ 518573 words of memory out of 5000000
+ 27312 multiletter control sequences out of 15000+600000
+ 613904 words of font info for 155 fonts, out of 8000000 for 9000
  18 hyphenation exceptions out of 8191
- 63i,12n,100p,1707b,541s stack positions out of 5000i,500n,10000p,200000b,80000s
-{/usr/share/texmf/fonts/enc/dvips/lm/lm-ec.enc}{/usr/share/texmf/fonts/enc/dv
-ips/lm/lm-rm.enc}{/usr/share/texmf/fonts/enc/dvips/lm/lm-mathex.enc}{/usr/share
+ 63i,12n,100p,1427b,515s stack positions out of 5000i,500n,10000p,200000b,80000s
+{/usr/share/texmf/fonts/enc/dvips/lm/lm-rm.enc}{/usr/share/texmf/fonts/enc/dv
+ips/lm/lm-ec.enc}{/usr/share/texmf/fonts/enc/dvips/lm/lm-mathex.enc}{/usr/share
 /texmf/fonts/enc/dvips/lm/lm-mathsy.enc}{/usr/share/texmf/fonts/enc/dvips/lm/lm
 -mathit.enc}{/usr/share/texlive/texmf-dist/fonts/enc/dvips/base/8r.enc}</usr/sh
 are/texmf/fonts/type1/public/lm/lmbx12.pfb></usr/share/texmf/fonts/type1/public
@@ -967,10 +957,10 @@ e/texlive/texmf-dist/fonts/type1/urw/helvetic/uhvb8a.pfb></usr/share/texlive/te
 xmf-dist/fonts/type1/urw/helvetic/uhvbo8a.pfb></usr/share/texlive/texmf-dist/fo
 nts/type1/urw/helvetic/uhvr8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/ur
 w/helvetic/uhvro8a.pfb>
-Output written on SocialMemoryMigration_FEE.pdf (22 pages, 3028019 bytes).
+Output written on SocialMemoryMigration_FEE.pdf (22 pages, 3027205 bytes).
 PDF statistics:
- 558 PDF objects out of 1000 (max. 8388607)
- 498 compressed objects within 5 object streams
- 105 named destinations out of 1000 (max. 500000)
- 20654 words of extra memory for PDF output out of 20736 (max. 10000000)
+ 556 PDF objects out of 1000 (max. 8388607)
+ 496 compressed objects within 5 object streams
+ 108 named destinations out of 1000 (max. 500000)
+ 20678 words of extra memory for PDF output out of 20736 (max. 10000000)
 
