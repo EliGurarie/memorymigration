@@ -872,4 +872,111 @@
   publisher = {Elsevier {BV}},
 }
 
+@Article{Krafft2021,
+  author    = {P.M. Krafft and Erez Shmueli and Thomas L. Griffiths and Joshua B. Tenenbaum and Alex Pentland},
+  journal   = {Cognition},
+  title     = {Bayesian collective learning emerges from heuristic social learning},
+  year      = {2021},
+  month     = {jul},
+  pages     = {104469},
+  volume    = {212},
+  doi       = {10.1016/j.cognition.2020.104469},
+  file      = {:/Users/sriyapotluri/Documents/Research/memorymigration/library/Krafft2021_BayseianCollectiveLearning.pdf:PDF},
+  publisher = {Elsevier {BV}},
+}
+
+@Article{Kshirsagar2016,
+  author    = {Pravin Kshirsagar and Sudhir Akojwar},
+  journal   = {International Journal of Computer Applications},
+  title     = {Hybrid Heuristic Optimization for Benchmark Datasets},
+  year      = {2016},
+  month     = {jul},
+  number    = {7},
+  pages     = {11--16},
+  volume    = {146},
+  doi       = {10.5120/ijca2016910853},
+  file      = {:Kshirsagar2016_HybridHeuristicOptimizationBenchmarkDatasets.pdf:PDF},
+  publisher = {Foundation of Computer Science},
+}
+
+@Article{Kennedy1998,
+  author    = {James Kennedy},
+  journal   = {Journal of Conflict Resolution},
+  title     = {Thinking is Social},
+  year      = {1998},
+  month     = {feb},
+  number    = {1},
+  pages     = {56--76},
+  volume    = {42},
+  doi       = {10.1177/0022002798042001003},
+  publisher = {{SAGE} Publications},
+}
+
+@Article{Harriott2014,
+  author    = {Caroline E. Harriott and Adriane E. Seiffert and Sean T. Hayes and Julie A. Adams},
+  journal   = {Proceedings of the Human Factors and Ergonomics Society Annual Meeting},
+  title     = {Biologically-Inspired Human-Swarm Interaction Metrics},
+  year      = {2014},
+  month     = {sep},
+  number    = {1},
+  pages     = {1471--1475},
+  volume    = {58},
+  doi       = {10.1177/1541931214581307},
+  publisher = {{SAGE} Publications},
+}
+
+@Article{Brambilla2013,
+  author    = {Manuele Brambilla and Eliseo Ferrante and Mauro Birattari and Marco Dorigo},
+  journal   = {Swarm Intelligence},
+  title     = {Swarm robotics: a review from the swarm engineering perspective},
+  year      = {2013},
+  month     = {jan},
+  number    = {1},
+  pages     = {1--41},
+  volume    = {7},
+  doi       = {10.1007/s11721-012-0075-2},
+  file      = {:Brambilla2013 - Swarm Robotics_ a Review from the Swarm Engineering Perspective.pdf:PDF},
+  publisher = {Springer Science and Business Media {LLC}},
+}
+
+@InProceedings{Mohan2009,
+  author    = {Yogeswaran Mohan and S. G. Ponnambalam},
+  booktitle = {2009 World Congress on Nature {\&} Biologically Inspired Computing ({NaBIC})},
+  title     = {An extensive review of research in swarm robotics},
+  year      = {2009},
+  publisher = {{IEEE}},
+  doi       = {10.1109/nabic.2009.5393617},
+}
+
+@InCollection{Garnier2005,
+  author    = {Simon Garnier and Christian Jost and Raphaël Jeanson and Jacques Gautrais and Masoud Asadpour and Gilles Caprari and Guy Theraulaz},
+  booktitle = {Advances in Artificial Life},
+  publisher = {Springer Berlin Heidelberg},
+  title     = {Aggregation Behaviour as a Source of Collective Decision in a Group of Cockroach-Like-Robots},
+  year      = {2005},
+  pages     = {169--178},
+  doi       = {10.1007/11553090_18},
+  file      = {:../library/Garnier2005 _AggregationBehaviourCockroachRobots.pdf:PDF},
+}
+
+@InCollection{Sahin2005,
+  author    = {Erol {\c{S}}ahin},
+  booktitle = {Swarm Robotics},
+  publisher = {Springer Berlin Heidelberg},
+  title     = {Swarm Robotics: From Sources of Inspiration to Domains of Application},
+  year      = {2005},
+  pages     = {10--20},
+  doi       = {10.1007/978-3-540-30552-1_2},
+  file      = {:Sahin2005 _SwarmRoboticsInspiration.pdf:PDF},
+}
+
+@Article{Tomlinson2002,
+  author  = {Bill Tomlinson and Bruce Blumberg},
+  journal = {Proceedings of AAMAS},
+  title   = {Using emotional memories to form synthetic social relationships},
+  year    = {2002},
+  month   = jul,
+  file    = {:../library/Tomlinson2002_EmotionalMemoriesWolves.pdf:PDF},
+}
+
 @Comment{jabref-meta: databaseType:bibtex;}

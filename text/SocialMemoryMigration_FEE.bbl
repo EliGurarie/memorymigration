@@ -1,4 +1,4 @@
-\begin{thebibliography}{51}
+\begin{thebibliography}{56}
 \providecommand{\natexlab}[1]{#1}
 \expandafter\ifx\csname urlstyle\endcsname\relax
   \providecommand{\doi}[1]{doi:\discretionary{}{}{}#1}\else
@@ -88,6 +88,14 @@ Bracis, C. and Mueller, T. (2017).
 \newblock \emph{Proceedings of the Royal Society B: Biological Sciences} 284,
   20170449
 \bibAnnoteFile{Bracis2017}
+
+\bibitem[{Brambilla et~al.(2013)Brambilla, Ferrante, Birattari, and
+  Dorigo}]{Brambilla2013}
+Brambilla, M., Ferrante, E., Birattari, M., and Dorigo, M. (2013).
+\newblock Swarm robotics: a review from the swarm engineering perspective.
+\newblock \emph{Swarm Intelligence} 7, 1--41.
+\newblock \doi{10.1007/s11721-012-0075-2}
+\bibAnnoteFile{Brambilla2013}
 
 \bibitem[{Breiman(2001)}]{Breiman2001}
 Breiman, L. (2001).
@@ -324,6 +332,12 @@ Noonan, M.~J., Tucker, M.~A., Fleming, C.~H., Akre, T.~S., Alberts, S.~C., Ali,
 \newblock \emph{Ecological Monographs} 89, e01344
 \bibAnnoteFile{Noonan2019}
 
+\bibitem[{Okubo and Levin(2001)}]{Okubo2001}
+Okubo, A. and Levin, S. (2001).
+\newblock \emph{{Diffusion and Ecological Problems: Modern Perspectives}} (New
+  York: Springer Verlag)
+\bibAnnoteFile{Okubo2001}
+
 \bibitem[{Park et~al.(2020)Park, Jeong, and Pe{\~{n}}uelas}]{Park2020}
 Park, H., Jeong, S., and Pe{\~{n}}uelas, J. (2020).
 \newblock Accelerated rate of vegetation green-up related to warming at
@@ -376,6 +390,14 @@ Robinson, R., Crick, H., Learmonth, J., Maclean, I., Thomas, C., Bairlein, F.,
 \newblock \doi{10.3354/esr00095}
 \bibAnnoteFile{Robinson2009}
 
+\bibitem[{{\c{S}}ahin(2005)}]{Sahin2005}
+{\c{S}}ahin, E. (2005).
+\newblock Swarm robotics: From sources of inspiration to domains of
+  application.
+\newblock In \emph{Swarm Robotics} (Springer Berlin Heidelberg). 10--20.
+\newblock \doi{10.1007/978-3-540-30552-1_2}
+\bibAnnoteFile{Sahin2005}
+
 \bibitem[{Seebacher and Post(2015)}]{Seebacher2015}
 Seebacher, F. and Post, E. (2015).
 \newblock Climate change impacts on animal migration.
@@ -398,6 +420,12 @@ Shaw, A.~K. and Couzin, I.~D. (2013).
 \newblock \emph{The American Naturalist} 181, 114--124
 \bibAnnoteFile{Shaw2013}
 
+\bibitem[{Skellam(1951)}]{Skellam1951}
+Skellam, J.~G. (1951).
+\newblock Random dispersal in theoretical populations.
+\newblock \emph{Biometrika} 38, 196--218
+\bibAnnoteFile{Skellam1951}
+
 \bibitem[{Soetaert and Meysman(2012)}]{Soetaert2012}
 Soetaert, K. and Meysman, F. (2012).
 \newblock Reactive transport in aquatic ecosystems: Rapid model prototyping in
@@ -411,6 +439,12 @@ Soetaert, K., Petzoldt, T., and Setzer, R.~W. (2010).
 \newblock \emph{Journal of Statistical Software} 33, 1--25.
 \newblock \doi{10.18637/jss.v033.i09}
 \bibAnnoteFile{Soetaert2010}
+
+\bibitem[{Turchin(1998)}]{Turchin1998}
+Turchin, P. (1998).
+\newblock \emph{Quantitative analysis of movement: measuring and modeling
+  population redistribution in animals and plants} (Sinauer Associates)
+\bibAnnoteFile{Turchin1998}
 
 \bibitem[{Uboni et~al.(2016)Uboni, Horstkotte, Kaarlejärvi,
   S{\'{e}}v{\^{e}}que, Stammler, Olofsson et~al.}]{Uboni2016}
