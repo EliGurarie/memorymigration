@@ -35,16 +35,19 @@ if(eval)
 load("results/msexamples/adaptation.rda")
 source("text/figures/code/functions_plottingForMS.R")
 
-n <- 14
 
-png("text/figures/example1_adaptation.png", 
-    width = 3000, height = 3000, res = 300)
+#png("text/figures/example1_adaptation.png", 
+#    width = 3000, height = 3000, res = 300)
+pdf("text/figures/example1_adaptation.pdf", 
+    width = 10, height = 10)
+
+n <- 14
 
 {
   M <- rbind(1:n, rep(n+1:2, each = n/2), rep(n+3:4, each = n/2))
   layout(M)
   
-  par(oma = c(2,4,2,2), mgp = c(2,.25,0), las = 1, mar = c(4,0,0,0), 
+  par(oma = c(2,4,2,2), mgp = c(2.5,.25,0), las = 1, mar = c(4,0,0,0), 
       xpd = NA, tck = 0, bty = "l")
   M0.example <- M0$pop[paste0("Year",1:n - 1)] %T>% 
     plotSomeYears(world, labelyears = TRUE, par = TRUE)

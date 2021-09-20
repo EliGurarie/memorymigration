@@ -114,7 +114,7 @@ for(s in seq(3,15,3)){
   # mtext(side = 1, at = 1:4, c("< 1", "1-5", "5-50", ">50"), line = 0.5)
   if(s == 3){ 
     axis(2, las = 2)
-    mtext(side = 2, "Foraging efficiency", line = 1.75)
+    mtext(side = 2, "foraging efficiency", line = 1.75)
     legend("top", fill = cols, legend = c("< 1", "1-5", "5-50", "> 50"), 
            ncol = 2, cex = 1.3, xpd = NA, 
            title = "total mismatch", bty = "n")
